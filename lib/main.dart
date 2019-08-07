@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'page/start_page.dart';
+import 'page/main_page.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget
@@ -8,16 +11,27 @@ class MyApp extends StatelessWidget
 	Widget build(BuildContext context)
 	{
 		return MaterialApp(
-			title: "KronoX App",
-			theme: ThemeData(
-				primarySwatch: Colors.blue,
+			title: "KronoX",
+			theme: ThemeData.dark().copyWith(
+				primaryColor: Colors.orange[500],
+				primaryColorDark: Colors.orange[700],
+				accentColor: Colors.deepOrangeAccent
 			),
-			home: MyHomePage(
-				title: "KronoX"
-			),
+			home: StartPage(),
+			routes: {
+				"/start": (context) => StartPage(),
+				"/main":  (context) => MainPage()
+			},
 		);
 	}
 }
+
+/*
+ * Below is the default Flutter code
+ * It's only kept as a point of reference and
+ * will be removed once some more actual code is added
+ * It is instanced like MyHomePage(title: "<title>")
+ */
 
 class MyHomePage extends StatefulWidget
 {
