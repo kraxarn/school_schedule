@@ -97,6 +97,12 @@ class SearchState extends State<SearchDialog>
 	/// If we should show the loading spinner
 	var _loading = false;
 	
+	/// Fix å, ä, ö (kind of hacky, but works)
+	String _decode(String text) =>
+		text.replaceAll("&#229;", "å")
+			.replaceAll("&#228;", "ä")
+			.replaceAll("&#246;", "ö");
+	
 	Future<Map<String, String>> _search(String keyword) async
 	{
 		// TODO: Make it work with any school
@@ -118,7 +124,7 @@ class SearchState extends State<SearchDialog>
 				if (r[0].endsWith("-"))
 					r[0] = r[0].substring(0, r[0].length - 1);
 				results.addAll({
-					r[0].trim(): Uri.decodeComponent(r[1].trim())
+					r[0].trim(): _decode(r[1].trim())
 				});
 		});
 		
