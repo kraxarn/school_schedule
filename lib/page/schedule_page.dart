@@ -107,7 +107,7 @@ class SearchDialog extends StatefulWidget
 	
 	@override
 	State createState() =>
-		SearchState();
+		SearchState(_saved);
 	
 	SearchDialog(this._saved);
 }
@@ -117,7 +117,7 @@ class SearchState extends State<SearchDialog>
 	final _http = http.Client();
 	
 	/// Title (course code) of all saved
-	final _saved = Set<String>();
+	final _saved;
 	
 	/// Map with all results as <title, subtitle>
 	final _results = Map<String, String>();
@@ -130,6 +130,8 @@ class SearchState extends State<SearchDialog>
 		text.replaceAll("&#229;", "å")
 			.replaceAll("&#228;", "ä")
 			.replaceAll("&#246;", "ö");
+	
+	SearchState(this._saved);
 	
 	Future<Map<String, String>> _search(String keyword) async
 	{
