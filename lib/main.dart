@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'page/start_page.dart';
 import 'page/main_page.dart';
+import 'page/settings_page.dart';
 
 void main() => runApp(MyApp());
 
@@ -19,8 +20,9 @@ class MyApp extends StatelessWidget
 			),
 			home: StartPage(),
 			routes: {
-				"/start": (context) => StartPage(),
-				"/main":  (context) => MainPage()
+				"/start":    (context) => StartPage(),
+				"/main":     (context) => MainPage(),
+				"/settings": (context) => SettingsPage()
 			},
 		);
 	}

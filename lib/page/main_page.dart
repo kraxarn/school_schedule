@@ -35,36 +35,6 @@ class MainState extends State<MainPage>
 		)
 	];
 	
-	// TODO: This is just temporary until we have proper settings
-	_showSettings(context)
-	{
-		showDialog(
-			context: context,
-			builder: (builder) {
-				return SimpleDialog(
-					title: Text("Settings"),
-					children: <Widget>[
-						ListTile(
-							leading: Icon(Icons.school),
-							title: Text("Change School"),
-							onTap: () {
-								Navigator.of(context).pop();
-								Navigator.of(context).pushReplacementNamed("/start");
-							},
-						),
-						ListTile(
-							leading: Icon(Icons.text_fields),
-							title: Text("Privacy Policy"),
-							onTap: () {
-								Navigator.of(context).pop();
-							},
-						)
-					],
-				);
-			}
-		);
-	}
-	
 	_createTextField(String label, bool obscureText)
 	{
 		return TextField(
@@ -140,7 +110,7 @@ class MainState extends State<MainPage>
 					IconButton(
 						icon: Icon(Icons.settings),
 						onPressed: () {
-							_showSettings(context);
+							Navigator.of(context).pushNamed("/settings");
 						},
 					)
 				],
