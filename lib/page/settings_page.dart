@@ -105,6 +105,7 @@ class SettingsState extends State<SettingsPage>
 				"You're currently not logged in to your school account", null
 			),
 			_buildButton("Log in", null, () {
+				_showLogin(context);
 			}),
 			_buildButtonBar([])
 		]);
@@ -137,6 +138,65 @@ class SettingsState extends State<SettingsPage>
 		]);
 	}
 	
+	_buildTextField(String label, bool obscureText)
+	{
+		return TextField(
+			obscureText: obscureText,
+			decoration: InputDecoration(
+				labelText: label,
+				border: OutlineInputBorder(
+					borderRadius: BorderRadius.all(
+						Radius.circular(8.0)
+					)
+				)
+			),
+		);
+	}
+	
+	_showLogin(context)
+	{
+		showDialog(
+			context: context,
+			builder: (builder) {
+				return SimpleDialog(
+					title: Text("Login"),
+					children: <Widget>[
+						Padding(
+							padding: EdgeInsets.all(16.0),
+							child: _buildTextField("Username", false),
+						),
+						Padding(
+							padding: EdgeInsets.only(
+								left: 16.0,
+								right: 16.0,
+								bottom: 16.0
+							),
+							child: _buildTextField("Password", true),
+						),
+						ButtonTheme.bar(
+							child: ButtonBar(
+								children: <Widget>[
+									FlatButton(
+										child: Text("CANCEL"),
+										onPressed: () {
+											Navigator.of(context).pop();
+										},
+									),
+									FlatButton(
+										child: Text("OK"),
+										onPressed: () {
+											Navigator.of(context).pop();
+										},
+									)
+								],
+							),
+						)
+					],
+				);
+			}
+		);
+	}
+	
 	@override
 	Widget build(BuildContext context)
 	{
@@ -165,13 +225,16 @@ class PrivacyPolicyDialog extends StatefulWidget
 
 class PrivacyPolicyState extends State<PrivacyPolicyDialog>
 {
+	/// If we're currently loading the privacy policy
 	var _loading = true;
 	
+	/// String the privacy policy will be written to later
 	var _privacyPolicy = "";
 	
 	@override
 	Widget build(BuildContext context)
 	{
+		// We start fetching it ahead of time
 		http.read("https://kronox.se/app/privacypolicy.php").then((response) {
 			setState(() {
 				_privacyPolicy = response.substring(
@@ -182,21 +245,19 @@ class PrivacyPolicyState extends State<PrivacyPolicyDialog>
 			});
 		});
 		
+		// Return a basic view
 		return Scaffold(
 			appBar: AppBar(
 				title: Text("Privacy Policy"),
 			),
-			body: Padding(
-				padding: EdgeInsets.all(0.0),
-				child: _loading ? Align(
-					alignment: Alignment.topCenter,
-					child: CircularProgressIndicator(),
-				) : Scrollbar(
-					child: Markdown(
-						data: _privacyPolicy
-					),
-				)
-			),
+			// Show centered progress indicator while loading
+			body: _loading ? Center(
+				child: CircularProgressIndicator()
+			) : Scrollbar(
+				child: Markdown(
+					data: _privacyPolicy
+				),
+			)
 		);
 	}
 }

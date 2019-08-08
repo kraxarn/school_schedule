@@ -35,65 +35,6 @@ class MainState extends State<MainPage>
 		)
 	];
 	
-	_createTextField(String label, bool obscureText)
-	{
-		return TextField(
-			obscureText: obscureText,
-			decoration: InputDecoration(
-				labelText: label,
-				border: OutlineInputBorder(
-					borderRadius: BorderRadius.all(
-						Radius.circular(8.0)
-					)
-				)
-			),
-		);
-	}
-	
-	_showLogin(context)
-	{
-		showDialog(
-			context: context,
-			builder: (builder) {
-				return SimpleDialog(
-					title: Text("Login"),
-					children: <Widget>[
-						Padding(
-							padding: EdgeInsets.all(16.0),
-							child: _createTextField("Username", false),
-						),
-						Padding(
-							padding: EdgeInsets.only(
-								left: 16.0,
-								right: 16.0,
-								bottom: 16.0
-							),
-							child: _createTextField("Password", true),
-						),
-						ButtonTheme.bar(
-							child: ButtonBar(
-								children: <Widget>[
-									FlatButton(
-										child: Text("CANCEL"),
-										onPressed: () {
-											Navigator.of(context).pop();
-										},
-									),
-									FlatButton(
-										child: Text("OK"),
-										onPressed: () {
-											Navigator.of(context).pop();
-										},
-									)
-								],
-							),
-						)
-					],
-				);
-			}
-		);
-	}
-	
 	@override
 	Widget build(BuildContext context)
 	{
@@ -101,12 +42,6 @@ class MainState extends State<MainPage>
 			appBar: AppBar(
 				title: Text("KronoX"),
 				actions: <Widget>[
-					IconButton(
-						icon: Icon(Icons.account_circle),
-						onPressed: () {
-							_showLogin(context);
-						}
-					),
 					IconButton(
 						icon: Icon(Icons.settings),
 						onPressed: () {
