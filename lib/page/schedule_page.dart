@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SchedulePage extends StatefulWidget
 {
@@ -10,6 +11,8 @@ class SchedulePage extends StatefulWidget
 
 class ScheduleState extends State<SchedulePage>
 {
+	List<String> _savedCourses;
+	
 	_createTitle(ThemeData theme, text)
 	{
 		return ListTile(
@@ -48,12 +51,28 @@ class ScheduleState extends State<SchedulePage>
 	
 	_refreshSchedule()
 	{
+	}
 	
+	_openSearch() async
+	{
+		await Navigator.of(context).push(MaterialPageRoute(
+			builder: (builder) {
+				return SearchDialog(_savedCourses);
+			},
+			fullscreenDialog: true
+		));
+		
+		_savedCourses = (await SharedPreferences.getInstance())
+			.getStringList("courses");
 	}
 	
 	@override
 	Widget build(BuildContext context)
 	{
+		SharedPreferences.getInstance().then((prefs) {
+			_savedCourses = prefs.getStringList("courses");
+		});
+		
 		return Scaffold(
 			body: RefreshIndicator(
 				child: ListView(
@@ -74,12 +93,7 @@ class ScheduleState extends State<SchedulePage>
 			floatingActionButton: FloatingActionButton(
 				child: Icon(Icons.search),
 				onPressed: () {
-					Navigator.of(context).push(MaterialPageRoute(
-						builder: (builder) {
-							return SearchDialog();
-						},
-						fullscreenDialog: true
-					));
+					_openSearch();
 				},
 				backgroundColor: Theme.of(context).accentColor,
 			),
@@ -89,9 +103,13 @@ class ScheduleState extends State<SchedulePage>
 
 class SearchDialog extends StatefulWidget
 {
+	final List<String> _saved;
+	
 	@override
 	State createState() =>
 		SearchState();
+	
+	SearchDialog(this._saved);
 }
 
 class SearchState extends State<SearchDialog>
@@ -158,16 +176,21 @@ class SearchState extends State<SearchDialog>
 						_saved.remove(title);
 					else
 						_saved.add(title);
+					_save();
 				});
 			},
 		);
 	}
+	
+	_save() async => (await SharedPreferences.getInstance())
+			.setStringList("courses", _saved.toList());
 	
 	@override
 	Widget build(BuildContext context)
 	{
 		return Scaffold(
 			appBar: AppBar(
+				leading: SizedBox(),
 				title: ListTile(
 					title: TextField(
 						autofocus: true,
