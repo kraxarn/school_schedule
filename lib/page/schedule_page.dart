@@ -190,7 +190,6 @@ class SearchState extends State<SearchDialog>
 	{
 		return Scaffold(
 			appBar: AppBar(
-				leading: SizedBox(),
 				title: ListTile(
 					title: TextField(
 						autofocus: true,
