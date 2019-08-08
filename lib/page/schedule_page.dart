@@ -46,20 +46,30 @@ class ScheduleState extends State<SchedulePage>
 		);
 	}
 	
+	_refreshSchedule()
+	{
+	
+	}
+	
 	@override
 	Widget build(BuildContext context)
 	{
 		return Scaffold(
-			body: ListView(
-				children: <Widget>[
-					Padding(
-						padding: EdgeInsets.all(32.0),
-						child: Text(
-							"No courses found, press the search button to add",
-							textAlign: TextAlign.center,
+			body: RefreshIndicator(
+				child: ListView(
+					children: <Widget>[
+						Padding(
+							padding: EdgeInsets.all(32.0),
+							child: Text(
+								"No courses found, press the search button to add",
+								textAlign: TextAlign.center,
+							),
 						),
-					),
-				],
+					],
+				),
+				onRefresh: () {
+					return;
+				},
 			),
 			floatingActionButton: FloatingActionButton(
 				child: Icon(Icons.search),
@@ -121,8 +131,8 @@ class SearchState extends State<SearchDialog>
 				var r1 = result.substring(result.lastIndexOf("\">") + 2);
 				var r2 = r1.substring(0, r1.indexOf("<"));
 				var r = r2.split(',');
-				if (r[0].endsWith("-"))
-					r[0] = r[0].substring(0, r[0].length - 1);
+				//if (r[0].endsWith("-"))
+				//	r[0] = r[0].substring(0, r[0].length - 1);
 				results.addAll({
 					r[0].trim(): _decode(r[1].trim())
 				});
@@ -134,11 +144,14 @@ class SearchState extends State<SearchDialog>
 	Widget _createResult(String title, String subtitle)
 	{
 		final _alreadySaved = _saved.contains(title);
-		
 		return ListTile(
-			title: Text(title),
+			title: Text(title.endsWith('-')
+				? title.substring(0, title.length - 1) : title),
 			subtitle: Text(subtitle),
-			trailing: Icon(_alreadySaved ? Icons.star : Icons.star_border),
+			trailing: Icon(
+				_alreadySaved ? Icons.star : Icons.star_border,
+				color: _alreadySaved ? Colors.yellow : null,
+			),
 			onTap: () {
 				setState(() {
 					if (_alreadySaved)
@@ -157,6 +170,7 @@ class SearchState extends State<SearchDialog>
 			appBar: AppBar(
 				title: ListTile(
 					title: TextField(
+						autofocus: true,
 						decoration: InputDecoration(
 							hintText: "Search"
 						),
