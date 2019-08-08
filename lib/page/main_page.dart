@@ -50,6 +50,7 @@ class MainState extends State<MainPage>
 					)
 				],
 			),
+			/*
 			bottomNavigationBar: BottomNavigationBar(
 				items: _navigationBarItems,
 				currentIndex: _tabIndex,
@@ -59,6 +60,7 @@ class MainState extends State<MainPage>
 					});
 				},
 			),
+			 */
 			body: _tabPages[_tabIndex]
 		);
 	}
