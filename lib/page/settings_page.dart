@@ -1,6 +1,8 @@
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+// TODO: Using markdown is a lacy way to get HTML rendered properly
+import 'package:flutter_markdown/flutter_markdown.dart';
 
 class SettingsPage extends StatefulWidget
 {
@@ -8,21 +10,6 @@ class SettingsPage extends StatefulWidget
 	State createState() =>
 		SettingsState();
 }
-
-/*
- * -- General --
- * Change school
- * Privacy Policy
- * Dark Mode
- * Sync with device calendar
- *
- * -- Account --
- * Login to school account
- *
- * -- Google --
- * Login with Google account
- * Sync with Google calendar
- */
 
 class SettingsState extends State<SettingsPage>
 {
@@ -67,9 +54,17 @@ class SettingsState extends State<SettingsPage>
 			_buildTitle(context, "General"),
 			_buildButton("Change School", null, ()
 			{
+				Navigator.of(context).pop();
+				Navigator.of(context).pushReplacementNamed("/start");
 			}),
 			_buildButton("Privacy Policy", null, ()
 			{
+				Navigator.of(context).push(MaterialPageRoute(
+					builder: (builder) {
+						return PrivacyPolicyDialog();
+					},
+					fullscreenDialog: true
+				));
 			}),
 			SwitchListTile(
 				title: Text("Dark Mode"),
@@ -156,6 +151,51 @@ class SettingsState extends State<SettingsPage>
 					_buildAccountCard(context),
 					_buildGoogleCard(context)
 				],
+			),
+		);
+	}
+}
+
+class PrivacyPolicyDialog extends StatefulWidget
+{
+	@override
+	State createState() =>
+		PrivacyPolicyState();
+}
+
+class PrivacyPolicyState extends State<PrivacyPolicyDialog>
+{
+	var _loading = true;
+	
+	var _privacyPolicy = "";
+	
+	@override
+	Widget build(BuildContext context)
+	{
+		http.read("https://kronox.se/app/privacypolicy.php").then((response) {
+			setState(() {
+				_privacyPolicy = response.substring(
+					response.indexOf("</head>") + 7,
+					response.indexOf("</html>")
+				).replaceAll("<h2>", "## ").replaceAll("</h2>", "").trim();
+				_loading = false;
+			});
+		});
+		
+		return Scaffold(
+			appBar: AppBar(
+				title: Text("Privacy Policy"),
+			),
+			body: Padding(
+				padding: EdgeInsets.all(0.0),
+				child: _loading ? Align(
+					alignment: Alignment.topCenter,
+					child: CircularProgressIndicator(),
+				) : Scrollbar(
+					child: Markdown(
+						data: _privacyPolicy
+					),
+				)
 			),
 		);
 	}
