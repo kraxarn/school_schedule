@@ -365,7 +365,7 @@ class SearchState extends State<SearchDialog>
 		// TODO: Does nothing if already searching, should cancel
 		
 		final response = await _http.read(
-			"http://kronox.$_schoolId.se/ajax/ajax_sokResurser.jsp"
+			"https://webbschema.$_schoolId.se/ajax/ajax_sokResurser.jsp"
 			"?sokord=$keyword&startDatum=idag&slutDatum="
 			"&intervallTyp=a&intervallAntal=1");
 		
