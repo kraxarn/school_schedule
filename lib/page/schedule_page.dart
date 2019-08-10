@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../calendar_event.dart';
+
 class SchedulePage extends StatefulWidget
 {
 	@override
@@ -13,6 +15,8 @@ class ScheduleState extends State<SchedulePage>
 {
 	List<String> _savedCourses;
 	
+	final _events = List<CalendarEvent>();
+	
 	_createTitle(ThemeData theme, text)
 	{
 		return ListTile(
@@ -23,7 +27,29 @@ class ScheduleState extends State<SchedulePage>
 		);
 	}
 	
-	_createEvent(ThemeData theme, String day, title, subtitle, info)
+	String _weekdayToString(int weekday)
+	{
+		switch (weekday)
+		{
+			case 1:  return "MON";
+			case 2:  return "TUE";
+			case 3:  return "WED";
+			case 4:  return "THU";
+			case 5:  return "FRI";
+			case 6:  return "SAT";
+			case 7:  return "SUN";
+			default: return "???";
+		}
+	}
+	
+	String _timeToString(DateTime time)
+	{
+		final hours   = time.hour   < 10 ? "0${time.hour}"   : "${time.hour}";
+		final minutes = time.minute < 10 ? "0${time.minute}" : "${time.minute}";
+		return "$hours:$minutes";
+	}
+	
+	Widget _createEvent(ThemeData theme, CalendarEvent event)
 	{
 		return ListTile(
 			leading: Column(
@@ -31,27 +57,50 @@ class ScheduleState extends State<SchedulePage>
 				crossAxisAlignment: CrossAxisAlignment.center,
 				children: <Widget>[
 					Text(
-						day.split(' ')[0],
+						_weekdayToString(event.start.weekday),
 						style: theme.textTheme.caption,
 					),
 					Text(
-						day.split(' ')[1]
+						event.start.day.toString()
 					)
 				],
 			),
-			title:    Text(title),
-			subtitle: Text(subtitle),
+			title:    Text(event.summary),
+			subtitle: Text(
+				"${_timeToString(event.start)} - ${_timeToString(event.end)}"
+			),
 			trailing: Text(
-				info,
+				"${event.courseId}\n${event.location}",
 				textAlign: TextAlign.end
 			),
-			onTap: () {},
+			onTap: () {
+				// TODO: Expand to show some more info
+			},
 		);
 	}
 	
 	Future<void> _refreshSchedule() async
 	{
-	
+		// If no courses saved, do nothing
+		if (_savedCourses == null)
+		{
+			print("Refresh failed: no courses");
+			return;
+		}
+		
+		// Get events
+		final schoolId = (await SharedPreferences.getInstance()).getString("school");
+		
+		_events.clear();
+		for (var course in _savedCourses)
+		{
+			final event = CalendarEvent(await CalendarEvent.getCalendar(schoolId, course));
+			event.courseId = course;
+			setState(() {
+				_events.add(event);
+			});
+		}
+		return;
 	}
 	
 	_openSearch() async
@@ -77,7 +126,9 @@ class ScheduleState extends State<SchedulePage>
 		return Scaffold(
 			body: RefreshIndicator(
 				child: ListView(
-					children: <Widget>[
+					children: _events.map((event) {
+						return _createEvent(Theme.of(context), event);
+					}).toList() /*<Widget>[
 						Padding(
 							padding: EdgeInsets.all(32.0),
 							child: Text(
@@ -87,7 +138,7 @@ class ScheduleState extends State<SchedulePage>
 								textAlign: TextAlign.center,
 							),
 						),
-					],
+					],*/
 				),
 				onRefresh: () {
 					return _refreshSchedule();
