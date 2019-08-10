@@ -218,9 +218,7 @@ class ScheduleState extends State<SchedulePage>
 			}
 			catch (e)
 			{
-				Scaffold.of(context).showSnackBar(SnackBar(
-					content: Text("Connection to server failed")
-				));
+				print(e);
 				return;
 			}
 		}
