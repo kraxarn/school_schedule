@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:school_schedule/page/settings_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'schedule_page.dart';
 
@@ -55,7 +57,16 @@ class MainState extends State<MainPage> with SingleTickerProviderStateMixin
 					IconButton(
 						icon: Icon(Icons.settings),
 						onPressed: () {
-							Navigator.of(context).pushNamed("/settings");
+							// TODO: Pass arguments with named route instead
+							SharedPreferences.getInstance().then((prefs)
+							{
+								Navigator.of(context).push(
+									MaterialPageRoute(
+										builder: (context) =>
+											SettingsPage(prefs)
+									)
+								);
+							});
 						},
 					)
 				],

@@ -1,22 +1,26 @@
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-// TODO: Using markdown is a lacy way to get HTML rendered properly
+// TODO: Using markdown is a lazy way to get HTML rendered properly
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsPage extends StatefulWidget
 {
+	final SharedPreferences _preferences;
+	
+	SettingsPage(this._preferences);
+	
 	@override
 	State createState() =>
-		SettingsState();
+		SettingsState(_preferences);
 }
 
 class SettingsState extends State<SettingsPage>
 {
-	// Temporary
-	var _darkMode  = false;
-	var _deviceCal = false;
-	var _googleCal = false;
+	final SharedPreferences _preferences;
+	
+	SettingsState(this._preferences);
 	
 	_buildCard(List<Widget> children) =>
 		Card(
@@ -69,12 +73,14 @@ class SettingsState extends State<SettingsPage>
 			SwitchListTile(
 				title: Text("Dark Mode"),
 				subtitle: Text("Use a dark theme for the app"),
-				value: _darkMode,
+				value: _preferences.getString("theme") == "dark",
 				onChanged: (checked)
 				{
 					setState(()
 					{
-						_darkMode = checked;
+						_preferences.setString(
+							"theme", checked ? "dark" : "light"
+						);
 					});
 				}
 			),
@@ -83,13 +89,10 @@ class SettingsState extends State<SettingsPage>
 				subtitle: Text(
 					"Automatically add course events to device calendar"
 				),
-				value: _deviceCal,
+				value: false,
 				onChanged: (checked)
 				{
-					setState(()
-					{
-						_deviceCal = checked;
-					});
+					// TODO: Toggle setting here
 				}
 			),
 			_buildButtonBar([])
@@ -125,12 +128,12 @@ class SettingsState extends State<SettingsPage>
 				title: Text("Sync with Google calendar"),
 				subtitle: Text(
 					"Automatically add course events to Google calendar"),
-				value: _googleCal,
+				value: false,
 				onChanged: (checked)
 				{
 					setState(()
 					{
-						_googleCal = checked;
+						// TODO: Toggle setting here
 					});
 				},
 			),
