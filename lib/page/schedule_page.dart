@@ -91,14 +91,19 @@ class ScheduleState extends State<SchedulePage>
 		// Get events
 		final schoolId = (await SharedPreferences.getInstance()).getString("school");
 		
-		_events.clear();
+		setState(() {
+		  _events.clear();
+		});
 		for (var course in _savedCourses)
 		{
-			final event = CalendarEvent(await CalendarEvent.getCalendar(schoolId, course));
-			event.courseId = course;
-			setState(() {
-				_events.add(event);
-			});
+			final events = CalendarEvent.parseMultiple(await CalendarEvent.getCalendar(schoolId, course));
+			for (var event in events)
+			{
+				event.courseId = course.substring(0, course.indexOf('-'));
+				setState(() {
+					_events.add(event);
+				});
+			}
 		}
 		return;
 	}
