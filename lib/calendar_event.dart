@@ -38,6 +38,10 @@ class CalendarEvent
 	String _summary;
 	String get summary => _summary;
 	
+	/// Course ID for helping later
+	/// (currently not fetched from ICS)
+	String courseId;
+	
 	/// Parses a single event
 	CalendarEvent(String data)
 	{
