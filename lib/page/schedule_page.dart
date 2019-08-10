@@ -110,7 +110,7 @@ class SearchDialog extends StatefulWidget
 	
 	@override
 	State createState() =>
-		SearchState(_saved);
+		SearchState(_saved ?? new List<String>());
 	
 	SearchDialog(this._saved);
 }
