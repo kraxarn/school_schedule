@@ -80,6 +80,61 @@ class ScheduleState extends State<SchedulePage>
 		}
 	}
 	
+	TableRow _buildEventInfoRow(String title, String info)
+	{
+		return TableRow(
+			children: [
+				Text(
+					title,
+					style: Theme.of(context).textTheme.subtitle,
+				),
+				Text(info ?? "(none)")
+			]
+		);
+	}
+	
+	TableRow _buildEventDivider()
+	{
+		return TableRow(
+			children: [
+				Divider(),
+				Divider()
+			]
+		);
+	}
+	
+	void _showEventInfo(CalendarEvent event)
+	{
+		showModalBottomSheet(
+			context: context,
+			builder: (builder) {
+				return Padding(
+					padding: EdgeInsets.all(32.0),
+					child: Table(
+						defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+						children: [
+							_buildEventInfoRow(
+								"Course Name", event.courseId
+							),
+							_buildEventDivider(),
+							_buildEventInfoRow(
+								"Signature", event.signature
+							),
+							_buildEventDivider(),
+							_buildEventInfoRow(
+								"Start", event.start.toString()
+							),
+							_buildEventDivider(),
+							_buildEventInfoRow(
+								"End", event.end.toString()
+							),
+						],
+					)
+				);
+			}
+		);
+	}
+	
 	Widget _buildEvent(ThemeData theme, CalendarEvent event)
 	{
 		return ListTile(
@@ -101,11 +156,12 @@ class ScheduleState extends State<SchedulePage>
 				"${_timeToString(event.start)} - ${_timeToString(event.end)}"
 			),
 			trailing: Text(
-				"${event.courseId}\n${event.location}",
+				"${event.courseId.substring(0, event.courseId.indexOf('-'))}\n"
+				"${event.location}",
 				textAlign: TextAlign.end
 			),
 			onTap: () {
-				// TODO: Expand to show some more info
+				_showEventInfo(event);
 			},
 		);
 	}
@@ -149,7 +205,7 @@ class ScheduleState extends State<SchedulePage>
 				final events = CalendarEvent.parseMultiple(cal);
 				for (var event in events)
 				{
-					event.courseId = course.substring(0, course.indexOf('-'));
+					//event.courseId = course.substring(0, course.indexOf('-'));
 					setState(() {
 						_events.add(event);
 					});
