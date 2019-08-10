@@ -125,19 +125,27 @@ class SearchState extends State<SearchDialog>
 	/// If we should show the loading spinner
 	var _loading = false;
 	
+	/// Set school id from preferences
+	String _schoolId;
+	
 	/// Fix å, ä, ö (kind of hacky, but works)
 	String _decode(String text) =>
 		text.replaceAll("&#229;", "å")
 			.replaceAll("&#228;", "ä")
 			.replaceAll("&#246;", "ö");
 	
-	SearchState(this._saved);
+	SearchState(this._saved)
+	{
+		// Get school ID from preferences when instancing
+		SharedPreferences.getInstance().then((prefs) {
+			_schoolId = prefs.getString("school");
+		});
+	}
 	
 	Future<Map<String, String>> _search(String keyword) async
 	{
-		// TODO: Make it work with any school
 		final response = await _http.read(
-			"http://webbschema.mdh.se/ajax/ajax_sokResurser.jsp"
+			"http://kronox.$_schoolId.se/ajax/ajax_sokResurser.jsp"
 			"?sokord=$keyword&startDatum=idag&slutDatum="
 			"&intervallTyp=a&intervallAntal=1");
 		
