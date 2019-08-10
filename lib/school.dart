@@ -28,9 +28,6 @@ class School
 	/// Get the full school name
 	String get name => _school.value;
 	
-	/// Base KronoX url
-	String get baseUrl => "http://kronox.$id.se";
-	
 	/// Main constructor from the school ID
 	School(String schoolId)
 	{
