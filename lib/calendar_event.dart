@@ -89,7 +89,7 @@ class CalendarEvent
 	
 	/// Get ICS calendar for specified course
 	static Future<String> getCalendar(String schoolId, String courseId) =>
-		http.read("https://kronox.$schoolId.se/setup/jsp/SchemaICAL.ics?"
+		http.read("https://webbschema.$schoolId.se/setup/jsp/SchemaICAL.ics?"
 			"startDatum=idag&intervallTyp=a&intervallAntal=1&sprak=SV"
 			"&sokMedAND=true&forklaringar=true&resurser=k.$courseId");
 }
