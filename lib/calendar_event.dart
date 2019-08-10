@@ -35,11 +35,13 @@ class CalendarEvent
 	String get location => _location;
 	
 	/// Summary or subject
+	/// TODO: Parse summary nicer
 	String _summary;
 	String get summary => _summary;
 	
 	/// Course ID for helping later
 	/// (currently not fetched from ICS)
+	/// TODO: Course ID can be fetched from summary
 	String courseId;
 	
 	/// Parses a single event
@@ -50,26 +52,56 @@ class CalendarEvent
 			switch (l[0])
 			{
 				case "DTSTART":
-					_start = DateTime.parse(l[1]);
+					_start = _parseDateTime(l[1]);
 					break;
 					
 				case "DTEND":
-					_end = DateTime.parse(l[2]);
+					_end = _parseDateTime(l[1]);
 					break;
 					
 				case "LAST-MODIFIED":
-					_lastModified = DateTime.parse(l[1]);
+					_lastModified = _parseDateTime(l[1]);
 					break;
 					
 				case "LOCATION":
-					_location = l[1].trim();
+					_location = l[1].trim().replaceAll(" ", ", ");
 					break;
 					
 				case "SUMMARY":
-					_summary = l[1].trim();
+					/*
+					 * TODO: Here we actually want to get each part
+					 *  and put it somewhere separately, but for now, we
+					 *  just put the interesting stuff and also assume what
+					 *  ends it
+					 */
+					_summary = line.substring(line.indexOf("Moment:") + 7, line.indexOf("Aktivitetstyp")).trim();
 					break;
 			}
 		});
+	}
+	
+	/// Parse iCal date
+	/// WARNING: This assumes UTC+2 time zone
+	DateTime _parseDateTime(String data)
+	{
+		data = data.trim();
+		
+		// Dart's DateTime.parse doesn't work, so we have to make our own
+		return DateTime(
+			// Year
+			int.parse(data.substring(0, 4)),
+			// Month
+			int.parse(data.substring(4, 6)),
+			// Day
+			int.parse(data.substring(6, 8)),
+			// Hour
+			// (add 2 if Z (UTC) / convert to UTC+2)
+			int.parse(data.substring(9, 11)) + (data.endsWith('Z') ? 2 : 0),
+			// Minute
+			int.parse(data.substring(11, 13)),
+			// Second (prob not needed, but why not)
+			int.parse(data.substring(13, 15)),
+		);
 	}
 	
 	/// Parse all events in an ICS file
