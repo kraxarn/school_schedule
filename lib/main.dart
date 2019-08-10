@@ -32,8 +32,8 @@ class MyApp extends StatelessWidget
 			),
 			home: StartPage(),
 			routes: {
-				"/start":    (context) => StartPage(),
-				"/main":     (context) => MainPage()
+				"/start": (context) => StartPage(),
+				"/main":  (context) => MainPage()
 			},
 		);
 	}
