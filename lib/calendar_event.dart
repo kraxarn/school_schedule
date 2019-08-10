@@ -74,7 +74,7 @@ class CalendarEvent
 					break;
 					
 				case "LOCATION":
-					_location = l[1].trim().replaceAll(" ", ", ");
+					_location = l[1].trim();
 					break;
 					
 				case "SUMMARY":

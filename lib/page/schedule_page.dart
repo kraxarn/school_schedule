@@ -122,6 +122,11 @@ class ScheduleState extends State<SchedulePage>
 							),
 							_buildEventDivider(),
 							_buildEventInfoRow(
+								"Locations",
+								event.location.replaceAll(" ", ", ")
+							),
+							_buildEventDivider(),
+							_buildEventInfoRow(
 								"Start", event.start.toString()
 							),
 							_buildEventDivider(),
@@ -157,7 +162,7 @@ class ScheduleState extends State<SchedulePage>
 			),
 			trailing: Text(
 				"${event.courseId.substring(0, event.courseId.indexOf('-'))}\n"
-				"${event.location}",
+				"${event.location.substring(0, event.location.indexOf(' '))}",
 				textAlign: TextAlign.end
 			),
 			onTap: () {
