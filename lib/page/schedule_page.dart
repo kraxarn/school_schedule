@@ -82,20 +82,6 @@ class ScheduleState extends State<SchedulePage>
 		);
 	}
 	
-	bool _trySetState(void Function() state)
-	{
-		try
-		{
-			setState(state);
-			return true;
-		}
-		catch (e)
-		{
-			print("Failed to set state: ${e.toString()}");
-			return false;
-		}
-	}
-	
 	@override
 	void initState()
 	{
