@@ -116,7 +116,7 @@ class CalendarEvent
 		// Return final list with events
 		return events.map((event) {
 			return CalendarEvent(event);
-		});
+		}).toList();
 	}
 	
 	/// Get ICS calendar for specified course
