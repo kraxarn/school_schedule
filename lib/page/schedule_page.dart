@@ -105,32 +105,35 @@ class ScheduleState extends State<SchedulePage>
 		// Get events
 		final schoolId = (await SharedPreferences.getInstance()).getString("school");
 		
-		setState(() {
+		// We only set state here if events is empty
+		if (_savedCourses == null ||  _savedCourses.isEmpty)
+			setState(() {
+				_events.clear();
+			});
+		else
 			_events.clear();
-		});
 		
 		for (var course in _savedCourses)
 		{
-			CalendarEvent.getCalendar(_http, schoolId, course)
-				.then((cal)
+			try
+			{
+				var cal = await CalendarEvent.getCalendar(_http, schoolId, course);
+				final events = CalendarEvent.parseMultiple(cal);
+				for (var event in events)
 				{
-					final events = CalendarEvent.parseMultiple(cal);
-					for (var event in events)
-					{
-						event.courseId = course.substring(0, course.indexOf('-'));
-						setState(() {
-							_events.add(event);
-						});
-					}
-				})
-				.catchError((error)
-				{
-					Scaffold.of(context).showSnackBar(SnackBar(
-						content: Text("Connection to server failed")
-					));
-					_http.close();
-					return;
-				});
+					event.courseId = course.substring(0, course.indexOf('-'));
+					setState(() {
+						_events.add(event);
+					});
+				}
+			}
+			catch (e)
+			{
+				Scaffold.of(context).showSnackBar(SnackBar(
+					content: Text("Connection to server failed")
+				));
+				return;
+			}
 		}
 	}
 	
