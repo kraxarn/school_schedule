@@ -17,6 +17,9 @@ class ScheduleState extends State<SchedulePage>
 	
 	final _events = List<CalendarEvent>();
 	
+	/// Reusable HTTP instance for schedule refreshing
+	final _http = http.Client();
+	
 	_createTitle(ThemeData theme, text)
 	{
 		return ListTile(
@@ -79,7 +82,32 @@ class ScheduleState extends State<SchedulePage>
 		);
 	}
 	
-	Future<void> _refreshSchedule() async
+	bool _trySetState(void Function() state)
+	{
+		try
+		{
+			setState(state);
+			return true;
+		}
+		catch (e)
+		{
+			print("Failed to set state: ${e.toString()}");
+			return false;
+		}
+	}
+	
+	@override
+	void initState()
+	{
+		super.initState();
+		
+		SharedPreferences.getInstance().then((prefs) {
+			_savedCourses = prefs.getStringList("courses");
+			_refreshSchedule(context);
+		});
+	}
+	
+	Future<void> _refreshSchedule(BuildContext context) async
 	{
 		// If no courses saved, do nothing
 		if (_savedCourses == null)
@@ -91,17 +119,32 @@ class ScheduleState extends State<SchedulePage>
 		// Get events
 		final schoolId = (await SharedPreferences.getInstance()).getString("school");
 		
-		_events.clear();
+		setState(() {
+			_events.clear();
+		});
+		
 		for (var course in _savedCourses)
 		{
-			final events = CalendarEvent.parseMultiple(await CalendarEvent.getCalendar(schoolId, course));
-			for (var event in events)
-			{
-				event.courseId = course.substring(0, course.indexOf('-'));
-				setState(() {
-					_events.add(event);
+			CalendarEvent.getCalendar(_http, schoolId, course)
+				.then((cal)
+				{
+					final events = CalendarEvent.parseMultiple(cal);
+					for (var event in events)
+					{
+						event.courseId = course.substring(0, course.indexOf('-'));
+						setState(() {
+							_events.add(event);
+						});
+					}
+				})
+				.catchError((error)
+				{
+					Scaffold.of(context).showSnackBar(SnackBar(
+						content: Text("Connection to server failed")
+					));
+					_http.close();
+					return;
 				});
-			}
 		}
 	}
 	
@@ -148,17 +191,13 @@ class ScheduleState extends State<SchedulePage>
 	@override
 	Widget build(BuildContext context)
 	{
-		SharedPreferences.getInstance().then((prefs) {
-			_savedCourses = prefs.getStringList("courses");
-		});
-		
 		return Scaffold(
 			body: RefreshIndicator(
 				child: ListView(
 					children: _buildEvents()
 				),
 				onRefresh: () {
-					return _refreshSchedule();
+					return _refreshSchedule(context);
 				},
 			),
 			floatingActionButton: FloatingActionButton(
@@ -215,6 +254,8 @@ class SearchState extends State<SearchDialog>
 	
 	Future<Map<String, String>> _search(String keyword) async
 	{
+		// TODO: Does nothing if already searching, should cancel
+		
 		final response = await _http.read(
 			"http://kronox.$_schoolId.se/ajax/ajax_sokResurser.jsp"
 			"?sokord=$keyword&startDatum=idag&slutDatum="
