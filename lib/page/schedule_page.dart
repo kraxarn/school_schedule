@@ -91,9 +91,7 @@ class ScheduleState extends State<SchedulePage>
 		// Get events
 		final schoolId = (await SharedPreferences.getInstance()).getString("school");
 		
-		setState(() {
-		  _events.clear();
-		});
+		_events.clear();
 		for (var course in _savedCourses)
 		{
 			final events = CalendarEvent.parseMultiple(await CalendarEvent.getCalendar(schoolId, course));
@@ -105,7 +103,33 @@ class ScheduleState extends State<SchedulePage>
 				});
 			}
 		}
-		return;
+	}
+	
+	_buildStatusMessage(String text) =>
+		[
+			Padding(
+				padding: EdgeInsets.all(32.0),
+				child: Text(
+					text,
+					textAlign: TextAlign.center,
+				)
+			)
+		];
+	
+	List<Widget> _buildEvents()
+	{
+		// Check if no saved courses
+		if (_savedCourses == null || _savedCourses.isEmpty)
+			return _buildStatusMessage("No courses found, press the search button to add");
+		
+		// Check if no events for saved courses
+		if (_events.isEmpty)
+			return _buildStatusMessage("No events found for saved courses");
+		
+		// We have courses with events
+		return _events.map((event) {
+			return _createEvent(Theme.of(context), event);
+		}).toList();
 	}
 	
 	_openSearch() async
@@ -131,19 +155,7 @@ class ScheduleState extends State<SchedulePage>
 		return Scaffold(
 			body: RefreshIndicator(
 				child: ListView(
-					children: _events.map((event) {
-						return _createEvent(Theme.of(context), event);
-					}).toList() /*<Widget>[
-						Padding(
-							padding: EdgeInsets.all(32.0),
-							child: Text(
-								_savedCourses == null || _savedCourses.isEmpty
-									? "No courses found, press the search button to add"
-									: "No events found for saved courses",
-								textAlign: TextAlign.center,
-							),
-						),
-					],*/
+					children: _buildEvents()
 				),
 				onRefresh: () {
 					return _refreshSchedule();
