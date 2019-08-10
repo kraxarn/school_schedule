@@ -20,12 +20,20 @@ class ScheduleState extends State<SchedulePage>
 	/// Reusable HTTP instance for schedule refreshing
 	final _http = http.Client();
 	
-	_createTitle(ThemeData theme, text)
+	Widget _buildTitle(ThemeData theme, text)
 	{
-		return ListTile(
-			title: Text(
-				text,
-				style: theme.textTheme.title,
+		return DecoratedBox(
+			child: ListTile(
+				title: Text(
+					text,
+					style: theme.textTheme.title,
+				),
+			
+			),
+			decoration: BoxDecoration(
+				border: Border(
+					bottom: Divider.createBorderSide(context)
+				)
 			),
 		);
 	}
@@ -52,7 +60,27 @@ class ScheduleState extends State<SchedulePage>
 		return "$hours:$minutes";
 	}
 	
-	Widget _createEvent(ThemeData theme, CalendarEvent event)
+	String _monthToString(int month)
+	{
+		switch (month)
+		{
+			case 1:  return "Janurary";
+			case 2:  return "February";
+			case 3:  return "March";
+			case 4:  return "April";
+			case 5:  return "May";
+			case 6:  return "June";
+			case 7:  return "July";
+			case 8:  return "August";
+			case 9:  return "September";
+			case 10: return "October";
+			case 11: return "November";
+			case 12: return "December";
+			default: return "Unknown";
+		}
+	}
+	
+	Widget _buildEvent(ThemeData theme, CalendarEvent event)
 	{
 		return ListTile(
 			leading: Column(
@@ -158,10 +186,42 @@ class ScheduleState extends State<SchedulePage>
 		if (_events.isEmpty)
 			return _buildStatusMessage("No events found for saved courses");
 		
-		// We have courses with events
-		return _events.map((event) {
-			return _createEvent(Theme.of(context), event);
-		}).toList();
+		// Creates titles for a year
+		final events = List<Widget>();
+		final now = DateTime.now();
+		for (var i = now.month; i <= now.month + 12; i++)
+		{
+			// Temporary variables
+			final year  = i <= 12 ? now.year  : now.year + 1;
+			final month = i <= 12 ? i : i % 12;
+			
+			// Add month title
+			events.add(_buildTitle(Theme.of(context), "${_monthToString(month)} $year"));
+			
+			// Add all events in month
+			final monthEvents = _events
+				.where((event) => event.start.month == month
+					&& event.start.year == year);
+			
+			// Insert message if empty
+			if (monthEvents.isEmpty)
+			{
+				events.add(ListTile(
+					title: Text(
+						"No events for this month",
+						style: Theme.of(context).textTheme.caption,
+					),
+				));
+			}
+			else
+			{
+				monthEvents
+					.forEach((event) => events
+					.add(_buildEvent(Theme.of(context), event)));
+			}
+		}
+		
+		return events;
 	}
 	
 	_openSearch() async
