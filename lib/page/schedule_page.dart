@@ -49,8 +49,9 @@ class ScheduleState extends State<SchedulePage>
 		);
 	}
 	
-	_refreshSchedule()
+	Future<void> _refreshSchedule() async
 	{
+	
 	}
 	
 	_openSearch() async
@@ -80,14 +81,16 @@ class ScheduleState extends State<SchedulePage>
 						Padding(
 							padding: EdgeInsets.all(32.0),
 							child: Text(
-								"No courses found, press the search button to add",
+								_savedCourses == null || _savedCourses.isEmpty
+									? "No courses found, press the search button to add"
+									: "No events found for saved courses",
 								textAlign: TextAlign.center,
 							),
 						),
 					],
 				),
 				onRefresh: () {
-					return;
+					return _refreshSchedule();
 				},
 			),
 			floatingActionButton: FloatingActionButton(
@@ -96,7 +99,7 @@ class ScheduleState extends State<SchedulePage>
 					_openSearch();
 				},
 				backgroundColor: Theme.of(context).accentColor,
-			),
+			)
 		);
 	}
 }
