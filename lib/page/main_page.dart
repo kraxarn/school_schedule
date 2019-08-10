@@ -10,30 +10,40 @@ class MainPage extends StatefulWidget
 		MainState();
 }
 
-class MainState extends State<MainPage>
+class MainState extends State<MainPage> with SingleTickerProviderStateMixin
 {
-	var _tabIndex = 0;
-	
 	final _tabPages = <Widget>[
 		SchedulePage(),
 		BookPage(),
-		ExamPage()
+		//ExamPage()
 	];
 	
-	final _navigationBarItems = <BottomNavigationBarItem>[
-		BottomNavigationBarItem(
-			title: Text("Schedule"),
-			icon: Icon(Icons.calendar_today)
+	final _tabItems = <Tab>[
+		Tab(
+			child: ListTile(
+				leading: Icon(Icons.calendar_today),
+				title: Text("Schedule"),
+			),
 		),
-		BottomNavigationBarItem(
-			title: Text("Booking"),
-			icon: Icon(Icons.access_time)
-		),
-		BottomNavigationBarItem(
-			title: Text("Exams"),
-			icon: Icon(Icons.school)
+		Tab(
+			child: ListTile(
+				leading: Icon(Icons.access_time),
+				title: Text("Booking"),
+			),
 		)
 	];
+	
+	TabController _tabController;
+	
+	@override
+	void initState()
+	{
+		super.initState();
+		_tabController = TabController(
+			vsync: this,
+			length: _tabItems.length
+		);
+	}
 	
 	@override
 	Widget build(BuildContext context)
@@ -49,19 +59,15 @@ class MainState extends State<MainPage>
 						},
 					)
 				],
+				bottom: TabBar(
+					tabs: _tabItems,
+					controller: _tabController,
+				),
 			),
-			/*
-			bottomNavigationBar: BottomNavigationBar(
-				items: _navigationBarItems,
-				currentIndex: _tabIndex,
-				onTap: (index) {
-					setState(() {
-						_tabIndex = index;
-					});
-				},
-			),
-			 */
-			body: _tabPages[_tabIndex]
+			body: TabBarView(
+				controller: _tabController,
+				children: _tabPages,
+			)
 		);
 	}
 }
@@ -78,7 +84,13 @@ class BookState extends State<BookPage>
 	@override
 	Widget build(BuildContext context)
 	{
-		return Text("BookPage");
+		return Padding(
+			padding: EdgeInsets.all(32.0),
+			child: Text(
+				"This feature is currently not available, come back later!",
+				textAlign: TextAlign.center,
+			),
+		);
 	}
 }
 
@@ -94,6 +106,13 @@ class ExamState extends State<ExamPage>
 	@override
 	Widget build(BuildContext context)
 	{
-		return Text("ExamPage");
+		return Padding(
+			padding: EdgeInsets.all(32.0),
+			child: Text(
+				"This feature is currently not available, "
+				"contact me if you want to help me out!",
+				textAlign: TextAlign.center,
+			),
+		);
 	}
 }
