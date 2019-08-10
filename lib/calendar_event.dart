@@ -39,10 +39,20 @@ class CalendarEvent
 	String _summary;
 	String get summary => _summary;
 	
-	/// Course ID for helping later
-	/// (currently not fetched from ICS)
-	/// TODO: Course ID can be fetched from summary
-	String courseId;
+	/// Course ID / course code
+	String _courseId;
+	String get courseId => _courseId;
+	
+	/// Signature / who created it
+	String _signature;
+	String get signature => _signature;
+	
+	/// Substring between start and end of text
+	String _between(String text, String start, String end) =>
+		text.substring(
+			text.indexOf(start) + start.length,
+			text.indexOf(end)
+		).trim();
 	
 	/// Parses a single event
 	CalendarEvent(String data)
@@ -69,12 +79,13 @@ class CalendarEvent
 					
 				case "SUMMARY":
 					/*
-					 * TODO: Here we actually want to get each part
-					 *  and put it somewhere separately, but for now, we
-					 *  just put the interesting stuff and also assume what
-					 *  ends it
+					 * TODO: This could possible be done better
+					 * Assume:
+					 * SUMMARY: Kurs.grp:<course-id> Sign:<signature> Moment:<summary>
 					 */
-					_summary = line.substring(line.indexOf("Moment:") + 7, line.indexOf("Aktivitetstyp")).trim();
+					_courseId  = _between(line, "Kurs.grp:", "Sign");
+					_signature = _between(line, "Sign:", "Moment");
+					_summary   = _between(line, "Moment:", "Aktivitetstyp");
 					break;
 			}
 		});
