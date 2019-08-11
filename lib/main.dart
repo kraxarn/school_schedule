@@ -1,25 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'page/main_page.dart';
 import 'page/start_page.dart';
-import 'page/splash_page.dart';
+import 'preferences.dart';
 
-void main()
-{
-	SharedPreferences.getInstance().then((prefs) {
-		runApp(MyApp(
-			prefs.getString("theme") == "dark"
-				? ThemeData.dark() : ThemeData.light()
-		));
+void main() =>
+	Preferences.create().then((result) {
+		runApp(MyApp());
 	});
-}
 
 class MyApp extends StatelessWidget
 {
-	final ThemeData _baseTheme;
-	
-	MyApp(this._baseTheme);
+	ThemeData get _baseTheme =>
+		(Preferences.darkMode ? ThemeData.dark() : ThemeData.light());
 	
 	@override
 	Widget build(BuildContext context)
@@ -31,12 +24,11 @@ class MyApp extends StatelessWidget
 				primaryColorDark: Colors.orange[700],
 				accentColor: Colors.deepOrangeAccent
 			),
-			home: SplashPage(),
+			home: Preferences.school == null ? StartPage() : MainPage(),
 			routes: {
-				"/splash": (context) => SplashPage(),
 				"/start":  (context) => StartPage(),
 				"/main":   (context) => MainPage()
-			},
+			}
 		);
 	}
 }
