@@ -103,7 +103,7 @@ class SearchState extends State<SearchDialog>
 						decoration: InputDecoration(
 							hintText: "Search"
 						),
-						onChanged: (value) {
+						onSubmitted: (value) {
 							setState(() {
 								if (value.isEmpty || value.length < 3)
 									return;
