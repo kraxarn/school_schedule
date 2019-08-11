@@ -252,8 +252,10 @@ class PrivacyPolicyState extends State<PrivacyPolicyDialog>
 	var _privacyPolicy = "";
 	
 	@override
-	Widget build(BuildContext context)
+	void initState()
 	{
+		super.initState();
+		
 		// We start fetching it ahead of time
 		http.read("https://kronox.se/app/privacypolicy.php").then((response) {
 			setState(() {
@@ -264,7 +266,11 @@ class PrivacyPolicyState extends State<PrivacyPolicyDialog>
 				_loading = false;
 			});
 		});
-		
+	}
+	
+	@override
+	Widget build(BuildContext context)
+	{
 		// Return a basic view
 		return Scaffold(
 			appBar: AppBar(
@@ -310,7 +316,7 @@ class LicenseState extends State<LicenseDialog>
 		client.read("https://raw.githubusercontent.com/dart-lang/sdk/master/LICENSE").then((response)
 		{
 			_addLicense("Dart SDK", response);
-			// Flutter SDK,  shared_preferences and package_info
+			// Flutter SDK, shared_preferences and package_info
 			client.read("https://raw.githubusercontent.com/flutter/flutter/master/LICENSE").then((response)
 			{
 				_addLicense("Flutter and Flutter plugins", response);
