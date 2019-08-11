@@ -178,14 +178,6 @@ class ScheduleState extends State<SchedulePage>
 		);
 	}
 	
-	@override
-	void initState()
-	{
-		super.initState();
-		_loadFromCache();
-		_refreshSchedule(context);
-	}
-	
 	Future<void> _refreshSchedule(BuildContext context) async
 	{
 		// If no courses saved, do nothing
@@ -323,6 +315,14 @@ class ScheduleState extends State<SchedulePage>
 			},
 			fullscreenDialog: true
 		));
+	}
+	
+	@override
+	void initState()
+	{
+		super.initState();
+		_loadFromCache();
+		_refreshSchedule(context);
 	}
 	
 	@override
