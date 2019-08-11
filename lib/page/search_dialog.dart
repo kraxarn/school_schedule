@@ -27,6 +27,8 @@ class SearchState extends State<SearchDialog>
 	/// If we should show the loading spinner
 	var _loading = false;
 	
+	var _enteringText = false;
+	
 	/// Set school id from preferences
 	String _schoolId = Preferences.school;
 	
@@ -48,6 +50,9 @@ class SearchState extends State<SearchDialog>
 				"&intervallTyp=a&intervallAntal=1");
 		
 		final results = Map<String, String>();
+		
+		if (!response.contains("resursLista"))
+			return results;
 		
 		response.substring(
 			response.indexOf("resursLista") + 13,
@@ -90,6 +95,12 @@ class SearchState extends State<SearchDialog>
 		);
 	}
 	
+	Widget _buildStatusText() =>
+		_enteringText ? Padding(
+			padding: EdgeInsets.all(32.0),
+			child: Text("No results found")
+		) : SizedBox();
+	
 	_save() async => Preferences.savedCourses = _saved;
 	
 	@override
@@ -103,16 +114,18 @@ class SearchState extends State<SearchDialog>
 						decoration: InputDecoration(
 							hintText: "Search"
 						),
+						onChanged: (value) {
+							_enteringText = value.length > 3;
+						},
 						onSubmitted: (value) {
-							setState(() {
+							setState(()
+							{
 								if (value.isEmpty || value.length < 3)
 									return;
 								_loading = true;
 								_results.clear();
 								_search(value).then((results) {
-									setState(() {
-										_results.addAll(results);
-									});
+									setState(() => _results.addAll(results));
 									_loading = false;
 								});
 							});
@@ -124,7 +137,7 @@ class SearchState extends State<SearchDialog>
 				children: <Widget>[
 					_loading ? LinearProgressIndicator(
 						backgroundColor: Color.fromARGB(0, 0, 0, 0),
-					) : SizedBox(),
+					) : _buildStatusText(),
 					Expanded(
 						child: ListView(
 							children: _results.entries.map((result) {
