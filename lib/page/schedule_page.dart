@@ -18,7 +18,7 @@ class SchedulePage extends StatefulWidget
 
 class ScheduleState extends State<SchedulePage>
 {
-	final _savedCourses = Preferences.savedCourses;
+	List<String> get _savedCourses => Preferences.savedCourses;
 	
 	final _events = List<CalendarEvent>();
 	
@@ -311,7 +311,7 @@ class ScheduleState extends State<SchedulePage>
 	{
 		await Navigator.of(context).push(MaterialPageRoute(
 			builder: (builder) {
-				return SearchDialog(_savedCourses);
+				return SearchDialog();
 			},
 			fullscreenDialog: true
 		));

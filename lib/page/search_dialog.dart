@@ -5,13 +5,9 @@ import '../preferences.dart';
 
 class SearchDialog extends StatefulWidget
 {
-	final List<String> _saved;
-	
 	@override
 	State createState() =>
-		SearchState(_saved ?? new List<String>());
-	
-	SearchDialog(this._saved);
+		SearchState();
 }
 
 class SearchState extends State<SearchDialog>
@@ -19,7 +15,7 @@ class SearchState extends State<SearchDialog>
 	final _http = http.Client();
 	
 	/// Title (course code) of all saved
-	final List<String> _saved;
+	List<String> get _saved => Preferences.savedCourses ?? List<String>();
 	
 	/// Map with all results as <title, subtitle>
 	final _results = Map<String, String>();
@@ -37,8 +33,6 @@ class SearchState extends State<SearchDialog>
 		text.replaceAll("&#229;", "å")
 			.replaceAll("&#228;", "ä")
 			.replaceAll("&#246;", "ö");
-	
-	SearchState(this._saved);
 	
 	Future<Map<String, String>> _search(String keyword) async
 	{
@@ -101,7 +95,7 @@ class SearchState extends State<SearchDialog>
 			child: Text("No results found")
 		) : SizedBox();
 	
-	_save() async => Preferences.savedCourses = _saved;
+	_save() => Preferences.savedCourses = _saved;
 	
 	@override
 	Widget build(BuildContext context)
