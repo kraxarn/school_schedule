@@ -196,6 +196,7 @@ class ScheduleState extends State<SchedulePage>
 		if (_savedCourses == null ||  _savedCourses.isEmpty)
 		{
 			setState(() => _events.clear());
+			_refreshing = false;
 			return;
 		}
 		
