@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'page/main_page.dart';
 import 'page/start_page.dart';
+import 'page/splash_page.dart';
 
 void main()
 {
@@ -30,10 +31,11 @@ class MyApp extends StatelessWidget
 				primaryColorDark: Colors.orange[700],
 				accentColor: Colors.deepOrangeAccent
 			),
-			home: StartPage(),
+			home: SplashPage(),
 			routes: {
-				"/start": (context) => StartPage(),
-				"/main":  (context) => MainPage()
+				"/splash": (context) => SplashPage(),
+				"/start":  (context) => StartPage(),
+				"/main":   (context) => MainPage()
 			},
 		);
 	}
