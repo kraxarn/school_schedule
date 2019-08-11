@@ -263,7 +263,9 @@ class ScheduleState extends State<SchedulePage>
 			// Add all events in month
 			final monthEvents = _events
 				.where((event) => event.start.month == month
-					&& event.start.year == year);
+					&& event.start.year == year).toList();
+			monthEvents.sort(((e1, e2) =>
+				e1.start.compareTo(e2.start)));
 			
 			// Insert message if empty
 			if (monthEvents.isEmpty)
