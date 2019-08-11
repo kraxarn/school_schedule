@@ -23,6 +23,7 @@ dependencies:
   http: any
   flutter_markdown: any
   package_info: any
+  path_provider: any
 
 dev_dependencies:
   flutter_test:
