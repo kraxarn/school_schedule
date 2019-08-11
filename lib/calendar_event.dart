@@ -115,6 +115,30 @@ class CalendarEvent
 		);
 	}
 	
+	/// DateTime to int
+	static int _encodeDate(DateTime value) =>
+		value.millisecondsSinceEpoch;
+	
+	/// int to DateTime
+	static DateTime _decodeDate(int value) =>
+		DateTime.fromMillisecondsSinceEpoch(value);
+	
+	CalendarEvent.fromJson(Map<String, dynamic> json) : _start = _decodeDate(json["start"]),
+			_end = _decodeDate(json["end"]), _lastModified = _decodeDate(json["last_modified"]),
+			_location = json["location"], _summary = json["summary"],
+			_courseId = json["course_id"], _signature = json["signature"];
+	
+	Map<String, dynamic> toJson() =>
+		{
+			"start":         _encodeDate(_start),
+			"end":           _encodeDate(_end),
+			"last_modified": _encodeDate(_lastModified),
+			"location":      _location,
+			"summary":       _summary,
+			"course_id":     _courseId,
+			"signature":     _signature
+		};
+	
 	/// Parse all events in an ICS file
 	static List<CalendarEvent> parseMultiple(String data)
 	{
