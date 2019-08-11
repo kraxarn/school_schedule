@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../calendar_event.dart';
+import '../preferences.dart';
 
 class SchedulePage extends StatefulWidget
 {
@@ -13,7 +13,7 @@ class SchedulePage extends StatefulWidget
 
 class ScheduleState extends State<SchedulePage>
 {
-	List<String> _savedCourses;
+	final _savedCourses = Preferences.savedCourses;
 	
 	final _events = List<CalendarEvent>();
 	
@@ -175,11 +175,7 @@ class ScheduleState extends State<SchedulePage>
 	void initState()
 	{
 		super.initState();
-		
-		SharedPreferences.getInstance().then((prefs) {
-			_savedCourses = prefs.getStringList("courses");
-			_refreshSchedule(context);
-		});
+		_refreshSchedule(context);
 	}
 	
 	Future<void> _refreshSchedule(BuildContext context) async
@@ -192,7 +188,7 @@ class ScheduleState extends State<SchedulePage>
 		}
 		
 		// Get events
-		final schoolId = (await SharedPreferences.getInstance()).getString("school");
+		final schoolId = Preferences.school;
 		
 		// We only set state here if events is empty
 		if (_savedCourses == null ||  _savedCourses.isEmpty)
@@ -291,9 +287,6 @@ class ScheduleState extends State<SchedulePage>
 			},
 			fullscreenDialog: true
 		));
-		
-		_savedCourses = (await SharedPreferences.getInstance())
-			.getStringList("courses");
 	}
 	
 	@override
@@ -335,7 +328,7 @@ class SearchState extends State<SearchDialog>
 	final _http = http.Client();
 	
 	/// Title (course code) of all saved
-	final _saved;
+	final List<String> _saved;
 	
 	/// Map with all results as <title, subtitle>
 	final _results = Map<String, String>();
@@ -344,7 +337,7 @@ class SearchState extends State<SearchDialog>
 	var _loading = false;
 	
 	/// Set school id from preferences
-	String _schoolId;
+	String _schoolId = Preferences.school;
 	
 	/// Fix å, ä, ö (kind of hacky, but works)
 	String _decode(String text) =>
@@ -352,13 +345,7 @@ class SearchState extends State<SearchDialog>
 			.replaceAll("&#228;", "ä")
 			.replaceAll("&#246;", "ö");
 	
-	SearchState(this._saved)
-	{
-		// Get school ID from preferences when instancing
-		SharedPreferences.getInstance().then((prefs) {
-			_schoolId = prefs.getString("school");
-		});
-	}
+	SearchState(this._saved);
 	
 	Future<Map<String, String>> _search(String keyword) async
 	{
@@ -412,8 +399,7 @@ class SearchState extends State<SearchDialog>
 		);
 	}
 	
-	_save() async => (await SharedPreferences.getInstance())
-			.setStringList("courses", _saved.toList());
+	_save() async => Preferences.savedCourses = _saved;
 	
 	@override
 	Widget build(BuildContext context)

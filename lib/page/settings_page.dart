@@ -3,25 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 // TODO: Using markdown is a lazy way to get HTML rendered properly
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
+import '../preferences.dart';
 
 class SettingsPage extends StatefulWidget
 {
-	final SharedPreferences _preferences;
-	
-	SettingsPage(this._preferences);
-	
 	@override
-	State createState() =>
-		SettingsState(_preferences);
+	State createState() => SettingsState();
 }
 
 class SettingsState extends State<SettingsPage>
 {
-	final SharedPreferences _preferences;
-	
-	SettingsState(this._preferences);
-	
 	_buildCard(List<Widget> children) =>
 		Card(
 			child: Column(
@@ -73,16 +65,9 @@ class SettingsState extends State<SettingsPage>
 			SwitchListTile(
 				title: Text("Dark Mode"),
 				subtitle: Text("Use a dark theme for the app"),
-				value: _preferences.getString("theme") == "dark",
-				onChanged: (checked)
-				{
-					setState(()
-					{
-						_preferences.setString(
-							"theme", checked ? "dark" : "light"
-						);
-					});
-				}
+				value: Preferences.darkMode,
+				onChanged: (checked) =>
+					setState(() => Preferences.darkMode = checked)
 			),
 			SwitchListTile(
 				title: Text("Sync with device calendar"),
