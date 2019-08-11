@@ -178,7 +178,7 @@ class ScheduleState extends State<SchedulePage>
 		);
 	}
 	
-	Future<void> _refreshSchedule(BuildContext context) async
+	Future<void> _refreshSchedule() async
 	{
 		// If no courses saved, do nothing
 		if (_savedCourses == null)
@@ -322,7 +322,7 @@ class ScheduleState extends State<SchedulePage>
 	{
 		super.initState();
 		_loadFromCache();
-		_refreshSchedule(context);
+		_refreshSchedule();
 	}
 	
 	@override
@@ -334,7 +334,7 @@ class ScheduleState extends State<SchedulePage>
 					children: _buildEvents()
 				),
 				onRefresh: () {
-					return _refreshSchedule(context);
+					return _refreshSchedule();
 				},
 			),
 			floatingActionButton: FloatingActionButton(
