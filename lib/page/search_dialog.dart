@@ -96,7 +96,7 @@ class SearchState extends State<SearchDialog>
 	}
 	
 	Widget _buildStatusText() =>
-		_enteringText ? Padding(
+		_enteringText && _results.isEmpty ? Padding(
 			padding: EdgeInsets.all(32.0),
 			child: Text("No results found")
 		) : SizedBox();
