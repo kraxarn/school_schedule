@@ -21,6 +21,8 @@ class ScheduleState extends State<SchedulePage>
 	/// Reusable HTTP instance for schedule refreshing
 	final _http = http.Client();
 	
+	var _refreshing = false;
+	
 	Widget _buildTitle(ThemeData theme, text)
 	{
 		return DecoratedBox(
@@ -188,6 +190,8 @@ class ScheduleState extends State<SchedulePage>
 			return;
 		}
 		
+		_refreshing = true;
+		
 		// Get events
 		final schoolId = Preferences.school;
 		
@@ -212,10 +216,13 @@ class ScheduleState extends State<SchedulePage>
 						_events.add(event);
 					});
 				}
+				
+				_refreshing = false;
 			}
 			catch (e)
 			{
 				print(e);
+				_refreshing = false;
 				return;
 			}
 		}
@@ -234,6 +241,11 @@ class ScheduleState extends State<SchedulePage>
 	
 	List<Widget> _buildEvents()
 	{
+		if (_refreshing)
+			return [
+				SizedBox()
+			];
+		
 		// Check if no saved courses
 		if (_savedCourses == null || _savedCourses.isEmpty)
 			return _buildStatusMessage("No courses found, press the search button to add");
