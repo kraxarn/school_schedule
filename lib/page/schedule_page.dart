@@ -315,6 +315,7 @@ class ScheduleState extends State<SchedulePage>
 			},
 			fullscreenDialog: true
 		));
+		_refreshSchedule();
 	}
 	
 	@override
