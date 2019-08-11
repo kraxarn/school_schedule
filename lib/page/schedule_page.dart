@@ -197,9 +197,7 @@ class ScheduleState extends State<SchedulePage>
 		
 		// We only set state here if events is empty
 		if (_savedCourses == null ||  _savedCourses.isEmpty)
-			setState(() {
-				_events.clear();
-			});
+			setState(() => _events.clear());
 		else
 			_events.clear();
 		
@@ -208,14 +206,10 @@ class ScheduleState extends State<SchedulePage>
 			try
 			{
 				var cal = await CalendarEvent.getCalendar(_http, schoolId, course);
+				
 				final events = CalendarEvent.parseMultiple(cal);
 				for (var event in events)
-				{
-					//event.courseId = course.substring(0, course.indexOf('-'));
-					setState(() {
-						_events.add(event);
-					});
-				}
+					setState(() => _events.add(event));
 				
 				_refreshing = false;
 			}
