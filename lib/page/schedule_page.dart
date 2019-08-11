@@ -1,5 +1,9 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
 
 import '../calendar_event.dart';
 import '../preferences.dart';
@@ -178,6 +182,7 @@ class ScheduleState extends State<SchedulePage>
 	void initState()
 	{
 		super.initState();
+		_loadFromCache();
 		_refreshSchedule(context);
 	}
 	
@@ -197,20 +202,19 @@ class ScheduleState extends State<SchedulePage>
 		
 		// We only set state here if events is empty
 		if (_savedCourses == null ||  _savedCourses.isEmpty)
+		{
 			setState(() => _events.clear());
-		else
-			_events.clear();
+			return;
+		}
+		
+		final tempEvents = List<CalendarEvent>();
 		
 		for (var course in _savedCourses)
 		{
 			try
 			{
 				var cal = await CalendarEvent.getCalendar(_http, schoolId, course);
-				
-				final events = CalendarEvent.parseMultiple(cal);
-				for (var event in events)
-					setState(() => _events.add(event));
-				
+				tempEvents.addAll(CalendarEvent.parseMultiple(cal));
 				_refreshing = false;
 			}
 			catch (e)
@@ -220,6 +224,29 @@ class ScheduleState extends State<SchedulePage>
 				return;
 			}
 		}
+		
+		_events.clear();
+		setState(() => _events.addAll(tempEvents));
+		_saveToCache();
+		print("Saved ${_events.length} events to cache");
+	}
+	
+	/// Save current event list to cache
+	void _saveToCache() async =>
+		await File("${(await getTemporaryDirectory()).path}/events.json")
+			.writeAsString(jsonEncode(_events.map((event) => event.toJson()).toList()));
+	
+	/// Loads the current event list from cache
+	void _loadFromCache() async
+	{
+		_events.clear();
+		
+		final file = File("${(await getTemporaryDirectory()).path}/events.json");
+		if (!(await file.exists()))
+			return;
+		final tempEvents = jsonDecode(await file.readAsString()) as List<dynamic>;
+		final events = tempEvents.map((value) => CalendarEvent.fromJson(value));
+		setState(() => _events.addAll(events));
 	}
 	
 	_buildStatusMessage(String text) =>
@@ -235,7 +262,7 @@ class ScheduleState extends State<SchedulePage>
 	
 	List<Widget> _buildEvents()
 	{
-		if (_refreshing)
+		if (_refreshing && _events.isEmpty)
 			return [
 				SizedBox()
 			];
