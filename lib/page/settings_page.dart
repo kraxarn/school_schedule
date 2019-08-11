@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 // TODO: Using markdown is a lazy way to get HTML rendered properly
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:package_info/package_info.dart';
 
 import '../preferences.dart';
 
@@ -14,6 +15,10 @@ class SettingsPage extends StatefulWidget
 
 class SettingsState extends State<SettingsPage>
 {
+	// For about card
+	var _version = "v1.0.0";
+	var _build = "1";
+	
 	_buildCard(List<Widget> children) =>
 		Card(
 			child: Column(
@@ -52,15 +57,6 @@ class SettingsState extends State<SettingsPage>
 			{
 				Navigator.of(context).pop();
 				Navigator.of(context).pushReplacementNamed("/start");
-			}),
-			_buildButton("Privacy Policy", null, ()
-			{
-				Navigator.of(context).push(MaterialPageRoute(
-					builder: (builder) {
-						return PrivacyPolicyDialog();
-					},
-					fullscreenDialog: true
-				));
 			}),
 			SwitchListTile(
 				title: Text("Dark Mode"),
@@ -122,6 +118,41 @@ class SettingsState extends State<SettingsPage>
 					});
 				},
 			),
+			_buildButtonBar([])
+		]);
+	}
+	
+	_buildAboutCard()
+	{
+		PackageInfo.fromPlatform().then((info) {
+			setState(()
+			{
+				_version = "Version ${info.version}";
+				_build   = "Build ${info.buildNumber}";
+			});
+		});
+		
+		return _buildCard([
+			_buildTitle(context, "About"),
+			_buildButton(_version, _build, null),
+			_buildButton("Privacy Policy", null, ()
+			{
+				Navigator.of(context).push(MaterialPageRoute(
+					builder: (builder) {
+						return PrivacyPolicyDialog();
+					},
+					fullscreenDialog: true
+				));
+			}),
+			_buildButton("Licenses", null, ()
+			{
+				Navigator.of(context).push(MaterialPageRoute(
+					builder: (builder) {
+						return LicenseDialog();
+					},
+					fullscreenDialog: true
+				));
+			}),
 			_buildButtonBar([])
 		]);
 	}
@@ -194,10 +225,11 @@ class SettingsState extends State<SettingsPage>
 			),
 			body: ListView(
 				padding: EdgeInsets.all(16.0),
-				children: <Widget>[
+				children: [
 					_buildGeneralCard(context),
 					_buildAccountCard(context),
-					_buildGoogleCard(context)
+					_buildGoogleCard(context),
+					_buildAboutCard()
 				],
 			),
 		);
@@ -244,6 +276,69 @@ class PrivacyPolicyState extends State<PrivacyPolicyDialog>
 			) : Scrollbar(
 				child: Markdown(
 					data: _privacyPolicy
+				),
+			)
+		);
+	}
+}
+
+class LicenseDialog extends StatefulWidget
+{
+	@override
+	State createState() => LicenseState();
+}
+
+class LicenseState extends State<LicenseDialog>
+{
+	// This is very similar to the privacy policy view
+	
+	var _loading = true;
+	
+	var _licenses = "";
+	
+	_addLicense(String title, String message) =>
+		_licenses += "\n# $title\n\n$message";
+	
+	@override
+	void initState()
+	{
+		super.initState();
+		
+		final client = http.Client();
+		
+		// Dart SDK
+		client.read("https://raw.githubusercontent.com/dart-lang/sdk/master/LICENSE").then((response)
+		{
+			_addLicense("Dart SDK", response);
+			// Flutter SDK,  shared_preferences and package_info
+			client.read("https://raw.githubusercontent.com/flutter/flutter/master/LICENSE").then((response)
+			{
+				_addLicense("Flutter and Flutter plugins", response);
+				// Dart HTTP
+				client.read("https://raw.githubusercontent.com/dart-lang/http/master/LICENSE").then((response) {
+					_addLicense("Dart plugins", response);
+					// flutter_markdown
+					client.read("https://raw.githubusercontent.com/flutter/flutter_markdown/master/LICENSE").then((response) {
+						_addLicense("Flutter Markdown", response);
+						setState(() => _loading = false);
+					});
+				});
+			});
+		});
+	}
+	
+	@override
+	Widget build(BuildContext context)
+	{
+		return Scaffold(
+			appBar: AppBar(
+				title: Text("Licenses"),
+			),
+			body: _loading ? Center(
+				child: CircularProgressIndicator()
+			) : Scrollbar(
+				child: Markdown(
+					data: _licenses
 				),
 			)
 		);
