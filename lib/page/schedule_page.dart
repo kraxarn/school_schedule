@@ -278,7 +278,7 @@ class ScheduleState extends State<SchedulePage>
 		// Creates titles for a year
 		final events = List<Widget>();
 		final now = DateTime.now();
-		for (var i = now.month; i <= now.month + months; i++)
+		for (var i = all.first.start.month; i <= all.first.start.month + months; i++)
 		{
 			// Temporary variables
 			final year  = i <= 12 ? now.year : now.year + 1;
