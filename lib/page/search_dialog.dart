@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:school_schedule/course_name.dart';
 
 import '../preferences.dart';
 
@@ -77,14 +78,23 @@ class SearchState extends State<SearchDialog>
 				_alreadySaved ? Icons.star : Icons.star_border,
 				color: _alreadySaved ? Colors.yellow : null,
 			),
-			onTap: () {
-				setState(() {
+			onTap: ()
+			{
+				setState(()
+				{
 					if (_alreadySaved)
 						_saved.remove(title);
 					else
 						_saved.add(title);
 					_save();
 				});
+				
+				// Save to course name
+				// (this is unrelated to widget state)
+				if (_alreadySaved)
+					CourseName.remove(title);
+				else
+					CourseName.add(title, subtitle);
 			},
 		);
 	}
