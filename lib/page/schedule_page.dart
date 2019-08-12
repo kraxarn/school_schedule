@@ -264,13 +264,24 @@ class ScheduleState extends State<SchedulePage>
 		if (_events.isEmpty)
 			return _buildStatusMessage("No events found for saved courses");
 		
+		// Get first and last month for events
+		final all = List<CalendarEvent>();
+		all.addAll(_events);
+		all.sort((e1, e2) => e1.start.compareTo(e2.start));
+		
+		// Months between first and last event
+		// Shortest month here just to be sure, could possibly be done better
+		// We also floor it (even though it's not really needed)
+		final months = (all.last.end.difference(all.first.start).inDays / 28)
+			.floor();
+		
 		// Creates titles for a year
 		final events = List<Widget>();
 		final now = DateTime.now();
-		for (var i = now.month; i <= now.month + 12; i++)
+		for (var i = now.month; i <= now.month + months; i++)
 		{
 			// Temporary variables
-			final year  = i <= 12 ? now.year  : now.year + 1;
+			final year  = i <= 12 ? now.year : now.year + 1;
 			final month = i <= 12 ? i : i % 12;
 			
 			// Add month title
