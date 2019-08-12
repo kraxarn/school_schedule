@@ -10,12 +10,16 @@ class Account
 	
 	Account(this._session);
 	
+	/// Saves account id to settings
+	void save() =>
+		Preferences.accountId = _session.value;
+	
 	/// Create a new session
 	static Future<Cookie> getSession(HttpClient httpClient) async
 	{
 		// Get session cookie
 		final sessionResponse = await (await httpClient.getUrl(Uri.parse(
-		"https://webbschema.${Preferences.school}.se"))).close();
+			"https://webbschema.${Preferences.school}.se"))).close();
 	
 		// Get cookie from first response
 		final cookies = sessionResponse.cookies;
