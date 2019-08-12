@@ -13,7 +13,9 @@ class CourseName
 		if (!(await file.exists()))
 			return false;
 		_courseNames.clear();
-		_courseNames.addAll(jsonDecode(await file.readAsString()));
+		_courseNames.addAll(
+			(jsonDecode(await file.readAsString()) as Map<String, dynamic>)
+				.map((key, value) => MapEntry<String, String>(key, value)));
 		return true;
 	}
 	
