@@ -1,10 +1,11 @@
+import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-// TODO: Using markdown is a lazy way to get HTML rendered properly
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:http/http.dart' as http;
 import 'package:package_info/package_info.dart';
 
+import '../account.dart';
 import '../preferences.dart';
 
 class SettingsPage extends StatefulWidget
@@ -85,12 +86,15 @@ class SettingsState extends State<SettingsPage>
 	{
 		return _buildCard([
 			_buildTitle(context, "Account"),
-			_buildButton("Not logged in",
-				"You're currently not logged in to your school account", null
+			_buildButton(Preferences.accountId == null
+				? "Not logged in" : "Logged in",
+				Preferences.accountId == null
+					? "You're currently not logged in to your school account"
+					: "You're logged in", null
 			),
-			_buildButton("Log in", null, () {
-				_showLogin(context);
-			}),
+			_buildButton(Preferences.accountId == null ? "Log in" : "Log out",
+				null, () => Preferences.accountId == null
+					? _showLogin(context) : _logOut()),
 			_buildButtonBar([])
 		]);
 	}
@@ -157,63 +161,20 @@ class SettingsState extends State<SettingsPage>
 		]);
 	}
 	
-	_buildTextField(String label, bool obscureText)
-	{
-		return TextField(
-			obscureText: obscureText,
-			decoration: InputDecoration(
-				labelText: label,
-				border: OutlineInputBorder(
-					borderRadius: BorderRadius.all(
-						Radius.circular(8.0)
-					)
-				)
-			),
-		);
-	}
+	_logOut() =>
+		setState(() => Preferences.accountId = null);
 	
 	_showLogin(context)
 	{
-		showDialog(
-			context: context,
+		Navigator.of(context).push(MaterialPageRoute(
 			builder: (builder) {
-				return SimpleDialog(
-					title: Text("Login"),
-					children: <Widget>[
-						Padding(
-							padding: EdgeInsets.all(16.0),
-							child: _buildTextField("Username", false),
-						),
-						Padding(
-							padding: EdgeInsets.only(
-								left: 16.0,
-								right: 16.0,
-								bottom: 16.0
-							),
-							child: _buildTextField("Password", true),
-						),
-						ButtonTheme.bar(
-							child: ButtonBar(
-								children: <Widget>[
-									FlatButton(
-										child: Text("CANCEL"),
-										onPressed: () {
-											Navigator.of(context).pop();
-										},
-									),
-									FlatButton(
-										child: Text("OK"),
-										onPressed: () {
-											Navigator.of(context).pop();
-										},
-									)
-								],
-							),
-						)
-					],
-				);
-			}
-		);
+				return LoginDialog();
+			},
+			fullscreenDialog: true
+		));
+		
+		if (Preferences.accountId != null)
+			setState(() {});
 	}
 	
 	@override
@@ -232,6 +193,157 @@ class SettingsState extends State<SettingsPage>
 					_buildAboutCard()
 				],
 			),
+		);
+	}
+}
+
+enum LoginState
+{
+	notLoggingIn,
+	loggingIn,
+	loginError
+}
+
+class LoginDialog extends StatefulWidget
+{
+	@override
+	State createState() => LoginDialogState();
+}
+
+class LoginDialogState extends State<LoginDialog>
+{
+	final _formKey = GlobalKey<FormState>();
+	
+	final _usernameController = TextEditingController();
+	final _passwordController = TextEditingController();
+	
+	/// State of current school account login
+	var _loggingIn = false;
+	
+	// We use a Dart HttpClient here because cookies
+	final _http = HttpClient();
+	Cookie _session;
+	
+	_buildTextField(String label, bool obscureText,
+		TextEditingController controller, String Function(String) validator)
+	{
+		return TextFormField(
+			controller: controller,
+			obscureText: obscureText,
+			decoration: InputDecoration(
+				labelText: label,
+				border: OutlineInputBorder(
+					borderRadius: BorderRadius.all(
+						Radius.circular(8.0)
+					)
+				)
+			),
+			validator: validator,
+		);
+	}
+	
+	_showResultDialog(String content)
+	{
+		showDialog(
+			context: context,
+			builder: (builder) =>
+				AlertDialog(
+					title: Text("Login Failed"),
+					content: Text(content),
+					actions: <Widget>[
+						FlatButton(
+							child: Text("OK"),
+							onPressed: () => Navigator.of(context).pop(),
+						)
+					],
+				)
+			
+		);
+	}
+	
+	void _login() async
+	{
+		// Show that we're logging in
+		setState(() => _loggingIn = true);
+		
+		// If no session known, create
+		if (_session == null)
+			_session = await Account.getSession(_http);
+		
+		// Try to login
+		final account = await Account.login(_http,
+			_usernameController.text, _passwordController.text, _session);
+		account?.save();
+		
+		setState(() => _loggingIn = false);
+		
+		if (account == null)
+			_showResultDialog("Incorrect username or password");
+		else
+			Navigator.of(context).pop();
+	}
+	
+	@override
+	Widget build(BuildContext context)
+	{
+		// Return a basic view
+		return Scaffold(
+			appBar: AppBar(
+				title: Text("School Login"),
+			),
+			body: Form(
+				key: _formKey,
+				child: Column(
+					children: <Widget>[
+						_loggingIn ? LinearProgressIndicator(
+							backgroundColor: Color.fromARGB(0, 0, 0, 0),
+						) : SizedBox(),
+						Padding(
+							padding: EdgeInsets.only(
+								top: 32.0,
+								left: 32.0,
+								right: 32.0,
+								bottom: 16.0
+							),
+							child: _buildTextField("Username", false,
+								_usernameController, (value) =>
+									value.isEmpty
+										? "Please enter username" : null),
+						),
+						Padding(
+							padding: EdgeInsets.only(
+								left: 32.0,
+								right: 32.0,
+								bottom: 16.0
+							),
+							child: _buildTextField("Password", true,
+								_passwordController, (value) =>
+									value.isEmpty
+										? "Please enter password" : null)
+						),
+						ButtonTheme.bar(
+							child: ButtonBar(
+								children: <Widget>[
+									Padding(
+										padding: EdgeInsets.symmetric(
+											horizontal: 32.0
+										),
+										child: FlatButton(
+											child: Text("LOGIN"),
+											onPressed: ()
+											{
+												if (_formKey.currentState
+													.validate())
+													_login();
+											}
+										),
+									),
+								]
+							)
+						)
+					],
+				)
+			)
 		);
 	}
 }
