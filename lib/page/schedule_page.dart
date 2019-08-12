@@ -182,10 +182,7 @@ class ScheduleState extends State<SchedulePage>
 	{
 		// If no courses saved, do nothing
 		if (_savedCourses == null)
-		{
-			print("Refresh failed: no courses");
 			return;
-		}
 		
 		_refreshing = true;
 		
@@ -221,7 +218,6 @@ class ScheduleState extends State<SchedulePage>
 		_events.clear();
 		setState(() => _events.addAll(tempEvents));
 		_saveToCache();
-		print("Saved ${_events.length} events to cache");
 	}
 	
 	/// Save current event list to cache
@@ -232,13 +228,13 @@ class ScheduleState extends State<SchedulePage>
 	/// Loads the current event list from cache
 	void _loadFromCache() async
 	{
-		_events.clear();
-		
 		final file = File("${(await getTemporaryDirectory()).path}/events.json");
 		if (!(await file.exists()))
 			return;
 		final tempEvents = jsonDecode(await file.readAsString()) as List<dynamic>;
 		final events = tempEvents.map((value) => CalendarEvent.fromJson(value));
+		
+		_events.clear();
 		setState(() => _events.addAll(events));
 	}
 	
