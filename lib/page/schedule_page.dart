@@ -7,7 +7,7 @@ import 'package:path_provider/path_provider.dart';
 
 import '../calendar_event.dart';
 import '../preferences.dart';
-import 'search_dialog.dart';
+import '../dialog/search_dialog.dart';
 import '../course_name.dart';
 
 class SchedulePage extends StatefulWidget
