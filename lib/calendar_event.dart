@@ -43,6 +43,10 @@ class CalendarEvent
 	String _courseId;
 	String get courseId => _courseId;
 	
+	String get fullCourseId =>
+		_courseId.contains(' ')
+			? _courseId.substring(_courseId.indexOf(' ') + 1) : _courseId;
+	
 	/// Signature / who created it
 	String _signature;
 	String get signature => _signature;
