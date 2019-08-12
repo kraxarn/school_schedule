@@ -57,8 +57,6 @@ class SearchState extends State<SearchDialog>
 			var r1 = result.substring(result.lastIndexOf("\">") + 2);
 			var r2 = r1.substring(0, r1.indexOf("<"));
 			var r = r2.split(',');
-			//if (r[0].endsWith("-"))
-			//	r[0] = r[0].substring(0, r[0].length - 1);
 			results.addAll({
 				r[0].trim(): _decode(r[1].trim())
 			});
