@@ -1,3 +1,4 @@
+import 'package:school_schedule/course_name.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Application preferences
@@ -82,6 +83,7 @@ class Preferences
 		_googleId     = prefs.getString("google");
 		_googleSync   = prefs.getBool("google_sync");
 		
+		await CourseName.load();
 		return true;
 	}
 }
