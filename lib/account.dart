@@ -10,45 +10,6 @@ class Account
 	
 	Account(this._session);
 	
-	/// Attempts login
-	/// Returns Account on success or null on failure
-	/// TODO: This uses the http package
-	///  which currently does not support cookies until #20 is fixed
-	/*static Future<Account> login(String username, String password) async
-	{
-		// HTTP client to use throughout the method
-		final client = http.Client();
-		
-		// Get response from home page
-		final response = await client.get(
-			"https://webbschema.${Preferences.school}.se");
-		
-		// Get the cookies and check if we got a session cookie
-		final headers = response.headers;
-		final cookies = response.headers["set-cookie"];
-		if (!cookies.contains("JSESSIONID"))
-			return null;
-		print("login_cookies: $cookies");
-		
-		// Extract the session cookie from the cookies string
-		final session = cookies.substring(
-			cookies.indexOf('=') + 1, cookies.indexOf(';'));
-		print("login_session: $session");
-		
-		// Try logging in
-		final loginResponse = await http.read(
-			"https://webbschema.${Preferences.school}.se/ajax/"
-				"ajax_login.jsp?username=$username&password=$password",
-			headers: headers
-		);
-		
-		print("login_response: $loginResponse");
-		
-		if (loginResponse != "OK")
-			return null;
-		return Account(session);
-	}*/
-	
 	/// Create a new session
 	static Future<Cookie> getSession(HttpClient httpClient) async
 	{
