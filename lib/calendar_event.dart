@@ -1,4 +1,6 @@
+import 'package:device_calendar/device_calendar.dart';
 import 'package:http/http.dart' as http;
+import 'package:school_schedule/course_name.dart';
 
 /*
  * iCal properties:
@@ -18,6 +20,9 @@ import 'package:http/http.dart' as http;
 
 class CalendarEvent
 {
+	/// ID used with device calendar
+	String _id;
+	
 	/// Date and time of start
 	DateTime _start;
 	DateTime get start => _start;
@@ -81,6 +86,10 @@ class CalendarEvent
 					_location = l[1].trim();
 					break;
 					
+				case "UID":
+					_id = l[1].trim();
+					break;
+					
 				case "SUMMARY":
 					/*
 					 * TODO: This could possible be done better
@@ -142,6 +151,17 @@ class CalendarEvent
 			"course_id":     _courseId,
 			"signature":     _signature
 		};
+	
+	Event toDeviceCalendarEvent() =>
+		Event(
+			"kronox",
+			eventId: _id,
+			title: summary,
+			start: start,
+			end: end,
+			// TODO: No location
+			description: "$location, $courseId, ${CourseName.get(courseId)}"
+		);
 	
 	/// Parse all events in an ICS file
 	static List<CalendarEvent> parseMultiple(String data)

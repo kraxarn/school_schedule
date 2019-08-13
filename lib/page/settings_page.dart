@@ -1,3 +1,4 @@
+import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 
@@ -69,10 +70,32 @@ class SettingsState extends State<SettingsPage>
 				subtitle: Text(
 					"Automatically add course events to device calendar"
 				),
-				value: false,
-				onChanged: (checked)
+				value: Preferences.deviceSync,
+				onChanged: (checked) async
 				{
-					// TODO: Toggle setting here
+					// Always allow disable
+					if (!checked)
+						return setState(() => Preferences.deviceSync = false);
+					
+					// If enabling, check permission
+					final deviceCalendar = DeviceCalendarPlugin();
+					final permission = await deviceCalendar.requestPermissions();
+					
+					// If denied, just return
+					if (!permission.data)
+						return;
+					
+					// Create calendar if needed
+					final calendars = (await deviceCalendar.retrieveCalendars()).data;
+					if (calendars.any((calendar) => calendar.name == "KronoX"))
+						calendars.add(Calendar(
+							id:         "KronoX",
+							name:       "KronoX Device Calendar",
+							isReadOnly: false
+						));
+					
+					// Otherwise, enable
+					setState(() => Preferences.deviceSync = true);
 				}
 			),
 			_buildButtonBar([])

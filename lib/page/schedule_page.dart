@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
@@ -211,19 +212,61 @@ class ScheduleState extends State<SchedulePage>
 			{
 				var cal = await CalendarEvent.getCalendar(_http, schoolId, course);
 				tempEvents.addAll(CalendarEvent.parseMultiple(cal));
-				_refreshing = false;
 			}
 			catch (e)
 			{
 				print(e);
-				_refreshing = false;
 				return;
 			}
 		}
 		
 		_events.clear();
 		setState(() => _events.addAll(tempEvents));
+		_refreshing = false;
 		_saveToCache();
+	}
+	
+	Future<void> _refreshDeviceSchedule() async
+	{
+		// Don't if not enabled
+		if (!Preferences.deviceSync)
+			return;
+		
+		// Get device calendar
+		final deviceCalendar = DeviceCalendarPlugin();
+		
+		// Check if we still have permission
+		if (!(await deviceCalendar.hasPermissions()).data)
+		{
+			Preferences.deviceSync = false;
+			return;
+		}
+		
+		// Check if calendar was created
+		final calendars = (await deviceCalendar.retrieveCalendars()).data;
+		var calendar = calendars.isEmpty ? null : calendars.firstWhere((cal) => cal.id == "KronoX");
+		if (calendar == null)
+		{
+			print("warning: calendar missing, creating new");
+			calendar = Calendar(
+				id:         "kronox",
+				name:       "KronoX Device Calendar",
+				isReadOnly: false
+			);
+			calendars.add(calendar);
+		}
+		
+		print("ready to add to calendar");
+		
+		// Events have already been refreshed by _refreshSchedule()
+		for (final event in _events)
+		{
+			final ev = event.toDeviceCalendarEvent();
+			print("calendar_id: ${ev.calendarId}");
+			
+			final result = await deviceCalendar.createOrUpdateEvent(ev);
+			print("add_result: ${result.data} (error: ${result.errorMessages})");
+		}
 	}
 	
 	/// Save current event list to cache
