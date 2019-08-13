@@ -25,6 +25,7 @@ dependencies:
   package_info: any
   path_provider: any
   device_calendar: any
+  google_sign_in: ^4.0.6
 
 dev_dependencies:
   flutter_test:

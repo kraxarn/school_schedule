@@ -1,6 +1,7 @@
 import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import '../preferences.dart';
 import '../dialog/login_dialog.dart';
@@ -120,15 +121,47 @@ class SettingsState extends State<SettingsPage>
 		]);
 	}
 	
+	Future<bool> signInGoogle() async
+	{
+		try
+		{
+			Preferences.googleSignIn = await GoogleSignIn().signIn();
+		}
+		catch (err)
+		{
+			_showDialog("Error", "Something unexpected happened");
+			return false;
+		}
+		
+		// Canceled by user
+		if (Preferences.googleSignIn == null)
+			return false;
+		return true;
+	}
+	
+	void signOutGoogle() async
+	{
+		await GoogleSignIn().signOut();
+		Preferences.googleSignIn = null;
+	}
+	
 	/// Card for Google settings
 	_buildGoogleCard(BuildContext context)
 	{
 		return _buildCard([
 			_buildTitle(context, "Google"),
-			_buildButton("Not logged in",
-				"You're currently not logged in to your Google account", null
+			_buildButton(Preferences.googleSignIn == null ? "Not logged in" : "Logged in",
+				Preferences.googleSignIn == null ? "You're currently not logged in to your Google account" : "Logged in as ${Preferences.googleSignIn.displayName}", null
 			),
-			_buildButton("Log in", null, () {
+			_buildButton(Preferences.googleSignIn == null ? "Log in" : "Log out", null, () async
+			{
+				setState(()
+				{
+					if (Preferences.googleSignIn == null)
+						signInGoogle();
+					else
+						signOutGoogle();
+				});
 			}),
 			SwitchListTile(
 				title: Text("Sync with Google calendar"),
@@ -180,6 +213,25 @@ class SettingsState extends State<SettingsPage>
 			}),
 			_buildButtonBar([])
 		]);
+	}
+	
+	_showDialog(String title, String message)
+	{
+		showDialog(
+			context: context,
+			builder: (builder) {
+				return AlertDialog(
+					title: Text(title),
+					content: Text(message),
+					actions: <Widget>[
+						FlatButton(
+							child: Text("OK"),
+							onPressed: () => Navigator.of(context).pop(),
+						)
+					],
+				);
+			}
+		);
 	}
 	
 	_logOut() =>
