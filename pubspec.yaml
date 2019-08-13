@@ -24,6 +24,7 @@ dependencies:
   flutter_markdown: any
   package_info: any
   path_provider: any
+  device_calendar: any
 
 dev_dependencies:
   flutter_test:
