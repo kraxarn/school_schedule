@@ -1,5 +1,6 @@
 import 'package:school_schedule/course_name.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 /// Application preferences
 class Preferences
@@ -38,7 +39,7 @@ class Preferences
 	
 	/// If we should sync with device calendar
 	static bool _deviceSync;
-	static bool get deviceSync => _deviceSync;
+	static bool get deviceSync => _deviceSync ?? false;
 	static set deviceSync(bool value)
 	{
 		_deviceSync = value;
@@ -55,22 +56,25 @@ class Preferences
 	}
 	
 	/// Google account ID
-	static String _googleId;
+	/*static String _googleId;
 	static String get googleId => _googleId;
 	static set googleId(String value)
 	{
 		_googleId = value;
 		_prefs.then((prefs) => prefs.setString("google", value));
-	}
+	}*/
 	
 	/// Sync calendar with Google
 	static bool _googleSync;
-	static bool get googleSync => _googleSync;
+	static bool get googleSync => _googleSync ?? false;
 	static set googleSync(bool value)
 	{
 		_googleSync = value;
 		_prefs.then((prefs) => prefs.setBool("google_sync", value));
 	}
+	
+	/// Current Google login
+	static GoogleSignInAccount googleSignIn;
 	
 	static Future<bool> create() async
 	{
@@ -80,10 +84,10 @@ class Preferences
 		_darkMode     = prefs.getString("theme") == "dark";
 		_deviceSync   = prefs.getBool("device_sync");
 		_accountId    = prefs.getString("account");
-		_googleId     = prefs.getString("google");
 		_googleSync   = prefs.getBool("google_sync");
 		
 		await CourseName.load();
+		googleSignIn = await GoogleSignIn().signInSilently();
 		return true;
 	}
 }
