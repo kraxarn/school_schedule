@@ -19,36 +19,34 @@ class LicenseState extends State<LicenseDialog>
 	_addLicense(String title, String message) =>
 		_licenses += "\n# $title\n\n$message";
 	
+	void _loadLicenses() async
+	{
+		final client = http.Client();
+		
+		// Dart SDK
+		_addLicense("Dart SDK", await client.read(
+			"https://raw.githubusercontent.com/dart-lang/sdk/master/LICENSE"));
+		// Flutter SDK, shared_preferences and package_info
+		_addLicense("Flutter and Flutter plugins", await client.read(
+			"https://raw.githubusercontent.com/flutter/flutter/master/LICENSE"));
+		// Dart HTTP
+		_addLicense("Dart HTTP", await client.read(
+			"https://raw.githubusercontent.com/dart-lang/http/master/LICENSE"));
+		// flutter_markdown
+		_addLicense("Flutter Markdown", await client.read(
+			"https://raw.githubusercontent.com/flutter/flutter_markdown/master/LICENSE"));
+		// device_calendar
+		_addLicense("Device Calendar", await client.read(
+			"https://raw.githubusercontent.com/builttoroam/flutter_plugins/master/device_calendar/LICENSE"));
+		
+		setState(() => _loading = false);
+	}
+	
 	@override
 	void initState()
 	{
 		super.initState();
-		
-		final client = http.Client();
-		
-		// Dart SDK
-		client.read("https://raw.githubusercontent.com/dart-lang/sdk/master/LICENSE").then((response)
-		{
-			_addLicense("Dart SDK", response);
-			// Flutter SDK, shared_preferences and package_info
-			client.read("https://raw.githubusercontent.com/flutter/flutter/master/LICENSE").then((response)
-			{
-				_addLicense("Flutter and Flutter plugins", response);
-				// Dart HTTP
-				client.read("https://raw.githubusercontent.com/dart-lang/http/master/LICENSE").then((response) {
-					_addLicense("Dart plugins", response);
-					// flutter_markdown
-					client.read("https://raw.githubusercontent.com/flutter/flutter_markdown/master/LICENSE").then((response) {
-						_addLicense("Flutter Markdown", response);
-						// device_calendar
-						client.read("https://raw.githubusercontent.com/builttoroam/flutter_plugins/master/device_calendar/LICENSE").then((response) {
-							_addLicense("Device Calendar", response);
-							setState(() => _loading = false);
-						});
-					});
-				});
-			});
-		});
+		_loadLicenses();
 	}
 	
 	@override
