@@ -45,6 +45,15 @@ class Preferences
 		_prefs.then((prefs) => prefs.setBool("device_sync", value));
 	}
 	
+	/// How often to refresh in the background
+	static int _refreshInterval;
+	static int get refreshInterval => _refreshInterval ?? 60;
+	static set refreshInterval(int value)
+	{
+		_refreshInterval = value;
+		_prefs.then((prefs) => prefs.setInt("refresh_interval", value));
+	}
+	
 	/// School login ID
 	static String _accountId;
 	static String get accountId => _accountId;
