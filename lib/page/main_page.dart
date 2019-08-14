@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:school_schedule/page/settings_page.dart';
 
 import 'schedule_page.dart';
+import 'booking_page.dart';
 
 class MainPage extends StatefulWidget
 {
@@ -14,7 +15,7 @@ class MainState extends State<MainPage> with SingleTickerProviderStateMixin
 {
 	final _tabPages = <Widget>[
 		SchedulePage(),
-		BookPage(),
+		BookingPage(),
 		//ExamPage()
 	];
 	
@@ -76,27 +77,6 @@ class MainState extends State<MainPage> with SingleTickerProviderStateMixin
 	}
 }
 
-class BookPage extends StatefulWidget
-{
-	@override
-	State createState() =>
-		BookState();
-}
-
-class BookState extends State<BookPage>
-{
-	@override
-	Widget build(BuildContext context)
-	{
-		return Padding(
-			padding: EdgeInsets.all(32.0),
-			child: Text(
-				"This feature is currently not available, come back later!",
-				textAlign: TextAlign.center,
-			),
-		);
-	}
-}
 
 class ExamPage extends StatefulWidget
 {
