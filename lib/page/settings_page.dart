@@ -78,7 +78,8 @@ class SettingsState extends State<SettingsPage>
 		];
 		
 		// Add device sync and refresh interval if Android
-		if (Platform.isAndroid)
+		// Until implemented, debug only
+		if (!kReleaseMode && Platform.isAndroid)
 		{
 			children.insertAll(3, [
 				SwitchListTile(
