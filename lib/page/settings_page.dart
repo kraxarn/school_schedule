@@ -65,13 +65,13 @@ class SettingsState extends State<SettingsPage>
 		// Children for both Android/iOS
 		final children = <Widget>[
 			_buildTitle(context, "General"),
-			_buildButton("Change School", null, ()
+			_buildButton("Change school", null, ()
 			{
 				Navigator.of(context).pop();
 				Navigator.of(context).pushReplacementNamed("/start");
 			}),
 			SwitchListTile(
-				title: Text("Dark Mode"),
+				title: Text("Dark mode"),
 				subtitle: Text("Use a dark theme for the app"),
 				value: Preferences.darkMode,
 				onChanged: (checked)
@@ -105,7 +105,7 @@ class SettingsState extends State<SettingsPage>
 					}
 				),
 				ListTile(
-					title: Text("Refresh Interval"),
+					title: Text("Refresh interval"),
 					subtitle: Text(
 						"How often to refresh the schedule in the background"
 					),
@@ -114,7 +114,7 @@ class SettingsState extends State<SettingsPage>
 						onChanged: (value) =>
 							setState(() => Preferences.refreshInterval =
 								_refreshIntervals.entries
-									.firstWhere((entry) => 
+									.firstWhere((entry) =>
 									entry.value == value).key
 							),
 						items: _refreshIntervals.values
@@ -163,7 +163,7 @@ class SettingsState extends State<SettingsPage>
 		return _buildCard([
 			_buildTitle(context, "About"),
 			_buildButton(_version, _build, null),
-			_buildButton("Privacy Policy", null, ()
+			_buildButton("Privacy policy", null, ()
 			{
 				Navigator.of(context).push(MaterialPageRoute(
 					builder: (builder) {
