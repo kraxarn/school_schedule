@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
+import 'package:flutter/foundation.dart';
 
 import '../preferences.dart';
 import '../dialog/login_dialog.dart';
@@ -16,6 +17,8 @@ class SettingsPage extends StatefulWidget
 
 class SettingsState extends State<SettingsPage>
 {
+	final _scaffoldKey = GlobalKey<ScaffoldState>();
+	
 	// For about card
 	var _version = "v1.0.0";
 	var _build = "1";
@@ -71,8 +74,16 @@ class SettingsState extends State<SettingsPage>
 				title: Text("Dark Mode"),
 				subtitle: Text("Use a dark theme for the app"),
 				value: Preferences.darkMode,
-				onChanged: (checked) =>
-					setState(() => Preferences.darkMode = checked)
+				onChanged: (checked)
+				{
+					_scaffoldKey.currentState.showSnackBar(SnackBar(
+						content: Text("Restart app to apply changes"),
+						duration: Duration(
+							seconds: 2
+						)
+					));
+					setState(() => Preferences.darkMode = checked);
+				}
 			),
 			_buildButtonBar([])
 		];
@@ -213,6 +224,7 @@ class SettingsState extends State<SettingsPage>
 	Widget build(BuildContext context)
 	{
 		return Scaffold(
+			key: _scaffoldKey,
 			appBar: AppBar(
 				title: Text("Settings"),
 			),
