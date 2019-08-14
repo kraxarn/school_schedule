@@ -1,6 +1,5 @@
 import 'package:school_schedule/course_name.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 /// Application preferences
 class Preferences
@@ -73,9 +72,6 @@ class Preferences
 		_prefs.then((prefs) => prefs.setBool("google_sync", value));
 	}
 	
-	/// Current Google login
-	static GoogleSignInAccount googleSignIn;
-	
 	static Future<bool> create() async
 	{
 		var prefs = await SharedPreferences.getInstance();
@@ -87,7 +83,6 @@ class Preferences
 		_googleSync   = prefs.getBool("google_sync");
 		
 		await CourseName.load();
-		googleSignIn = await GoogleSignIn().signInSilently();
 		return true;
 	}
 }

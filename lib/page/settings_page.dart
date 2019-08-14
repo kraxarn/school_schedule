@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 import '../preferences.dart';
 import '../dialog/login_dialog.dart';
@@ -108,65 +107,6 @@ class SettingsState extends State<SettingsPage>
 		]);
 	}
 	
-	Future<bool> signInGoogle() async
-	{
-		try
-		{
-			Preferences.googleSignIn = await GoogleSignIn().signIn();
-		}
-		catch (err)
-		{
-			_showDialog("Error", "Something unexpected happened");
-			return false;
-		}
-		
-		// Canceled by user
-		if (Preferences.googleSignIn == null)
-			return false;
-		return true;
-	}
-	
-	void signOutGoogle() async
-	{
-		await GoogleSignIn().signOut();
-		Preferences.googleSignIn = null;
-	}
-	
-	/// Card for Google settings
-	_buildGoogleCard(BuildContext context)
-	{
-		return _buildCard([
-			_buildTitle(context, "Google"),
-			_buildButton(Preferences.googleSignIn == null ? "Not logged in" : "Logged in",
-				Preferences.googleSignIn == null ? "You're currently not logged in to your Google account" : "Logged in as ${Preferences.googleSignIn.displayName}", null
-			),
-			_buildButton(Preferences.googleSignIn == null ? "Log in" : "Log out", null, () async
-			{
-				setState(()
-				{
-					if (Preferences.googleSignIn == null)
-						signInGoogle();
-					else
-						signOutGoogle();
-				});
-			}),
-			SwitchListTile(
-				title: Text("Sync with Google calendar"),
-				subtitle: Text(
-					"Automatically add course events to Google calendar"),
-				value: false,
-				onChanged: (checked)
-				{
-					setState(()
-					{
-						// TODO: Toggle setting here
-					});
-				},
-			),
-			_buildButtonBar([])
-		]);
-	}
-	
 	_buildAboutCard()
 	{
 		PackageInfo.fromPlatform().then((info) {
@@ -249,7 +189,6 @@ class SettingsState extends State<SettingsPage>
 				children: [
 					_buildGeneralCard(context),
 					_buildAccountCard(context),
-					_buildGoogleCard(context),
 					_buildAboutCard()
 				],
 			),
