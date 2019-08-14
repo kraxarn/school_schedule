@@ -35,9 +35,6 @@ class LicenseState extends State<LicenseDialog>
 		// flutter_markdown
 		_addLicense("Flutter Markdown", await client.read(
 			"https://raw.githubusercontent.com/flutter/flutter_markdown/master/LICENSE"));
-		// device_calendar
-		_addLicense("Device Calendar", await client.read(
-			"https://raw.githubusercontent.com/builttoroam/flutter_plugins/master/device_calendar/LICENSE"));
 		
 		setState(() => _loading = false);
 	}

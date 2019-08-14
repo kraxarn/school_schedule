@@ -1,4 +1,3 @@
-import 'package:device_calendar/device_calendar.dart';
 import 'package:http/http.dart' as http;
 import 'package:school_schedule/course_name.dart';
 
@@ -151,17 +150,6 @@ class CalendarEvent
 			"course_id":     _courseId,
 			"signature":     _signature
 		};
-	
-	Event toDeviceCalendarEvent() =>
-		Event(
-			"kronox",
-			eventId: _id,
-			title: summary,
-			start: start,
-			end: end,
-			// TODO: No location
-			description: "$location, $courseId, ${CourseName.get(courseId)}"
-		);
 	
 	/// Parse all events in an ICS file
 	static List<CalendarEvent> parseMultiple(String data)
