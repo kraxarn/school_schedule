@@ -71,7 +71,7 @@ class SettingsState extends State<SettingsPage>
 				Navigator.of(context).pushReplacementNamed("/start");
 			}),
 			SwitchListTile(
-				title: Text("Dark mode"),
+				title: Text("Dark theme"),
 				subtitle: Text("Use a dark theme for the app"),
 				value: Preferences.darkMode,
 				onChanged: (checked)
