@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
@@ -52,7 +54,8 @@ class SettingsState extends State<SettingsPage>
 	/// Card for general settings
 	_buildGeneralCard(BuildContext context)
 	{
-		return _buildCard([
+		// Children for both Android/iOS
+		final children = <Widget>[
 			_buildTitle(context, "General"),
 			_buildButton("Change School", null, ()
 			{
@@ -66,7 +69,13 @@ class SettingsState extends State<SettingsPage>
 				onChanged: (checked) =>
 					setState(() => Preferences.darkMode = checked)
 			),
-			SwitchListTile(
+			_buildButtonBar([])
+		];
+		
+		// Add device sync if Android
+		if (Platform.isAndroid)
+		{
+			children.insert(3, SwitchListTile(
 				title: Text("Sync with device calendar"),
 				subtitle: Text(
 					"Automatically add course events to device calendar"
@@ -90,17 +99,18 @@ class SettingsState extends State<SettingsPage>
 					final calendars = (await deviceCalendar.retrieveCalendars()).data;
 					if (calendars.any((calendar) => calendar.name == "KronoX"))
 						calendars.add(Calendar(
-							id:         "KronoX",
-							name:       "KronoX Device Calendar",
+							id:   "KronoX",
+							name: "KronoX Device Calendar",
 							isReadOnly: false
 						));
 					
 					// Otherwise, enable
 					setState(() => Preferences.deviceSync = true);
 				}
-			),
-			_buildButtonBar([])
-		]);
+			));
+		}
+		
+		return _buildCard(children);
 	}
 	
 	/// Card for account settings
