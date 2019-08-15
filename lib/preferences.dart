@@ -139,12 +139,14 @@ class Preferences
 		
 		// Password is encrypted, so requires decryption
 		if (_password != null)
+		{
 			_password = _decrypt(prefs.getString("password"));
-		
-		// Refresh login
-		// This might take a little while, so we don't wait for it
-		Account.login(HttpClient(), _username, _password,
-			Cookie("JSESSIONID", _accountId));
+			
+			// Refresh login
+			// This might take a little while, so we don't wait for it
+			Account.login(HttpClient(), _username, _password,
+				Cookie("JSESSIONID", _accountId));
+		}
 		
 		await CourseName.load();
 		return true;
