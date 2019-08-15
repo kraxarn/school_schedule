@@ -6,13 +6,19 @@ import 'preferences.dart';
 /// Stuff related to school account
 class Account
 {
+	String _username, _password;
+	
 	Cookie _session;
 	
-	Account(this._session);
+	Account(this._session, [this._username, this._password]);
 	
 	/// Saves account id to settings
-	void save() =>
+	void save()
+	{
 		Preferences.accountId = _session.value;
+		Preferences.username  = _username;
+		Preferences.password  = _password;
+	}
 	
 	/// Create a new session
 	static Future<Cookie> getSession(HttpClient httpClient) async
@@ -47,7 +53,7 @@ class Account
 		final body = await response.transform(utf8.decoder).join();
 		
 		if (body.trim() == "OK")
-			return Account(session);
+			return Account(session, username, password);
 		return null;
 	}
 }
