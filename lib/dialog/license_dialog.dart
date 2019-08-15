@@ -29,8 +29,8 @@ class LicenseState extends State<LicenseDialog>
 		// Flutter SDK, shared_preferences and package_info
 		_addLicense("Flutter and Flutter plugins", await client.read(
 			"https://raw.githubusercontent.com/flutter/flutter/master/LICENSE"));
-		// Dart HTTP
-		_addLicense("Dart HTTP", await client.read(
+		// Dart HTTP and HTML
+		_addLicense("Dart plugins", await client.read(
 			"https://raw.githubusercontent.com/dart-lang/http/master/LICENSE"));
 		// flutter_markdown
 		_addLicense("Flutter Markdown", await client.read(
