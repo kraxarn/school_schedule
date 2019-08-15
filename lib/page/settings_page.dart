@@ -20,8 +20,8 @@ class SettingsState extends State<SettingsPage>
 	final _scaffoldKey = GlobalKey<ScaffoldState>();
 	
 	// For about card
-	var _version = "v1.0.0";
-	var _build = "1";
+	var _version = "version";
+	var _build   = "build";
 	
 	final _refreshIntervals = {
 		0:   "Disabled",
@@ -152,13 +152,15 @@ class SettingsState extends State<SettingsPage>
 	
 	_buildAboutCard()
 	{
-		PackageInfo.fromPlatform().then((info) {
-			setState(()
-			{
-				_version = "Version ${info.version}";
-				_build   = "Build ${info.buildNumber}";
-			});
-		});
+		if (_version == "version" || _build == "build")
+		{
+			PackageInfo.fromPlatform().then((info) =>
+				setState(()
+				{
+					_version = "Version ${info.version}";
+					_build = "Build ${info.buildNumber}";
+				}));
+		}
 		
 		return _buildCard([
 			_buildTitle(context, "About"),
