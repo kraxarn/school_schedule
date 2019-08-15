@@ -25,6 +25,7 @@ dependencies:
   package_info: any
   path_provider: any
   html: any
+  unique_identifier: ^0.0.3
 
 dev_dependencies:
   flutter_test:
