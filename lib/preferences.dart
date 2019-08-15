@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:encrypt/encrypt.dart';
-import 'package:school_schedule/course_name.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:unique_identifier/unique_identifier.dart';
+
+import 'account.dart';
+import 'course_name.dart';
 
 /// Application preferences
 class Preferences
@@ -128,6 +132,7 @@ class Preferences
 		_accountId    = prefs.getString("account");
 		_googleSync   = prefs.getBool("google_sync");
 		_username     = prefs.getString("username");
+		_password     = prefs.getString("password");
 		
 		// Get unique ID before decrypting
 		_uniqueId = await UniqueIdentifier.serial;
@@ -135,6 +140,11 @@ class Preferences
 		// Password is encrypted, so requires decryption
 		if (_password != null)
 			_password = _decrypt(prefs.getString("password"));
+		
+		// Refresh login
+		// This might take a little while, so we don't wait for it
+		Account.login(HttpClient(), _username, _password,
+			Cookie("JSESSIONID", _accountId));
 		
 		await CourseName.load();
 		return true;
