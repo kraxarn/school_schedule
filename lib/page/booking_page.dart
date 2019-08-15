@@ -243,7 +243,8 @@ class BookingState extends State<BookingPage>
 							return ListTile(
 								title: Text(result.title),
 								subtitle: Text(result.subtitle),
-								trailing: Text(_getFirstLastTime(result)),
+								trailing: Text("${result.states.where((state) =>
+									!Booking.isBooked(state)).length} available"),
 								onTap: () {
 									_showTimesDialog(result);
 								},
