@@ -1,5 +1,7 @@
+import 'package:encrypt/encrypt.dart';
 import 'package:school_schedule/course_name.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:unique_identifier/unique_identifier.dart';
 
 /// Application preferences
 class Preferences
@@ -7,6 +9,8 @@ class Preferences
 	/// Shortcut for SharedPreference.getInstance()
 	static Future<SharedPreferences> get _prefs =>
 		SharedPreferences.getInstance();
+	
+	static String _uniqueId;
 	
 	/// Selected school
 	static String _school;
@@ -63,6 +67,26 @@ class Preferences
 		_prefs.then((prefs) => prefs.setString("account", value));
 	}
 	
+	/// User's username
+	static String _username;
+	static String get username => _username;
+	static set username(String value)
+	{
+		_username = value;
+		_prefs.then((prefs) => prefs.setString("username", value));
+	}
+	
+	static String _password;
+	static String get password => _password;
+	static set password(String value)
+	{
+		// Password is kept unencrypted in memory
+		_password = value;
+		// Encrypted in storage
+		_prefs.then((prefs) => prefs.setString("password",
+			value == null ? null : _encrypt(value)));
+	}
+	
 	/// Google account ID
 	/*static String _googleId;
 	static String get googleId => _googleId;
@@ -81,6 +105,19 @@ class Preferences
 		_prefs.then((prefs) => prefs.setBool("google_sync", value));
 	}
 	
+	/// Get default encrypter
+	static Encrypter get _encrypter =>
+		Encrypter(AES(Key.fromUtf8(_uniqueId)));
+	
+	/// Get default IV (init vector)
+	static IV get _iv => IV.fromLength(16);
+	
+	static String _encrypt(String value) =>
+		_encrypter.encrypt(value, iv: _iv).base64;
+	
+	static String _decrypt(String value) =>
+		_encrypter.decrypt64(value, iv: _iv);
+	
 	static Future<bool> create() async
 	{
 		var prefs = await SharedPreferences.getInstance();
@@ -90,6 +127,14 @@ class Preferences
 		_deviceSync   = prefs.getBool("device_sync");
 		_accountId    = prefs.getString("account");
 		_googleSync   = prefs.getBool("google_sync");
+		_username     = prefs.getString("username");
+		
+		// Get unique ID before decrypting
+		_uniqueId = await UniqueIdentifier.serial;
+		
+		// Password is encrypted, so requires decryption
+		if (_password != null)
+			_password = _decrypt(prefs.getString("password"));
 		
 		await CourseName.load();
 		return true;
