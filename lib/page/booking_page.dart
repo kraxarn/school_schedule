@@ -152,10 +152,74 @@ class BookingState extends State<BookingPage>
 					title: Text("Select time"),
 					children: _times.where((time) => !Booking.isBooked(room.states[i++])).map((time) => ListTile(
 						title: Text(time),
-						onTap: () {
-							print("roomId: ${room.title}, timeIndex: ${_times.indexOf(time)}, timeString: ${time.replaceAll(' ', '')}");
+						onTap: ()
+						{
+							Navigator.of(context).pop();
+							_showConfirmDialog(room, time);
+							print("roomId: ${room.title}, timeIndex: ${_times.indexOf(time)}, timeString: $time");
 						},
 					)).toList(),
+				)
+		);
+	}
+	
+	void _showConfirmDialog(BookingRoom room, String time)
+	{
+		final commentController = TextEditingController();
+		
+		showDialog(
+			context: context,
+			builder: (builder) =>
+				AlertDialog(
+					title: Text("Confirm"),
+					content: Column(
+						mainAxisSize: MainAxisSize.min,
+						mainAxisAlignment: MainAxisAlignment.start,
+						children: <Widget>[
+							Table(
+								children: [
+									TableRow(
+										children: [
+											Text("Resource:"),
+											Text(room.title)
+										]
+									),
+									TableRow(
+										children: [
+											Text("Time:"),
+											Text(time)
+										]
+									)
+								],
+							),
+							SizedBox(
+								height: 16.0,
+							),
+							TextField(
+								controller: commentController,
+								decoration: InputDecoration(
+									labelText: "Comment",
+									border: OutlineInputBorder(
+										borderRadius: BorderRadius.all(
+											Radius.circular(8.0)
+										)
+									)
+								),
+							)
+						],
+					),
+					actions: <Widget>[
+						FlatButton(
+							child: Text("CANCEL"),
+							onPressed: () => Navigator.of(context).pop(),
+						),
+						FlatButton(
+							child: Text("BOOK"),
+							onPressed: () {
+								print("op: boka, datum: ${_formatDate(_date).substring(2)}, id: ${room.title}, typ: RESURSER_LOKALER, intervall: ${_times.indexOf(time)}, moment: ${commentController.text}, flik: FLIK_${_currentLocation.key}");
+							},
+						),
+					],
 				)
 		);
 	}
@@ -245,9 +309,7 @@ class BookingState extends State<BookingPage>
 								subtitle: Text(result.subtitle),
 								trailing: Text("${result.states.where((state) =>
 									!Booking.isBooked(state)).length} available"),
-								onTap: () {
-									_showTimesDialog(result);
-								},
+								onTap: () => _showTimesDialog(result),
 							);
 						}).toList(),
 					),
