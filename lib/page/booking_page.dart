@@ -141,6 +141,25 @@ class BookingState extends State<BookingPage>
 		setState(() => _loading = false);
 	}
 	
+	void _showTimesDialog(BookingRoom room)
+	{
+		var i = 0;
+		
+		showDialog(
+			context: context,
+			builder: (context) =>
+				SimpleDialog(
+					title: Text("Select time"),
+					children: _times.where((time) => !Booking.isBooked(room.states[i++])).map((time) => ListTile(
+						title: Text(time),
+						onTap: () {
+							print("roomId: ${room.title}, timeIndex: ${_times.indexOf(time)}, timeString: ${time.replaceAll(' ', '')}");
+						},
+					)).toList(),
+				)
+		);
+	}
+	
 	@override
 	Widget build(BuildContext context)
 	{
@@ -200,7 +219,9 @@ class BookingState extends State<BookingPage>
 								title: Text(result.title),
 								subtitle: Text(result.subtitle),
 								trailing: Text(result.isBooked() ? "FULL" : "FREE"),
-								onTap: () {},
+								onTap: () {
+									_showTimesDialog(result);
+								},
 							);
 						}).toList(),
 					),
