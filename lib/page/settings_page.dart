@@ -207,7 +207,8 @@ class SettingsState extends State<SettingsPage>
 	}
 	
 	_logOut() =>
-		setState(() => Preferences.accountId = null);
+		setState(() => Preferences.accountId = Preferences.username =
+			Preferences.password = null);
 	
 	_showLogin(context)
 	{
