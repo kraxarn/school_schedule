@@ -109,9 +109,33 @@ class BookingState extends State<BookingPage>
 		// Update from api
 		final response = await _booking.get(_currentLocation.key, _date);
 		
-		// Save response for use later
-		_times   = response.times;
-		_results = response.rooms;
+		if (response == null)
+		{
+			// Something went wrong
+			showDialog(
+				context: context,
+				builder: (context) =>
+					AlertDialog(
+						title: Text("Error"),
+						content: Text(
+							"Something went wrong while loading available "
+							"resources, try logging out and back in and "
+							"then try again"),
+						actions: <Widget>[
+							FlatButton(
+								child: Text("OK"),
+								onPressed: () => Navigator.of(context).pop(),
+							)
+						],
+					)
+			);
+		}
+		else
+		{
+			// Save response for use later
+			_times   = response.times;
+			_results = response.rooms;
+		}
 		
 		// Tell we're finished loading
 		setState(() => _loading = false);
