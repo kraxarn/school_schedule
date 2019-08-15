@@ -195,7 +195,7 @@ class BookingState extends State<BookingPage>
 				),
 				Expanded(
 					child: ListView(
-						children: _results.map((result) {
+						children: _results.where((result) => !result.isBooked()).map((result) {
 							return ListTile(
 								title: Text(result.title),
 								subtitle: Text(result.subtitle),
