@@ -54,6 +54,8 @@ class Account
 		
 		if (body.trim() == "OK")
 			return Account(session, username, password);
+		
+		print("login failed: $body");
 		return null;
 	}
 }
