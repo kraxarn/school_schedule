@@ -24,8 +24,9 @@ class Account
 	static Future<Cookie> getSession(HttpClient httpClient) async
 	{
 		// Get session cookie
+		// (/hjalp.jsp seems to be lightest page to load)
 		final sessionResponse = await (await httpClient.getUrl(Uri.parse(
-			"https://webbschema.${Preferences.school}.se"))).close();
+			"https://webbschema.${Preferences.school}.se/hjalp.jsp"))).close();
 	
 		// Get cookie from first response
 		final cookies = sessionResponse.cookies;
