@@ -141,7 +141,7 @@ class SettingsState extends State<SettingsPage>
 				? "Not logged in" : "Logged in",
 				Preferences.accountId == null
 					? "You're currently not logged in to your school account"
-					: "You're logged in", null
+					: "You're logged in as ${Preferences.username}", null
 			),
 			_buildButton(Preferences.accountId == null ? "Log in" : "Log out",
 				null, () => Preferences.accountId == null
