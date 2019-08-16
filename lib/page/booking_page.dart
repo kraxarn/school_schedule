@@ -13,6 +13,9 @@ class BookingPage extends StatefulWidget
 
 class BookingState extends State<BookingPage>
 {
+	/// Form key for comment entry when booking
+	final _formCommentKey = GlobalKey<FormState>();
+	
 	/// Current selected date
 	var _date = DateTime.now();
 	
@@ -183,17 +186,22 @@ class BookingState extends State<BookingPage>
 							SizedBox(
 								height: 16.0,
 							),
-							TextField(
-								controller: commentController,
-								decoration: InputDecoration(
-									labelText: "Comment",
-									border: OutlineInputBorder(
-										borderRadius: BorderRadius.all(
-											Radius.circular(8.0)
+							Form(
+								key: _formCommentKey,
+								child: TextFormField(
+									controller: commentController,
+									decoration: InputDecoration(
+										labelText: "Comment",
+										border: OutlineInputBorder(
+											borderRadius: BorderRadius.all(
+												Radius.circular(8.0)
+											)
 										)
-									)
+									),
+									validator: (value) =>
+										value.isEmpty ? "Required" : null
 								),
-							)
+							),
 						],
 					),
 					actions: <Widget>[
@@ -205,6 +213,10 @@ class BookingState extends State<BookingPage>
 							child: Text("BOOK"),
 							onPressed: () async
 							{
+								// Check if comment is entered
+								if (!_formCommentKey.currentState.validate())
+									return;
+								
 								// Dismiss dialog
 								Navigator.of(context).pop();
 								
