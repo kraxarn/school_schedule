@@ -203,7 +203,42 @@ class BookingState extends State<BookingPage>
 						),
 						FlatButton(
 							child: Text("BOOK"),
-							onPressed: () {
+							onPressed: () async
+							{
+								// Dismiss dialog
+								Navigator.of(context).pop();
+								
+								// Check if it was successful
+								if (await _booking.book(
+									date:      _date,
+									id:        room.title,
+									timeIndex: _times.indexOf(time),
+									comment:   commentController.text,
+									tabId:     _currentLocation.key
+								))
+									Scaffold.of(context).showSnackBar(SnackBar(
+										content: Text("Resource booked"),
+									));
+								else
+									showDialog(
+										context: context,
+										builder: (builder) =>
+											AlertDialog(
+												title: Text("Error"),
+												content: Text(
+													"Something went wrong when "
+														"booking the resource, "
+														"maybe you reached your "
+														"booking limit?"
+												),
+												actions: <Widget>[
+													FlatButton(
+														child: Text("OK"),
+														onPressed: () => Navigator.of(context).pop(),
+													)
+												],
+											)
+									);
 								print("op: boka, datum: ${_formatDate(_date).substring(2)}, id: ${room.title}, typ: RESURSER_LOKALER, intervall: ${_times.indexOf(time)}, moment: ${commentController.text}, flik: FLIK_${_currentLocation.key}");
 							},
 						),
