@@ -174,7 +174,7 @@ class ScheduleState extends State<SchedulePage>
 				"${_timeToString(event.start)} - ${_timeToString(event.end)}"
 			),
 			trailing: Text(
-				"${event.courseId.substring(0, event.courseId.indexOf('-'))}\n"
+				"${event.courseId.split('-')[0]}\n"
 				"${event.location.split(' ')[0]}",
 				textAlign: TextAlign.end
 			),
