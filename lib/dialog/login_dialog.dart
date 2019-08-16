@@ -66,13 +66,9 @@ class LoginDialogState extends State<LoginDialog>
 		// Show that we're logging in
 		setState(() => _loggingIn = true);
 		
-		// If no session known, create
-		if (_session == null)
-			_session = await Account.getSession(_http);
-		
 		// Try to login
 		final account = await Account.login(_http,
-			_usernameController.text, _passwordController.text, _session);
+			_usernameController.text, _passwordController.text);
 		account?.save();
 		
 		setState(() => _loggingIn = false);

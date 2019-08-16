@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 import 'package:flutter/foundation.dart';
+import 'package:school_schedule/account.dart';
 
 import '../preferences.dart';
 import '../dialog/login_dialog.dart';
@@ -137,15 +138,16 @@ class SettingsState extends State<SettingsPage>
 	{
 		return _buildCard([
 			_buildTitle(context, "Account"),
-			_buildButton(Preferences.accountId == null
+			_buildButton(Preferences.username == null
 				? "Not logged in" : "Logged in",
-				Preferences.accountId == null
+				Preferences.username == null
 					? "You're currently not logged in to your school account"
 					: "You're logged in as ${Preferences.username}", null
 			),
-			_buildButton(Preferences.accountId == null ? "Log in" : "Log out",
-				null, () => Preferences.accountId == null
+			_buildButton(Preferences.username == null ? "Log in" : "Log out",
+				null, () => Preferences.username == null
 					? _showLogin(context) : _logOut()),
+			_buildButton("Get new session", null, () => Account.getSession(HttpClient())),
 			_buildButtonBar([])
 		]);
 	}
@@ -207,8 +209,7 @@ class SettingsState extends State<SettingsPage>
 	}
 	
 	_logOut() =>
-		setState(() => Preferences.accountId = Preferences.username =
-			Preferences.password = null);
+		setState(() => Preferences.username = Preferences.password = null);
 	
 	_showLogin(context)
 	{
@@ -219,7 +220,7 @@ class SettingsState extends State<SettingsPage>
 			fullscreenDialog: true
 		));
 		
-		if (Preferences.accountId != null)
+		if (Preferences.username != null)
 			setState(() {});
 	}
 	

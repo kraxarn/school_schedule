@@ -63,13 +63,24 @@ class Preferences
 	}
 	
 	/// School login ID
-	static String _accountId;
-	static String get accountId => _accountId;
-	static set accountId(String value)
+	static String _sessionId;
+	static Future<String> get sessionId async
 	{
-		_accountId = value;
-		_prefs.then((prefs) => prefs.setString("account", value));
+		if (_sessionId == null)
+		{
+			// Get new session
+			final http = HttpClient();
+			_sessionId = (await Account.getSession(http)).value;
+			
+			// Also login if saved
+			if (username != null && password != null)
+				if ((await Account.login(http, username, password)) == null)
+					print("warning: login failed");
+		}
+		return _sessionId;
 	}
+	static Future<Cookie> get sessionCookie async =>
+		Cookie("JSESSIONID", await sessionId);
 	
 	/// User's username
 	static String _username;
@@ -129,7 +140,6 @@ class Preferences
 		_savedCourses = prefs.getStringList("courses");
 		_darkMode     = prefs.getString("theme") == "dark";
 		_deviceSync   = prefs.getBool("device_sync");
-		_accountId    = prefs.getString("account");
 		_googleSync   = prefs.getBool("google_sync");
 		_username     = prefs.getString("username");
 		_password     = prefs.getString("password");
@@ -139,14 +149,7 @@ class Preferences
 		
 		// Password is encrypted, so requires decryption
 		if (_password != null)
-		{
 			_password = _decrypt(prefs.getString("password"));
-			
-			// Refresh login
-			// This might take a little while, so we don't wait for it
-			Account.login(HttpClient(), _username, _password,
-				Cookie("JSESSIONID", _accountId));
-		}
 		
 		await CourseName.load();
 		return true;

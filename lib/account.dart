@@ -8,16 +8,13 @@ class Account
 {
 	String _username, _password;
 	
-	Cookie _session;
-	
-	Account(this._session, [this._username, this._password]);
+	Account([this._username, this._password]);
 	
 	/// Saves account id to settings
 	void save()
 	{
-		Preferences.accountId = _session.value;
-		Preferences.username  = _username;
-		Preferences.password  = _password;
+		Preferences.username = _username;
+		Preferences.password = _password;
 	}
 	
 	/// Create a new session
@@ -38,23 +35,19 @@ class Account
 		return cookies.firstWhere((cookie) => cookie.name == "JSESSIONID");
 	}
 	
-	static Future<Account> login(HttpClient httpClient, String username, String password, Cookie session) async
+	static Future<Account> login(HttpClient httpClient, String username, String password) async
 	{
-		// Check if no session
-		if (session == null)
-			session = await getSession(httpClient);
-		
-		// Then try logging in
+		// Try logging in
 		final request = await httpClient.getUrl(Uri.parse(
 			"https://webbschema.${Preferences.school}.se/ajax/"
 				"ajax_login.jsp?username=$username&password=$password"));
 		
-		request.cookies.add(session);
+		request.cookies.add(await Preferences.sessionCookie);
 		final response = await request.close();
 		final body = await response.transform(utf8.decoder).join();
 		
 		if (body.trim() == "OK")
-			return Account(session, username, password);
+			return Account(username, password);
 		
 		print("login failed: $body");
 		return null;

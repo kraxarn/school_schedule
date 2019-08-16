@@ -99,7 +99,7 @@ class BookingState extends State<BookingPage>
 	void _search() async
 	{
 		// Don't if we're missing stuff
-		if (_locations == null || Preferences.accountId == null)
+		if (_locations == null || Preferences.username == null)
 			return;
 		
 		// Tell we're loading
@@ -249,7 +249,7 @@ class BookingState extends State<BookingPage>
 			);
 		
 		// Check if logged in
-		if (Preferences.accountId == null)
+		if (Preferences.username == null)
 			return _buildStatusMessage(
 				"Booking requires you to sign in from the settings"
 			);

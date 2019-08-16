@@ -19,14 +19,12 @@ enum BookingState
 
 class Booking
 {
-	final Cookie _session = Cookie("JSESSIONID", Preferences.accountId);
-	
 	final _http = HttpClient();
 	
 	Future<String> _get(String url) async
 	{
 		final request = await _http.getUrl(Uri.parse(url));
-		request.cookies.add(_session);
+		request.cookies.add(await Preferences.sessionCookie);
 		final response = await request.close();
 		return await response.transform(utf8.decoder).join();
 	}
