@@ -28,9 +28,8 @@ class ScheduleState extends State<SchedulePage>
 	
 	var _refreshing = false;
 	
-	Widget _buildTitle(ThemeData theme, text)
-	{
-		return DecoratedBox(
+	Widget _buildTitle(ThemeData theme, text) =>
+		DecoratedBox(
 			child: ListTile(
 				title: Text(
 					text,
@@ -44,7 +43,6 @@ class ScheduleState extends State<SchedulePage>
 				)
 			),
 		);
-	}
 	
 	String _weekdayToString(int weekday)
 	{
@@ -88,9 +86,8 @@ class ScheduleState extends State<SchedulePage>
 		}
 	}
 	
-	TableRow _buildEventInfoRow(String title, String info)
-	{
-		return TableRow(
+	TableRow _buildEventInfoRow(String title, String info) =>
+		TableRow(
 			children: [
 				Text(
 					title,
@@ -99,17 +96,14 @@ class ScheduleState extends State<SchedulePage>
 				Text(info ?? "(none)")
 			]
 		);
-	}
 	
-	TableRow _buildEventDivider()
-	{
-		return TableRow(
+	TableRow _buildEventDivider() =>
+		TableRow(
 			children: [
 				Divider(),
 				Divider()
 			]
 		);
-	}
 	
 	void _showEventInfo(CalendarEvent event)
 	{
@@ -153,9 +147,8 @@ class ScheduleState extends State<SchedulePage>
 		);
 	}
 	
-	Widget _buildEvent(ThemeData theme, CalendarEvent event)
-	{
-		return ListTile(
+	Widget _buildEvent(ThemeData theme, CalendarEvent event) =>
+		ListTile(
 			leading: Column(
 				mainAxisAlignment: MainAxisAlignment.center,
 				crossAxisAlignment: CrossAxisAlignment.center,
@@ -164,9 +157,7 @@ class ScheduleState extends State<SchedulePage>
 						_weekdayToString(event.start.weekday),
 						style: theme.textTheme.caption,
 					),
-					Text(
-						event.start.day.toString()
-					)
+					Text(event.start.day.toString())
 				],
 			),
 			title:    Text(event.summary),
@@ -178,11 +169,8 @@ class ScheduleState extends State<SchedulePage>
 				"${event.location.split(' ')[0]}",
 				textAlign: TextAlign.end
 			),
-			onTap: () {
-				_showEventInfo(event);
-			},
+			onTap: () => _showEventInfo(event)
 		);
-	}
 	
 	Future<void> _refreshSchedule() async
 	{
@@ -340,9 +328,8 @@ class ScheduleState extends State<SchedulePage>
 	}
 	
 	@override
-	Widget build(BuildContext context)
-	{
-		return Scaffold(
+	Widget build(BuildContext context) =>
+		Scaffold(
 			body: RefreshIndicator(
 				child: ListView(
 					children: _buildEvents()
@@ -359,5 +346,4 @@ class ScheduleState extends State<SchedulePage>
 				backgroundColor: Theme.of(context).accentColor,
 			)
 		);
-	}
 }
