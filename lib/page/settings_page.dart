@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 import 'package:flutter/foundation.dart';
-import 'package:school_schedule/account.dart';
 
 import '../preferences.dart';
 import '../dialog/login_dialog.dart';
