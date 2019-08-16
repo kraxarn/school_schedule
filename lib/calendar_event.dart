@@ -141,6 +141,7 @@ class CalendarEvent
 	
 	Map<String, dynamic> toJson() =>
 		{
+			"uid":           _id,
 			"start":         _encodeDate(_start),
 			"end":           _encodeDate(_end),
 			"last_modified": _encodeDate(_lastModified),
