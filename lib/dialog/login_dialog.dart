@@ -22,7 +22,6 @@ class LoginDialogState extends State<LoginDialog>
 	
 	// We use a Dart HttpClient here because cookies
 	final _http = HttpClient();
-	Cookie _session;
 	
 	_buildTextField(String label, bool obscureText,
 		TextEditingController controller, String Function(String) validator)
