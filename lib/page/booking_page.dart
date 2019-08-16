@@ -119,7 +119,7 @@ class BookingState extends State<BookingPage>
 						title: Text("Error"),
 						content: Text(
 							"Something went wrong while loading available "
-							"resources, try logging out and back in and "
+							"resources, try restarting the app and "
 							"then try again"),
 						actions: <Widget>[
 							FlatButton(
