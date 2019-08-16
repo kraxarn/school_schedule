@@ -176,21 +176,9 @@ class BookingState extends State<BookingPage>
 						mainAxisSize: MainAxisSize.min,
 						mainAxisAlignment: MainAxisAlignment.start,
 						children: <Widget>[
-							Table(
-								children: [
-									TableRow(
-										children: [
-											Text("Resource:"),
-											Text(room.title)
-										]
-									),
-									TableRow(
-										children: [
-											Text("Time:"),
-											Text(time)
-										]
-									)
-								],
+							Text(
+								"Are you sure you want to book resource "
+								"${room.title} at $time?"
 							),
 							SizedBox(
 								height: 16.0,
