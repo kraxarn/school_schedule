@@ -267,11 +267,14 @@ class BookingState extends State<BookingPage>
 								title: Text("Location"),
 								trailing: DropdownButton<String>(
 									value: _currentLocation == null ? null : _currentLocation.value,
-									onChanged: (value) => setState(()
+									onChanged: (value)
 									{
-										_currentLocation = _locations.entries.firstWhere((entry) => entry.value == value);
+										setState(() => _currentLocation =
+											_locations.entries
+												.firstWhere((entry) =>
+												entry.value == value));
 										_search();
-									}),
+									},
 									items: _locations.values
 										.map<DropdownMenuItem<String>>((value) =>
 										DropdownMenuItem(
