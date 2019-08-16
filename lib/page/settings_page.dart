@@ -187,25 +187,6 @@ class SettingsState extends State<SettingsPage>
 		]);
 	}
 	
-	_showDialog(String title, String message)
-	{
-		showDialog(
-			context: context,
-			builder: (builder) {
-				return AlertDialog(
-					title: Text(title),
-					content: Text(message),
-					actions: <Widget>[
-						FlatButton(
-							child: Text("OK"),
-							onPressed: () => Navigator.of(context).pop(),
-						)
-					],
-				);
-			}
-		);
-	}
-	
 	_logOut() =>
 		setState(() => Preferences.username = Preferences.password = null);
 	

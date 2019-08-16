@@ -259,31 +259,6 @@ class BookingState extends State<BookingPage>
 		);
 	}
 	
-	/// Gets the first and last available time to book
-	/// (this assumes there are first and last values)
-	String _getFirstLastTime(BookingRoom room)
-	{
-		final first = room.states.indexWhere((state) =>
-			!Booking.isBooked(state));
-		final last  = room.states.lastIndexWhere((state) =>
-			!Booking.isBooked(state));
-		
-		if (first < 0 || last < 0)
-		{
-			// If either wasn't found, log error and return nothing
-			// Returning empty string instead of null because Text
-			print("warning: non-booked time not found");
-			return "";
-		}
-		
-		final firstTime = _times[first].substring(
-			0, _times[first].indexOf(' '));
-		final lastTime  = _times[last].substring(
-			_times[last].lastIndexOf(' ') + 1);
-		
-		return "$firstTime - $lastTime";
-	}
-	
 	@override
 	Widget build(BuildContext context)
 	{
