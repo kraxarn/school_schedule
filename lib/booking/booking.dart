@@ -125,6 +125,18 @@ class Booking
 		
 		return BookingResponse(times, rooms);
 	}
+	
+	Future<bool> book({DateTime date, String id, int timeIndex, String comment, String tabId}) async =>
+		(await _get(
+			"https://webbschema.${Preferences.school}.se/"
+				"ajax/ajax_resursbokning.jsp?op=boka"
+				"&datum=${_formatDate(date)}"
+				"&id=$id"
+				"&typ=RESURSER_LOKALER"
+				"&intervall=$timeIndex"
+				"&moment=${Uri.encodeFull(comment)}"
+				"&flik=FLIK_$tabId"
+		)).trim() == "OK";
 }
 
 /// Represents a single room
