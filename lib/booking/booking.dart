@@ -63,9 +63,12 @@ class Booking
 	/// Only year, month and date is used for date
 	Future<BookingResponse> get(String tabId, DateTime date) async
 	{
-		// https://webbschema.mdh.se/ajax/ajax_resursbokning.jsp?flik=FLIK_0000&op=hamtaBokningar&datum=19-08-14
-		
-		final response = await _get("https://webbschema.${Preferences.school}.se/ajax/ajax_resursbokning.jsp?flik=FLIK_$tabId&op=hamtaBokningar&datum=${_formatDate(date)}");
+		final response = await _get(
+			"https://webbschema.${Preferences.school}.se/"
+				"ajax/ajax_resursbokning.jsp?flik=FLIK_$tabId"
+				"&op=hamtaBokningar"
+				"&datum=${_formatDate(date)}"
+		);
 		
 		if (response.contains("inte rättigheter"))
 		{
