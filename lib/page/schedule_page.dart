@@ -175,7 +175,7 @@ class ScheduleState extends State<SchedulePage>
 			),
 			trailing: Text(
 				"${event.courseId.substring(0, event.courseId.indexOf('-'))}\n"
-				"${event.location.substring(0, event.location.indexOf(' '))}",
+				"${event.location.split(' ')[0]}",
 				textAlign: TextAlign.end
 			),
 			onTap: () {
