@@ -147,7 +147,6 @@ class SettingsState extends State<SettingsPage>
 			_buildButton(Preferences.username == null ? "Log in" : "Log out",
 				null, () => Preferences.username == null
 					? _showLogin(context) : _logOut()),
-			_buildButton("Get new session", null, () => Account.getSession(HttpClient())),
 			_buildButtonBar([])
 		]);
 	}
