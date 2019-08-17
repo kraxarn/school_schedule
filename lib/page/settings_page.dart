@@ -5,6 +5,7 @@ import 'package:package_info/package_info.dart';
 import 'package:flutter/foundation.dart';
 
 import '../preferences.dart';
+import '../school.dart';
 import '../dialog/login_dialog.dart';
 import '../dialog/privacy_policy_dialog.dart';
 import '../dialog/license_dialog.dart';
@@ -65,7 +66,7 @@ class SettingsState extends State<SettingsPage>
 		// Children for both Android/iOS
 		final children = <Widget>[
 			_buildTitle(context, "General"),
-			_buildButton("Change school", null, ()
+			_buildButton("Change school", "Currently ${School(Preferences.school).name}", ()
 			{
 				Navigator.of(context).pop();
 				Navigator.of(context).pushReplacementNamed("/start");
