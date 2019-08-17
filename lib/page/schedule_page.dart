@@ -168,10 +168,8 @@ class ScheduleState extends State<SchedulePage>
 				"${_timeToString(event.start)} - ${_timeToString(event.end)}"
 			),
 			trailing: Text(
-				"${event.courseId.endsWith('-')
-					? event.courseId.substring(0, event.courseId.length - 1)
-					: event.courseId}\n"
-					"${event.location.split(' ')[0]}",
+				"${event.courseId.split('-')[0]}\n"
+				"${event.location.split(' ')[0]}",
 				textAlign: TextAlign.end
 			),
 			onTap: () => _showEventInfo(event)
