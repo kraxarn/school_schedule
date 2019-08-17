@@ -331,8 +331,17 @@ class ScheduleState extends State<SchedulePage>
 	Widget build(BuildContext context) =>
 		Scaffold(
 			body: RefreshIndicator(
-				child: ListView(
-					children: _buildEvents()
+				child: Column(
+					children: <Widget>[
+						_refreshing ? LinearProgressIndicator(
+							backgroundColor: Color.fromARGB(0, 0, 0, 0),
+						) : SizedBox(),
+						Expanded(
+							child: ListView(
+								children: _buildEvents()
+							),
+						)
+					],
 				),
 				onRefresh: () {
 					return _refreshSchedule();
