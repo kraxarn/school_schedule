@@ -337,7 +337,7 @@ class BookingState extends State<BookingPage>
 				title: Text(result.title),
 				subtitle: Text(result.subtitle),
 				trailing: Text("${result.states.where((state) =>
-				!Booking.isBooked(state)).length} available"),
+					!Booking.isBooked(state)).length} available"),
 				onTap: () => _showTimesDialog(result),
 			);
 		}).toList();
