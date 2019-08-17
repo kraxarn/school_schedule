@@ -81,7 +81,7 @@ class SearchState extends State<SearchDialog>
 			subtitle: Text(subtitle),
 			trailing: Icon(
 				_alreadySaved ? Icons.star : Icons.star_border,
-				color: _alreadySaved ? Colors.yellow : null,
+				color: _alreadySaved ? Colors.orange : null,
 			),
 			onTap: ()
 			{
