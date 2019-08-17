@@ -319,6 +319,30 @@ class BookingState extends State<BookingPage>
 			})).toList());
 	}
 	
+	
+	List<Widget> _buildResourceList()
+	{
+		final results = _results.where((result) => !result.isBooked());
+		
+		if (results.isEmpty)
+			return [
+				_loading ? SizedBox() : _buildStatusMessage(
+					"No available resources found for the "
+						"specified location and day"
+				)
+			];
+		
+		return results.map((result) {
+			return ListTile(
+				title: Text(result.title),
+				subtitle: Text(result.subtitle),
+				trailing: Text("${result.states.where((state) =>
+				!Booking.isBooked(state)).length} available"),
+				onTap: () => _showTimesDialog(result),
+			);
+		}).toList();
+	}
+	
 	@override
 	Widget build(BuildContext context)
 	{
@@ -395,15 +419,7 @@ class BookingState extends State<BookingPage>
 				),
 				Expanded(
 					child: ListView(
-						children: _results.where((result) => !result.isBooked()).map((result) {
-							return ListTile(
-								title: Text(result.title),
-								subtitle: Text(result.subtitle),
-								trailing: Text("${result.states.where((state) =>
-									!Booking.isBooked(state)).length} available"),
-								onTap: () => _showTimesDialog(result),
-							);
-						}).toList(),
+						children: _buildResourceList()
 					),
 				)
 			],
