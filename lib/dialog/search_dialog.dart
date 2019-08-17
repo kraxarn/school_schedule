@@ -26,9 +26,6 @@ class SearchState extends State<SearchDialog>
 	
 	var _enteringText = false;
 	
-	/// Set school id from preferences
-	String _schoolId = Preferences.school;
-	
 	SearchState()
 	{
 		if (Preferences.savedCourses != null)
@@ -46,7 +43,7 @@ class SearchState extends State<SearchDialog>
 		// TODO: Does nothing if already searching, should cancel
 		
 		final response = await _http.read(
-			"https://webbschema.$_schoolId.se/ajax/ajax_sokResurser.jsp"
+			"${Preferences.school.baseUrl}ajax/ajax_sokResurser.jsp"
 				"?sokord=$keyword&startDatum=idag&slutDatum="
 				"&intervallTyp=a&intervallAntal=1");
 		

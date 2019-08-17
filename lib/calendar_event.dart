@@ -1,4 +1,5 @@
 import 'package:http/http.dart' as http;
+import 'package:school_schedule/school.dart';
 
 /*
  * iCal properties:
@@ -167,9 +168,9 @@ class CalendarEvent
 	}
 	
 	/// Get ICS calendar for specified course
-	static Future<String> getCalendar(http.Client http, String schoolId, String courseId) =>
+	static Future<String> getCalendar(http.Client http, School school, String courseId) =>
 		http.read(
-			"https://webbschema.$schoolId.se/setup/jsp/SchemaICAL.ics?"
+			"${school.baseUrl}setup/jsp/SchemaICAL.ics?"
 			"startDatum=idag&intervallTyp=a&intervallAntal=1&sprak=SV"
 			"&sokMedAND=true&forklaringar=true&resurser=k.$courseId"
 		);

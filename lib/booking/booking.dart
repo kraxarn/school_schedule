@@ -65,7 +65,7 @@ class Booking
 	Future<BookingResponse> get(String tabId, DateTime date) async
 	{
 		final response = await _get(
-			"https://webbschema.${Preferences.school}.se/"
+			"${Preferences.school.baseUrl}"
 				"ajax/ajax_resursbokning.jsp?flik=FLIK_$tabId"
 				"&op=hamtaBokningar"
 				"&datum=${_formatDate(date)}"
@@ -129,7 +129,7 @@ class Booking
 	
 	Future<bool> book({DateTime date, String id, int timeIndex, String comment, String tabId}) async =>
 		(await _get(
-			"https://webbschema.${Preferences.school}.se/"
+			"${Preferences.school.baseUrl}"
 				"ajax/ajax_resursbokning.jsp?op=boka"
 				"&datum=${_formatDate(date)}"
 				"&id=$id"
@@ -141,7 +141,7 @@ class Booking
 	
 	Future<bool> cancel(String bookingId) async =>
 		(await _get(
-			"https://webbschema.${Preferences.school}.se/"
+			"${Preferences.school.baseUrl}"
 				"ajax/ajax_resursbokning.jsp?op=avboka"
 				"&bokningsId=$bookingId"
 		)).trim() == "OK";
@@ -152,7 +152,7 @@ class Booking
 		
 		// Get and parse HTML
 		final html = parse(await _get(
-			"https://webbschema.${Preferences.school}.se/"
+			"${Preferences.school.baseUrl}"
 				"minaresursbokningar.jsp"
 				"?flik=FLIK_$tabId&datum=${_formatDate(date)}"
 		));

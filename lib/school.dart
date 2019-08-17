@@ -28,6 +28,17 @@ class School
 	/// Get the full school name
 	String get name => _school.value;
 	
+	/// Base URL for KronoX calls with ending slash
+	String get baseUrl
+	{
+		switch (id)
+		{
+			// TODO: ltu is unknown
+			case "mdh": return "https://webbschema.mdh.se/";
+			default:    return "https://kronox.$id.se/";
+		}
+	}
+	
 	/// Main constructor from the school ID
 	School(String schoolId)
 	{

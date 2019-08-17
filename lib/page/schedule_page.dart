@@ -184,7 +184,7 @@ class ScheduleState extends State<SchedulePage>
 		_refreshing = true;
 		
 		// Get events
-		final schoolId = Preferences.school;
+		final school = Preferences.school;
 		
 		// We only set state here if events is empty
 		if (_savedCourses == null ||  _savedCourses.isEmpty)
@@ -200,7 +200,7 @@ class ScheduleState extends State<SchedulePage>
 		{
 			try
 			{
-				var cal = await CalendarEvent.getCalendar(_http, schoolId, course);
+				var cal = await CalendarEvent.getCalendar(_http, school, course);
 				tempEvents.addAll(CalendarEvent.parseMultiple(cal));
 			}
 			catch (e)

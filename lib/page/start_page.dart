@@ -14,7 +14,7 @@ class StartPage extends StatelessWidget
 	_saveSchool(BuildContext context, String schoolId) async
 	{
 		// Save to preferences and go to main page
-		Preferences.school = schoolId;
+		Preferences.school = School(schoolId);
 		_pushMain(context);
 	}
 	

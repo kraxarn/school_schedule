@@ -23,7 +23,7 @@ class Account
 		// Get session cookie
 		// (/hjalp.jsp seems to be lightest page to load)
 		final sessionResponse = await (await httpClient.getUrl(Uri.parse(
-			"https://webbschema.${Preferences.school}.se/hjalp.jsp"))).close();
+			"${Preferences.school.baseUrl}/hjalp.jsp"))).close();
 	
 		// Get cookie from first response
 		final cookies = sessionResponse.cookies;
@@ -39,7 +39,7 @@ class Account
 	{
 		// Try logging in
 		final request = await httpClient.getUrl(Uri.parse(
-			"https://webbschema.${Preferences.school}.se/ajax/"
+			"${Preferences.school.baseUrl}/ajax/"
 				"ajax_login.jsp?username=$username&password=$password"));
 		
 		request.cookies.add(await Preferences.sessionCookie);

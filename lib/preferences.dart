@@ -6,6 +6,7 @@ import 'package:unique_identifier/unique_identifier.dart';
 
 import 'account.dart';
 import 'course_name.dart';
+import 'school.dart';
 
 /// Application preferences
 class Preferences
@@ -17,12 +18,12 @@ class Preferences
 	static String _uniqueId;
 	
 	/// Selected school
-	static String _school;
-	static String get school => _school;
-	static set school(String value)
+	static School _school;
+	static School get school => _school;
+	static set school(School value)
 	{
 		_school = value;
-		_prefs.then((prefs) => prefs.setString("school", value));
+		_prefs.then((prefs) => prefs.setString("school", value.id));
 	}
 	
 	/// Saved courses
@@ -146,7 +147,7 @@ class Preferences
 	static Future<bool> create() async
 	{
 		var prefs = await SharedPreferences.getInstance();
-		_school       = prefs.getString("school");
+		_school       = School(prefs.getString("school"));
 		_savedCourses = prefs.getStringList("courses");
 		_darkMode     = prefs.getString("theme") == "dark";
 		_deviceSync   = prefs.getBool("device_sync");

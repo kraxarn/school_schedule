@@ -23,7 +23,7 @@ class BookingState extends State<BookingPage>
 	final _now = DateTime.now();
 	
 	/// Location to show in the dropdown as <id, name>
-	final _locations = BookingTabs.get(Preferences.school);
+	final _locations = BookingTabs.get(Preferences.school.id);
 	
 	final _booking = Booking();
 	
