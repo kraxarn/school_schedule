@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:html/dom.dart';
+import 'package:flutter/material.dart';
+import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' show parse;
 import 'package:school_schedule/preferences.dart';
 
@@ -41,7 +42,7 @@ class Booking
 	static bool isBooked(BookingState state) =>
 		state != BookingState.free;
 	
-	BookingState _getStateFromClasses(CssClassSet classes)
+	BookingState _getStateFromClasses(dom.CssClassSet classes)
 	{
 		for (final className in classes)
 		{
@@ -137,6 +138,86 @@ class Booking
 				"&moment=${Uri.encodeFull(comment)}"
 				"&flik=FLIK_$tabId"
 		)).trim() == "OK";
+	
+	Future<List<BookedRoom>> getBookings({DateTime date, String tabId}) async
+	{
+		// Because the booking list isn't proper HTML, we have to parse it manually
+		
+		// Get and parse HTML
+		final html = parse(await _get(
+			"https://webbschema.${Preferences.school}.se/"
+				"minaresursbokningar.jsp"
+				"?flik=FLIK_$tabId&datum=${_formatDate(date)}"
+		));
+		
+		//                    <html>     <body>      <div>
+		final bookingList = html.firstChild.children[1].children
+			.firstWhere((child) => child.id == "minabokningar");
+		
+		final bookings = bookingList.children
+			.where((child) => child.id.startsWith("post_"));
+		
+		if (bookings.isEmpty)
+			return null;
+		
+		return bookings.map((booking)
+		{
+			/*
+			 * text is:
+			 * 19-08-24 18:15 - 20:00 een17014, U2-273Avboka
+			 * We want to remove the Avboka text and the
+			 * spacing for the time we we get:
+			 * 19-08-24 18:15-20:00 een17014, U2-273
+			 * [0]: Date, [1]: Time span, [3]: Location
+			 */
+			
+			final text = booking.firstChild.text
+				.replaceAll("Avboka", "")
+				.replaceAll(" - ", "-")
+				.replaceAll(',', '')
+				.replaceAll(' ', ' '); // Don't ask
+			final parts = text.split(' ');
+			
+			return BookedRoom(
+				// To get rid of the post_
+				id: booking.id.substring(5),
+				// To get YYYY-MM-DD
+				date: "20${parts[0]}",
+				// Add back the space
+				timeSpan: parts[1].replaceAll("-", " - "),
+				// [2] is the ID of who booked
+				location: parts[3]
+			);
+		}).toList();
+	}
+}
+
+/// Represents an already booked room
+class BookedRoom
+{
+	/// ID used to cancel
+	final String id;
+	
+	/// Date of the booking
+	final String date;
+	
+	/// String representing the time span
+	final String timeSpan;
+	
+	/// Location or resource
+	final String location;
+	
+	BookedRoom({this.id, this.date, this.timeSpan, this.location});
+	
+	ListTile toListTile(void Function() cancelPressed) =>
+		ListTile(
+			title: Text(location),
+			subtitle: Text("$date, $timeSpan"),
+			trailing: FlatButton(
+				child: Text("CANCEL"),
+				onPressed: cancelPressed,
+			),
+		);
 }
 
 /// Represents a single room
