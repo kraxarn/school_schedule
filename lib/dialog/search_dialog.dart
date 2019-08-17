@@ -16,7 +16,7 @@ class SearchState extends State<SearchDialog>
 	final _http = http.Client();
 	
 	/// Title (course code) of all saved
-	List<String> get _saved => Preferences.savedCourses ?? List<String>();
+	final _saved = List<String>();
 	
 	/// Map with all results as <title, subtitle>
 	final _results = Map<String, String>();
@@ -28,6 +28,12 @@ class SearchState extends State<SearchDialog>
 	
 	/// Set school id from preferences
 	String _schoolId = Preferences.school;
+	
+	SearchState()
+	{
+		if (Preferences.savedCourses != null)
+			_saved.addAll(Preferences.savedCourses);
+	}
 	
 	/// Fix å, ä, ö (kind of hacky, but works)
 	String _decode(String text) =>
@@ -68,6 +74,7 @@ class SearchState extends State<SearchDialog>
 	Widget _createResult(String title, String subtitle)
 	{
 		final _alreadySaved = _saved.contains(title);
+		
 		return ListTile(
 			title: Text(title.endsWith('-')
 				? title.substring(0, title.length - 1) : title),
@@ -78,14 +85,9 @@ class SearchState extends State<SearchDialog>
 			),
 			onTap: ()
 			{
-				setState(()
-				{
-					if (_alreadySaved)
-						_saved.remove(title);
-					else
-						_saved.add(title);
-					_save();
-				});
+				setState(() =>
+					_alreadySaved ? _saved.remove(title) : _saved.add(title));
+				_save();
 				
 				// Save to course name
 				// (this is unrelated to widget state)
