@@ -62,15 +62,25 @@ class Preferences
 		_prefs.then((prefs) => prefs.setInt("refresh_interval", value));
 	}
 	
+	/// Last refresh of session
+	static DateTime _sessionRefresh = DateTime.now();
+	
 	/// School login ID
 	static String _sessionId;
 	static Future<String> get sessionId async
 	{
+		// Invalidate if older than 20 minutes
+		if (DateTime.now().difference(_sessionRefresh).inMinutes > 20)
+			_sessionId = null;
+		
 		if (_sessionId == null)
 		{
 			// Get new session
 			final http = HttpClient();
 			_sessionId = (await Account.getSession(http)).value;
+			
+			// Update refresh time
+			_sessionRefresh = DateTime.now();
 			
 			// Also login if saved
 			if (username != null && password != null)
