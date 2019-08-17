@@ -405,7 +405,7 @@ class BookingState extends State<BookingPage>
 									// Default to show locating indicator
 									setState(() => _booked = [
 										Padding(
-											padding: EdgeInsets.all(8.0),
+											padding: EdgeInsets.all(12.0),
 											child: CircularProgressIndicator(),
 										)
 									]);
