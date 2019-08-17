@@ -35,6 +35,9 @@ class LicenseState extends State<LicenseDialog>
 		// flutter_markdown
 		_addLicense("Flutter Markdown", await client.read(
 			"https://raw.githubusercontent.com/flutter/flutter_markdown/master/LICENSE"));
+		// encrypt
+		_addLicense("encrypt", await client.read(
+			"https://raw.githubusercontent.com/leocavalcante/encrypt/master/LICENSE"));
 		
 		setState(() => _loading = false);
 	}
