@@ -9,6 +9,7 @@ import '../calendar_event.dart';
 import '../preferences.dart';
 import '../dialog/search_dialog.dart';
 import '../course_name.dart';
+import '../demo.dart';
 
 class SchedulePage extends StatefulWidget
 {
@@ -177,6 +178,16 @@ class ScheduleState extends State<SchedulePage>
 	
 	Future<void> _refreshSchedule() async
 	{
+		// Test if we're using KronoX demo
+		if (Preferences.school.id == null)
+		{
+			setState(() {
+				_events.clear();
+				_events.addAll(Demo.calendarEvents);
+			});
+			return;
+		}
+		
 		// If no courses saved, do nothing
 		if (_savedCourses == null)
 			return;
