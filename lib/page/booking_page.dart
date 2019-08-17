@@ -38,6 +38,11 @@ class BookingState extends State<BookingPage>
 	/// Currently selected location as <id, name>
 	MapEntry<String, String> _currentLocation;
 	
+	var _booked = List<Widget>();
+	
+	/// To keep track of if we should refresh when shown
+	var _showingBookedResources = false;
+	
 	BookingState()
 	{
 		if (_locations != null)
@@ -97,6 +102,7 @@ class BookingState extends State<BookingPage>
 				// Refresh
 				_search();
 			});
+		_refreshBookedResources();
 	}
 	
 	void _search() async
@@ -228,9 +234,12 @@ class BookingState extends State<BookingPage>
 									comment:   commentController.text,
 									tabId:     _currentLocation.key
 								))
+								{
 									Scaffold.of(context).showSnackBar(SnackBar(
 										content: Text("Resource booked"),
 									));
+									_refreshBookedResources();
+								}
 								else
 									showDialog(
 										context: context,
@@ -251,12 +260,63 @@ class BookingState extends State<BookingPage>
 												],
 											)
 									);
-								print("op: boka, datum: ${_formatDate(_date).substring(2)}, id: ${room.title}, typ: RESURSER_LOKALER, intervall: ${_times.indexOf(time)}, moment: ${commentController.text}, flik: FLIK_${_currentLocation.key}");
 							},
 						),
 					],
 				)
 		);
+	}
+	
+	void _refreshBookedResources() async
+	{
+		// Don't refresh if not shown
+		if (!_showingBookedResources)
+			return;
+		
+		// When enabling, fetch stuff
+		final bookings = await _booking.getBookings(
+			date: _date,
+			tabId: _currentLocation.key
+		);
+		
+		setState(() =>
+			_booked = bookings == null ? [
+				Padding(
+					padding: EdgeInsets.all(16.0),
+					child: Text(
+						"No results found for the specified location",
+						textAlign: TextAlign.center,
+					),
+				)
+			] : bookings.map((booking) => booking.toListTile(() async
+			{
+				if (!await _booking.cancel(booking.id))
+					showDialog(
+						context: context,
+						builder: (builder) =>
+							AlertDialog(
+								title: Text("Error"),
+								content: Text(
+									"There was an error canceling the "
+										"selected resource"
+								),
+								actions: <Widget>[
+									FlatButton(
+										child: Text("OK"),
+										onPressed: () =>
+											Navigator.of(context).pop(),
+									)
+								],
+							)
+					);
+				else
+				{
+					Scaffold.of(context).showSnackBar(SnackBar(
+						content: Text("Booking canceled"),
+					));
+					_refreshBookedResources();
+				}
+			})).toList());
 	}
 	
 	@override
@@ -296,6 +356,7 @@ class BookingState extends State<BookingPage>
 												.firstWhere((entry) =>
 												entry.value == value));
 										_search();
+										_refreshBookedResources();
 									},
 									items: _locations.values
 										.map<DropdownMenuItem<String>>((value) =>
@@ -311,6 +372,24 @@ class BookingState extends State<BookingPage>
 								trailing: Text(_formatDate(_date)),
 								onTap: () => _selectDate(),
 							),
+							ExpansionTile(
+								title: Text("Booked resources"),
+								children: _booked,
+								onExpansionChanged: (visible) async
+								{
+									_showingBookedResources = visible;
+									// Default to show locating indicator
+									setState(() => _booked = [
+										Padding(
+											padding: EdgeInsets.all(8.0),
+											child: CircularProgressIndicator(),
+										)
+									]);
+									// Refresh if showing
+									if (visible)
+										_refreshBookedResources();
+								},
+							)
 						],
 					),
 				),
