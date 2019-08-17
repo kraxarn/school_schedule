@@ -139,6 +139,13 @@ class Booking
 				"&flik=FLIK_$tabId"
 		)).trim() == "OK";
 	
+	Future<bool> cancel(String bookingId) async =>
+		(await _get(
+			"https://webbschema.${Preferences.school}.se/"
+				"ajax/ajax_resursbokning.jsp?op=avboka"
+				"&bokningsId=$bookingId"
+		)).trim() == "OK";
+	
 	Future<List<BookedRoom>> getBookings({DateTime date, String tabId}) async
 	{
 		// Because the booking list isn't proper HTML, we have to parse it manually
