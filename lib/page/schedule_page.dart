@@ -147,6 +147,9 @@ class ScheduleState extends State<SchedulePage>
 		);
 	}
 	
+	int _getMonthsBetween(DateTime from, DateTime to) =>
+		((to.year - from.year) * 12) + (to.month - from.month);
+	
 	Widget _buildEvent(ThemeData theme, CalendarEvent event) =>
 		ListTile(
 			leading: Column(
@@ -263,10 +266,7 @@ class ScheduleState extends State<SchedulePage>
 		all.sort((e1, e2) => e1.start.compareTo(e2.start));
 		
 		// Months between first and last event
-		// Shortest month here just to be sure, could possibly be done better
-		// We also floor it (even though it's not really needed)
-		final months = (all.last.end.difference(all.first.start).inDays / 28)
-			.floor();
+		final months = _getMonthsBetween(all.first.start, all.last.end);
 		
 		// Creates titles for a year
 		final events = List<Widget>();
