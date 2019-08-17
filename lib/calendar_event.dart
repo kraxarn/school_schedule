@@ -91,7 +91,7 @@ class CalendarEvent
 					
 				case "SUMMARY":
 					/*
-					 * TODO: This could possible be done better
+					 * TODO: This could possibly be done better
 					 * Assume:
 					 * SUMMARY: Kurs.grp:<course-id> Sign:<signature> Moment:<summary>
 					 */
