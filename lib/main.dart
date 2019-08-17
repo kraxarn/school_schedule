@@ -26,8 +26,8 @@ class MyApp extends StatelessWidget
 			),
 			home: Preferences.school == null ? StartPage() : MainPage(),
 			routes: {
-				"/start":  (context) => StartPage(),
-				"/main":   (context) => MainPage()
+				"/start": (context) => StartPage(),
+				"/main":  (context) => MainPage()
 			}
 		);
 	}
