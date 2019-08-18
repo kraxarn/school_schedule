@@ -55,15 +55,17 @@ class SearchState extends State<SearchDialog>
 		
 		response.substring(
 			response.indexOf("resursLista") + 13,
-			response.indexOf("</ul>")).split("<li>").forEach((result) {
+			response.indexOf("</ul>")).split("<li>").forEach((result)
+		{
+			// If no content or we reached max
 			if (result.isEmpty || results.length > 20)
 				return;
+			// Get text between tags
 			var r1 = result.substring(result.lastIndexOf("\">") + 2);
 			var r2 = r1.substring(0, r1.indexOf("<"));
 			var r = r2.split(',');
-			results.addAll({
-				r[0].trim(): _decode(r[1].trim())
-			});
+			// Add to results
+			results[r[0].trim()] = _decode(r[1].trim());
 		});
 		
 		return results;
