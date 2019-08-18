@@ -3,7 +3,6 @@ import 'package:http/http.dart' as http;
 import 'package:school_schedule/course_name.dart';
 
 import '../preferences.dart';
-import 'course_list_dialog.dart';
 
 class SearchDialog extends StatefulWidget
 {
@@ -112,15 +111,6 @@ class SearchState extends State<SearchDialog>
 	/// Replace saved courses with temporary list
 	void _save() => Preferences.savedCourses = _saved;
 	
-	/// Opens the course list dialog
-	void _openCourseList() async =>
-		await Navigator.of(context).push(MaterialPageRoute(
-			builder: (builder) {
-				return CourseListDialog();
-			},
-			fullscreenDialog: true
-		));
-	
 	@override
 	Widget build(BuildContext context) =>
 		Scaffold(
@@ -148,13 +138,7 @@ class SearchState extends State<SearchDialog>
 							});
 						},
 					),
-				),
-				actions: <Widget>[
-					IconButton(
-						icon: Icon(Icons.list),
-						onPressed: () => _openCourseList(),
-					)
-				],
+				)
 			),
 			body: Column(
 				children: <Widget>[
