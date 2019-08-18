@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:school_schedule/page/settings_page.dart';
 
 import 'schedule_page.dart';
 import 'booking_page.dart';
+import 'settings_page.dart';
 
 class MainPage extends StatefulWidget
 {
@@ -16,63 +16,38 @@ class MainState extends State<MainPage> with SingleTickerProviderStateMixin
 	final _tabPages = <Widget>[
 		SchedulePage(),
 		BookingPage(),
-		//ExamPage()
+		//ExamPage(),
+		SettingsPage()
 	];
 	
-	/// All actual tabs
-	final _tabItems = <Tab>[
-		Tab(
-			child: ListTile(
-				leading: Icon(Icons.calendar_today),
-				title: Text("Schedule"),
-			),
+	/// All tabs
+	final _navBarItems = <BottomNavigationBarItem>
+	[
+		BottomNavigationBarItem(
+			icon: Icon(Icons.calendar_today),
+			title: Text("Schedule")
 		),
-		Tab(
-			child: ListTile(
-				leading: Icon(Icons.access_time),
-				title: Text("Booking"),
-			),
+		BottomNavigationBarItem(
+			icon: Icon(Icons.access_time),
+			title: Text("Booking")
+		),
+		BottomNavigationBarItem(
+			icon: Icon(Icons.settings),
+			title: Text("Settings")
 		)
 	];
 	
-	/// Controller required for tabs
-	TabController _tabController;
-	
-	@override
-	void initState()
-	{
-		super.initState();
-		_tabController = TabController(
-			vsync: this,
-			length: _tabItems.length
-		);
-	}
+	/// Current tab displayed
+	var _navBarIndex = 0;
 	
 	@override
 	Widget build(BuildContext context) =>
 		Scaffold(
-			appBar: AppBar(
-				title: Text("KronoX"),
-				actions: <Widget>[
-					IconButton(
-						icon: Icon(Icons.settings),
-						onPressed: () {
-							Navigator.of(context).push(
-								MaterialPageRoute(
-									builder: (context) => SettingsPage()
-								)
-							);
-						},
-					)
-				],
-				bottom: TabBar(
-					tabs: _tabItems,
-					controller: _tabController,
-				),
-			),
-			body: TabBarView(
-				controller: _tabController,
-				children: _tabPages,
+			body: _tabPages[_navBarIndex],
+			bottomNavigationBar: BottomNavigationBar(
+				items: _navBarItems,
+				currentIndex: _navBarIndex,
+				onTap: (index) => setState(() => _navBarIndex = index),
 			)
 		);
 }
