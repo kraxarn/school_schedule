@@ -40,12 +40,6 @@ class BookingState extends State<BookingPage>
 	/// Currently selected location as <id, name>
 	MapEntry<String, String> _currentLocation;
 	
-	/// Resources booked list
-	var _booked = List<Widget>();
-	
-	/// To keep track of if we should refresh when shown
-	var _showingBookedResources = false;
-	
 	BookingState()
 	{
 		if (_locations != null)
@@ -105,7 +99,6 @@ class BookingState extends State<BookingPage>
 				// Refresh
 				_search();
 			});
-		_refreshBookedResources();
 	}
 	
 	/// Perform search
@@ -244,7 +237,6 @@ class BookingState extends State<BookingPage>
 									Scaffold.of(context).showSnackBar(SnackBar(
 										content: Text("Resource booked"),
 									));
-									_refreshBookedResources();
 								}
 								else
 									showDialog(
@@ -273,57 +265,13 @@ class BookingState extends State<BookingPage>
 		);
 	}
 	
-	/// Refresh resource list
-	void _refreshBookedResources() async
+	void _showBookedResources()
 	{
-		// Don't refresh if not shown
-		if (!_showingBookedResources)
-			return;
-		
-		// When enabling, fetch stuff
-		final bookings = await _booking.getBookings(
-			date: _date,
-			tabId: _currentLocation.key
+		showModalBottomSheet(
+			context: context,
+			builder: (builder) => BookedResourcesDialog(
+				_booking, _currentLocation.key)
 		);
-		
-		setState(() =>
-			_booked = bookings == null ? [
-				Padding(
-					padding: EdgeInsets.all(16.0),
-					child: Text(
-						"No results found for the specified location",
-						textAlign: TextAlign.center,
-					),
-				)
-			] : bookings.map((booking) => booking.toListTile(() async
-			{
-				if (!await _booking.cancel(booking.id))
-					showDialog(
-						context: context,
-						builder: (builder) =>
-							AlertDialog(
-								title: Text("Error"),
-								content: Text(
-									"There was an error canceling the "
-										"selected resource"
-								),
-								actions: <Widget>[
-									FlatButton(
-										child: Text("OK"),
-										onPressed: () =>
-											Navigator.of(context).pop(),
-									)
-								],
-							)
-					);
-				else
-				{
-					Scaffold.of(context).showSnackBar(SnackBar(
-						content: Text("Booking canceled"),
-					));
-					_refreshBookedResources();
-				}
-			})).toList());
 	}
 	
 	/// Build list of resources
@@ -350,6 +298,69 @@ class BookingState extends State<BookingPage>
 		}).toList();
 	}
 	
+	Widget _buildFilterSettings()
+	{
+		return ListView(
+			children: <Widget>[
+				ListTile(
+					title: Text(
+						"Booking",
+						style: Theme.of(context).textTheme.title,
+					),
+					trailing: IconButton(
+						icon: Icon(Icons.list),
+						onPressed: () => _showBookedResources(),
+					),
+				),
+				// Location tile
+				ListTile(
+					leading: Icon(Icons.location_on),
+					title: Text("Location"),
+					trailing: DropdownButton<String>(
+						value: _currentLocation == null ? null : _currentLocation.value,
+						onChanged: (value)
+						{
+							setState(() => _currentLocation = _locations.entries.firstWhere((entry) => entry.value == value));
+							_search();
+						},
+						items: _locations.values.map<DropdownMenuItem<String>>((value) =>
+							DropdownMenuItem(
+								child: Text(value),
+								value: value
+							)
+						).toList()
+					),
+				),
+				// Day tile
+				ListTile(
+					leading: Icon(Icons.today),
+					title: Text("Day"),
+					trailing: Text(_formatDate(_date)),
+					onTap: () => _selectDate(),
+				),
+				// Showing all booked resources
+				/*ExpansionTile(
+					title: Text("Booked resources"),
+					children: _booked,
+					onExpansionChanged: (visible) async
+					{
+						_showingBookedResources = visible;
+						// Default to show locating indicator
+						setState(() => _booked = [
+							Padding(
+								padding: EdgeInsets.all(12.0),
+								child: CircularProgressIndicator(),
+							)
+						]);
+						// Refresh if showing
+						if (visible)
+							_refreshBookedResources();
+					}
+				)*/
+			]
+		);
+	}
+	
 	@override
 	Widget build(BuildContext context)
 	{
@@ -367,69 +378,115 @@ class BookingState extends State<BookingPage>
 				"Booking requires you to sign in from the settings"
 			);
 		
-		// Return normal booking if logged in
-		return Column(
-			children: <Widget>[
-				_loading ? LinearProgressIndicator(
-					backgroundColor: Color.fromARGB(0, 0, 0, 0),
-				) : SizedBox(),
-				Card(
-					child: Column(
-						children: <Widget>[
-							ListTile(
-								title: Text("Location"),
-								trailing: DropdownButton<String>(
-									value: _currentLocation == null ? null : _currentLocation.value,
-									onChanged: (value)
-									{
-										setState(() => _currentLocation =
-											_locations.entries
-												.firstWhere((entry) =>
-												entry.value == value));
-										_search();
-										_refreshBookedResources();
-									},
-									items: _locations.values
-										.map<DropdownMenuItem<String>>((value) =>
-										DropdownMenuItem(
-											child: Text(value),
-											value: value
-										)
-									).toList()
-								)
-							),
-							ListTile(
-								title: Text("Day"),
-								trailing: Text(_formatDate(_date)),
-								onTap: () => _selectDate(),
-							),
-							ExpansionTile(
-								title: Text("Booked resources"),
-								children: _booked,
-								onExpansionChanged: (visible) async
-								{
-									_showingBookedResources = visible;
-									// Default to show locating indicator
-									setState(() => _booked = [
-										Padding(
-											padding: EdgeInsets.all(12.0),
-											child: CircularProgressIndicator(),
-										)
-									]);
-									// Refresh if showing
-									if (visible)
-										_refreshBookedResources();
-								},
-							)
-						],
+		return Scaffold(
+			body: NestedScrollView(
+				headerSliverBuilder: (context, scrolled) =>
+				[
+					SliverAppBar(
+						pinned:   true,
+						snap:     true,
+						floating: true,
+						expandedHeight: 168.0,
+						flexibleSpace: _buildFilterSettings(),
 					),
+				],
+				body: ListView(
+					padding: EdgeInsets.all(0.0),
+					children: _loading ? [
+						LinearProgressIndicator(
+							backgroundColor: Color.fromARGB(0, 0, 0, 0),
+						)
+					] : _buildResourceList(),
 				),
-				Expanded(
-					child: ListView(
-						children: _buildResourceList()
-					),
-				)
-			],
+			),
 		);
 	}
+}
+
+class BookedResourcesDialog extends StatefulWidget
+{
+	final Booking _booking;
+	
+	final String _tabId;
+	
+	@override
+	State createState() => BookedResourcesState(_booking, _tabId);
+	
+	BookedResourcesDialog(this._booking, this._tabId);
+}
+
+class BookedResourcesState extends State<BookedResourcesDialog>
+{
+	/// Resources booked list
+	var _booked = List<Widget>();
+	
+	/// Instance of Booking to get bookings
+	final Booking _booking;
+	
+	/// Tab to get bookings for
+	final String _tabId;
+	
+	BookedResourcesState(this._booking, this._tabId);
+	
+	/// Refresh resource list
+	void _refreshBookedResources() async
+	{
+		// When enabling, fetch stuff
+		final bookings = await _booking.getBookings(
+			date: DateTime.now(),
+			tabId: _tabId
+		);
+		
+		setState(() =>
+		_booked = bookings == null ? [
+			ListTile(
+				title: Text(
+					"No results found for the specified location",
+					textAlign: TextAlign.center,
+				),
+			)
+		] : bookings.map((booking) => booking.toListTile(() async
+		{
+			if (!await _booking.cancel(booking.id))
+				showDialog(
+					context: context,
+					builder: (builder) =>
+						AlertDialog(
+							title: Text("Error"),
+							content: Text(
+								"There was an error canceling the "
+									"selected resource"
+							),
+							actions: <Widget>[
+								FlatButton(
+									child: Text("OK"),
+									onPressed: () =>
+										Navigator.of(context).pop(),
+								)
+							],
+						)
+				);
+			else
+				_refreshBookedResources();
+		})).toList());
+	}
+	
+	@override
+	void initState()
+	{
+		super.initState();
+		_refreshBookedResources();
+	}
+	
+	@override
+	Widget build(BuildContext context) =>
+		_booked.isEmpty ? Padding(
+			padding: EdgeInsets.all(32.0),
+			child: LinearProgressIndicator()
+		) : SizedBox(
+			height: 240.0,
+			child: ListView(
+				children: _booked,
+			)
+		);
 }
