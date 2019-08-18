@@ -12,9 +12,13 @@ class LoginDialog extends StatefulWidget
 
 class LoginDialogState extends State<LoginDialog>
 {
+	/// Key used to verify input
 	final _formKey = GlobalKey<FormState>();
 	
+	/// Username controller to get text in code
 	final _usernameController = TextEditingController();
+	
+	/// Password controller to get text in code
 	final _passwordController = TextEditingController();
 	
 	/// State of current school account login
@@ -23,10 +27,10 @@ class LoginDialogState extends State<LoginDialog>
 	// We use a Dart HttpClient here because cookies
 	final _http = HttpClient();
 	
-	_buildTextField(String label, bool obscureText,
-		TextEditingController controller, String Function(String) validator)
-	{
-		return TextFormField(
+	/// Create a text field for a form
+	Widget _buildTextField(String label, bool obscureText,
+		TextEditingController controller, String Function(String) validator) =>
+		TextFormField(
 			controller: controller,
 			obscureText: obscureText,
 			decoration: InputDecoration(
@@ -39,9 +43,9 @@ class LoginDialogState extends State<LoginDialog>
 			),
 			validator: validator,
 		);
-	}
 	
-	_showResultDialog(String content)
+	/// Show dialog when login fails
+	void _showResultDialog(String content)
 	{
 		showDialog(
 			context: context,
@@ -60,6 +64,7 @@ class LoginDialogState extends State<LoginDialog>
 		);
 	}
 	
+	/// Attempt login
 	void _login() async
 	{
 		// Show that we're logging in
@@ -79,10 +84,8 @@ class LoginDialogState extends State<LoginDialog>
 	}
 	
 	@override
-	Widget build(BuildContext context)
-	{
-		// Return a basic view
-		return Scaffold(
+	Widget build(BuildContext context) =>
+		Scaffold(
 			appBar: AppBar(
 				title: Text("School Login"),
 			),
@@ -95,9 +98,9 @@ class LoginDialogState extends State<LoginDialog>
 						) : SizedBox(),
 						Padding(
 							padding: EdgeInsets.only(
-								top: 32.0,
-								left: 32.0,
-								right: 32.0,
+								top:    32.0,
+								left:   32.0,
+								right:  32.0,
 								bottom: 16.0
 							),
 							child: _buildTextField("Username", false,
@@ -107,8 +110,8 @@ class LoginDialogState extends State<LoginDialog>
 						),
 						Padding(
 							padding: EdgeInsets.only(
-								left: 32.0,
-								right: 32.0,
+								left:   32.0,
+								right:  32.0,
 								bottom: 16.0
 							),
 							child: _buildTextField("Password", true,
@@ -140,5 +143,4 @@ class LoginDialogState extends State<LoginDialog>
 				)
 			)
 		);
-	}
 }

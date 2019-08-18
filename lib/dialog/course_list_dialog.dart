@@ -12,16 +12,21 @@ class CourseListDialog extends StatefulWidget
 
 class CourseListState extends State<CourseListDialog>
 {
+	/// All saved
 	final _saved = List<String>();
 	
 	CourseListState()
 	{
+		// Check if we have any saved courses
+		// (if we try to add null, it crashes)
 		if (Preferences.savedCourses != null)
 			_saved.addAll(Preferences.savedCourses);
 	}
 	
+	/// Replace saved courses with temporary list
 	void _save() => Preferences.savedCourses = _saved;
 	
+	/// Build a centered and padded message
 	List<Widget> _buildStatusMessage(String message) =>
 		[
 			Padding(
@@ -33,6 +38,7 @@ class CourseListState extends State<CourseListDialog>
 			)
 		];
 	
+	/// Build a result showing a delete button
 	Widget _buildResult(String title, String subtitle)
 	{
 		return ListTile(
@@ -52,9 +58,8 @@ class CourseListState extends State<CourseListDialog>
 	}
 	
 	@override
-	Widget build(BuildContext context)
-	{
-		return Scaffold(
+	Widget build(BuildContext context) =>
+		Scaffold(
 			appBar: AppBar(
 				title: Text("Saved Courses"),
 			),
@@ -66,5 +71,4 @@ class CourseListState extends State<CourseListDialog>
 					).toList()
 			),
 		);
-	}
 }

@@ -11,6 +11,7 @@ void main() =>
 
 class MyApp extends StatelessWidget
 {
+	/// Base light or dark theme
 	ThemeData get _baseTheme =>
 		(Preferences.darkMode ? ThemeData.dark() : ThemeData.light());
 	

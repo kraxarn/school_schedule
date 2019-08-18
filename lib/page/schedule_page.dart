@@ -20,16 +20,20 @@ class SchedulePage extends StatefulWidget
 
 class ScheduleState extends State<SchedulePage>
 {
+	/// Shortcut to getting saved courses
 	List<String> get _savedCourses => Preferences.savedCourses;
 	
+	// All events to show in the list
 	final _events = List<CalendarEvent>();
 	
 	/// Reusable HTTP instance for schedule refreshing
 	final _http = http.Client();
 	
+	// If we're refreshing, used when displaying progress indicator
 	var _refreshing = false;
 	
-	Widget _buildTitle(text) =>
+	/// Build title with bottom border
+	Widget _buildTitle(String text) =>
 		DecoratedBox(
 			child: ListTile(
 				title: Text(
@@ -45,6 +49,7 @@ class ScheduleState extends State<SchedulePage>
 			),
 		);
 	
+	/// Get 3 character name of weekday
 	String _weekdayToString(int weekday)
 	{
 		switch (weekday)
@@ -60,6 +65,7 @@ class ScheduleState extends State<SchedulePage>
 		}
 	}
 	
+	/// Format time as HH:MM
 	String _timeToString(DateTime time)
 	{
 		final hours   = time.hour   < 10 ? "0${time.hour}"   : "${time.hour}";
@@ -67,6 +73,7 @@ class ScheduleState extends State<SchedulePage>
 		return "$hours:$minutes";
 	}
 	
+	/// Get name of month
 	String _monthToString(int month)
 	{
 		switch (month)
@@ -87,6 +94,7 @@ class ScheduleState extends State<SchedulePage>
 		}
 	}
 	
+	/// Build table row for event info
 	TableRow _buildEventInfoRow(String title, String info) =>
 		TableRow(
 			children: [
@@ -98,6 +106,7 @@ class ScheduleState extends State<SchedulePage>
 			]
 		);
 	
+	/// Build an empty table row
 	TableRow _buildEventDivider() =>
 		TableRow(
 			children: [
@@ -106,6 +115,7 @@ class ScheduleState extends State<SchedulePage>
 			]
 		);
 	
+	/// Show modal sheet for displaying calendar event info
 	void _showEventInfo(CalendarEvent event)
 	{
 		showModalBottomSheet(
@@ -148,9 +158,11 @@ class ScheduleState extends State<SchedulePage>
 		);
 	}
 	
+	/// Get number of months between first day of each month
 	int _getMonthsBetween(DateTime from, DateTime to) =>
 		((to.year - from.year) * 12) + (to.month - from.month);
 	
+	/// Build a calendar event
 	Widget _buildEvent(CalendarEvent event) =>
 		ListTile(
 			leading: Column(
@@ -176,6 +188,7 @@ class ScheduleState extends State<SchedulePage>
 			onTap: () => _showEventInfo(event)
 		);
 	
+	/// Refresh the schedule
 	Future<void> _refreshSchedule() async
 	{
 		// Test if we're using KronoX demo
@@ -245,6 +258,7 @@ class ScheduleState extends State<SchedulePage>
 		setState(() => _events.addAll(events));
 	}
 	
+	/// Build centered and padded status message
 	_buildStatusMessage(String text) =>
 		[
 			Padding(
@@ -256,6 +270,7 @@ class ScheduleState extends State<SchedulePage>
 			)
 		];
 	
+	/// Build all events
 	List<Widget> _buildEvents()
 	{
 		if (_refreshing && _events.isEmpty)
@@ -319,6 +334,7 @@ class ScheduleState extends State<SchedulePage>
 		return events;
 	}
 	
+	/// Open search dialog
 	_openSearch() async
 	{
 		await Navigator.of(context).push(MaterialPageRoute(

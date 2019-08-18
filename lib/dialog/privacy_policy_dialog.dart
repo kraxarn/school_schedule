@@ -5,8 +5,7 @@ import 'package:http/http.dart' as http;
 class PrivacyPolicyDialog extends StatefulWidget
 {
 	@override
-	State createState() =>
-		PrivacyPolicyState();
+	State createState() => PrivacyPolicyState();
 }
 
 class PrivacyPolicyState extends State<PrivacyPolicyDialog>
@@ -23,15 +22,14 @@ class PrivacyPolicyState extends State<PrivacyPolicyDialog>
 		super.initState();
 		
 		// We start fetching it ahead of time
-		http.read("https://kronox.se/app/privacypolicy.php").then((response) {
+		http.read("https://kronox.se/app/privacypolicy.php").then((response) =>
 			setState(() {
 				_privacyPolicy = response.substring(
 					response.indexOf("</head>") + 7,
 					response.indexOf("</html>")
 				).replaceAll("<h2>", "## ").replaceAll("</h2>", "").trim();
 				_loading = false;
-			});
-		});
+			}));
 	}
 	
 	@override

@@ -17,12 +17,14 @@ class SettingsPage extends StatefulWidget
 
 class SettingsState extends State<SettingsPage>
 {
+	/// Scaffold state for showing snack bars
 	final _scaffoldKey = GlobalKey<ScaffoldState>();
 	
 	// For about card
 	var _version = "version";
 	var _build   = "build";
 	
+	/// Allowed refresh intervals as <minutes, formatted>
 	final _refreshIntervals = {
 		0:   "Disabled",
 		15:  "15 minutes",
@@ -30,6 +32,7 @@ class SettingsState extends State<SettingsPage>
 		240: "4 hours"
 	};
 	
+	/// Build a card with children in a column
 	Widget _buildCard(List<Widget> children) =>
 		Card(
 			child: Column(
@@ -37,6 +40,7 @@ class SettingsState extends State<SettingsPage>
 			),
 		);
 	
+	/// Build title with larger text
 	Widget _buildTitle(BuildContext context, String title) =>
 		ListTile(
 			title: Text(
@@ -45,6 +49,7 @@ class SettingsState extends State<SettingsPage>
 			)
 		);
 	
+	/// Build a button with optional subtitle
 	Widget _buildButton(String title, String subtitle, void Function() onTap) =>
 		ListTile(
 			title: Text(title),
@@ -52,6 +57,7 @@ class SettingsState extends State<SettingsPage>
 			onTap: onTap,
 		);
 	
+	/// Build a button bar (or use as padding)
 	Widget _buildButtonBar(List<Widget> children) =>
 		ButtonTheme.bar(
 			child: ButtonBar(
@@ -60,7 +66,7 @@ class SettingsState extends State<SettingsPage>
 		);
 	
 	/// Card for general settings
-	Widget _buildGeneralCard(BuildContext context)
+	Widget _buildGeneralCard()
 	{
 		// Children for both Android/iOS
 		final children = <Widget>[
@@ -133,7 +139,7 @@ class SettingsState extends State<SettingsPage>
 	}
 	
 	/// Card for account settings
-	Widget _buildAccountCard(BuildContext context)
+	Widget _buildAccountCard()
 	{
 		return _buildCard([
 			_buildTitle(context, "Account"),
@@ -150,6 +156,7 @@ class SettingsState extends State<SettingsPage>
 		]);
 	}
 	
+	/// Card for about section
 	Widget _buildAboutCard()
 	{
 		if (_version == "version" || _build == "build")
@@ -187,9 +194,11 @@ class SettingsState extends State<SettingsPage>
 		]);
 	}
 	
+	/// Log out (remove username and password)
 	void _logOut() =>
 		setState(() => Preferences.username = Preferences.password = null);
 	
+	/// Show login dialog
 	void _showLogin(context)
 	{
 		Navigator.of(context).push(MaterialPageRoute(
@@ -213,8 +222,8 @@ class SettingsState extends State<SettingsPage>
 			body: ListView(
 				padding: EdgeInsets.all(16.0),
 				children: [
-					_buildGeneralCard(context),
-					_buildAccountCard(context),
+					_buildGeneralCard(),
+					_buildAccountCard(),
 					_buildAboutCard()
 				],
 			),

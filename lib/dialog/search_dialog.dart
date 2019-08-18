@@ -13,6 +13,7 @@ class SearchDialog extends StatefulWidget
 
 class SearchState extends State<SearchDialog>
 {
+	/// Shared HTTP client for all searches
 	final _http = http.Client();
 	
 	/// Title (course code) of all saved
@@ -24,6 +25,7 @@ class SearchState extends State<SearchDialog>
 	/// If we should show the loading spinner
 	var _loading = false;
 	
+	/// If we're entering text, used when building status text
 	var _enteringText = false;
 	
 	SearchState()
@@ -38,6 +40,7 @@ class SearchState extends State<SearchDialog>
 			.replaceAll("&#228;", "ä")
 			.replaceAll("&#246;", "ö");
 	
+	/// Perform search and return results
 	Future<Map<String, String>> _search(String keyword) async
 	{
 		// TODO: Does nothing if already searching, should cancel
@@ -70,6 +73,7 @@ class SearchState extends State<SearchDialog>
 		return results;
 	}
 	
+	/// Create a result with button to add/remove
 	Widget _createResult(String title, String subtitle)
 	{
 		final _alreadySaved = _saved.contains(title);
@@ -98,14 +102,17 @@ class SearchState extends State<SearchDialog>
 		);
 	}
 	
+	/// Create centered, padded text if no results
 	Widget _buildStatusText() =>
 		_enteringText && _results.isEmpty ? Padding(
 			padding: EdgeInsets.all(32.0),
 			child: Text("No results found")
 		) : SizedBox();
 	
+	/// Replace saved courses with temporary list
 	void _save() => Preferences.savedCourses = _saved;
 	
+	/// Opens the course list dialog
 	void _openCourseList() async =>
 		await Navigator.of(context).push(MaterialPageRoute(
 			builder: (builder) {

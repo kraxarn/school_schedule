@@ -12,13 +12,17 @@ class LicenseState extends State<LicenseDialog>
 {
 	// This is very similar to the privacy policy view
 	
+	/// If we're fetching licenses
 	var _loading = true;
 	
+	/// Temporary string to save to later
 	var _licenses = "";
 	
-	_addLicense(String title, String message) =>
+	/// Format license with a title and add to string
+	void _addLicense(String title, String message) =>
 		_licenses += "\n# $title\n\n$message";
 	
+	/// Fetch all licenses
 	void _loadLicenses() async
 	{
 		final client = http.Client();
@@ -50,9 +54,8 @@ class LicenseState extends State<LicenseDialog>
 	}
 	
 	@override
-	Widget build(BuildContext context)
-	{
-		return Scaffold(
+	Widget build(BuildContext context) =>
+		Scaffold(
 			appBar: AppBar(
 				title: Text("Licenses"),
 			),
@@ -64,5 +67,4 @@ class LicenseState extends State<LicenseDialog>
 				),
 			)
 		);
-	}
 }

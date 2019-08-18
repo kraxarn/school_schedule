@@ -6,11 +6,14 @@ import '../school.dart';
 /// Starting page for choosing school
 class StartPage extends StatelessWidget
 {
+	/// Replace current page with main page
 	void _pushMain(BuildContext context)
 	{
 		Navigator.of(context).pushReplacementNamed("/main");
 	}
 	
+	/// Save school to preferences and replace page
+	/// (also removes any leftover preferences)
 	void _saveSchool(BuildContext context, String schoolId) async
 	{
 		// Erase old login information

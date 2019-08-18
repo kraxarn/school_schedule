@@ -7,18 +7,19 @@ import 'booking_page.dart';
 class MainPage extends StatefulWidget
 {
 	@override
-	State createState() =>
-		MainState();
+	State createState() => MainState();
 }
 
 class MainState extends State<MainPage> with SingleTickerProviderStateMixin
 {
+	/// Widgets for all tabs
 	final _tabPages = <Widget>[
 		SchedulePage(),
 		BookingPage(),
 		//ExamPage()
 	];
 	
+	/// All actual tabs
 	final _tabItems = <Tab>[
 		Tab(
 			child: ListTile(
@@ -34,6 +35,7 @@ class MainState extends State<MainPage> with SingleTickerProviderStateMixin
 		)
 	];
 	
+	/// Controller required for tabs
 	TabController _tabController;
 	
 	@override
@@ -79,16 +81,14 @@ class MainState extends State<MainPage> with SingleTickerProviderStateMixin
 class ExamPage extends StatefulWidget
 {
 	@override
-	State createState() =>
-		ExamState();
+	State createState() => ExamState();
 }
 
 class ExamState extends State<ExamPage>
 {
 	@override
-	Widget build(BuildContext context)
-	{
-		return Padding(
+	Widget build(BuildContext context) =>
+		Padding(
 			padding: EdgeInsets.all(32.0),
 			child: Text(
 				"This feature is currently not available, "
@@ -96,5 +96,4 @@ class ExamState extends State<ExamPage>
 				textAlign: TextAlign.center,
 			),
 		);
-	}
 }

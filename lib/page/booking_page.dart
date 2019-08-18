@@ -25,8 +25,10 @@ class BookingState extends State<BookingPage>
 	/// Location to show in the dropdown as <id, name>
 	final _locations = BookingTabs.get(Preferences.school.id);
 	
+	/// Booking instance for various API calls
 	final _booking = Booking();
 	
+	// All time intervals
 	var _times = List<String>();
 	
 	/// If progress indicator should be shown
@@ -38,6 +40,7 @@ class BookingState extends State<BookingPage>
 	/// Currently selected location as <id, name>
 	MapEntry<String, String> _currentLocation;
 	
+	/// Resources booked list
 	var _booked = List<Widget>();
 	
 	/// To keep track of if we should refresh when shown
@@ -105,6 +108,7 @@ class BookingState extends State<BookingPage>
 		_refreshBookedResources();
 	}
 	
+	/// Perform search
 	void _search() async
 	{
 		// Don't if we're missing stuff
@@ -150,6 +154,7 @@ class BookingState extends State<BookingPage>
 		setState(() => _loading = false);
 	}
 	
+	/// Show dialog for picking time after selecting resource
 	void _showTimesDialog(BookingRoom room)
 	{
 		var i = 0;
@@ -172,6 +177,7 @@ class BookingState extends State<BookingPage>
 		);
 	}
 	
+	/// Show confirm dialog with comment entry
 	void _showConfirmDialog(BookingRoom room, String time)
 	{
 		final commentController = TextEditingController();
@@ -267,6 +273,7 @@ class BookingState extends State<BookingPage>
 		);
 	}
 	
+	/// Refresh resource list
 	void _refreshBookedResources() async
 	{
 		// Don't refresh if not shown
@@ -319,7 +326,7 @@ class BookingState extends State<BookingPage>
 			})).toList());
 	}
 	
-	
+	/// Build list of resources
 	List<Widget> _buildResourceList()
 	{
 		final results = _results.where((result) => !result.isBooked());
