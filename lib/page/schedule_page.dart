@@ -29,12 +29,12 @@ class ScheduleState extends State<SchedulePage>
 	
 	var _refreshing = false;
 	
-	Widget _buildTitle(ThemeData theme, text) =>
+	Widget _buildTitle(text) =>
 		DecoratedBox(
 			child: ListTile(
 				title: Text(
 					text,
-					style: theme.textTheme.title,
+					style: Theme.of(context).textTheme.title,
 				),
 			
 			),
@@ -151,7 +151,7 @@ class ScheduleState extends State<SchedulePage>
 	int _getMonthsBetween(DateTime from, DateTime to) =>
 		((to.year - from.year) * 12) + (to.month - from.month);
 	
-	Widget _buildEvent(ThemeData theme, CalendarEvent event) =>
+	Widget _buildEvent(CalendarEvent event) =>
 		ListTile(
 			leading: Column(
 				mainAxisAlignment: MainAxisAlignment.center,
@@ -159,7 +159,7 @@ class ScheduleState extends State<SchedulePage>
 				children: <Widget>[
 					Text(
 						_weekdayToString(event.start.weekday),
-						style: theme.textTheme.caption,
+						style: Theme.of(context).textTheme.caption,
 					),
 					Text(event.start.day.toString())
 				],
@@ -289,7 +289,7 @@ class ScheduleState extends State<SchedulePage>
 			final month = i <= 12 ? i : i % 12;
 			
 			// Add month title
-			events.add(_buildTitle(Theme.of(context), "${_monthToString(month)} $year"));
+			events.add(_buildTitle("${_monthToString(month)} $year"));
 			
 			// Add all events in month
 			final monthEvents = _events
@@ -312,7 +312,7 @@ class ScheduleState extends State<SchedulePage>
 			{
 				monthEvents
 					.forEach((event) => events
-					.add(_buildEvent(Theme.of(context), event)));
+					.add(_buildEvent(event)));
 			}
 		}
 		

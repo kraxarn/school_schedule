@@ -104,9 +104,9 @@ class SearchState extends State<SearchDialog>
 			child: Text("No results found")
 		) : SizedBox();
 	
-	_save() => Preferences.savedCourses = _saved;
+	void _save() => Preferences.savedCourses = _saved;
 	
-	_openCourseList() async =>
+	void _openCourseList() async =>
 		await Navigator.of(context).push(MaterialPageRoute(
 			builder: (builder) {
 				return CourseListDialog();
@@ -115,9 +115,8 @@ class SearchState extends State<SearchDialog>
 		));
 	
 	@override
-	Widget build(BuildContext context)
-	{
-		return Scaffold(
+	Widget build(BuildContext context) =>
+		Scaffold(
 			appBar: AppBar(
 				title: ListTile(
 					title: TextField(
@@ -165,5 +164,4 @@ class SearchState extends State<SearchDialog>
 				],
 			)
 		);
-	}
 }

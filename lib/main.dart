@@ -15,14 +15,13 @@ class MyApp extends StatelessWidget
 		(Preferences.darkMode ? ThemeData.dark() : ThemeData.light());
 	
 	@override
-	Widget build(BuildContext context)
-	{
-		return MaterialApp(
+	Widget build(BuildContext context) =>
+		MaterialApp(
 			title: "KronoX",
 			theme: _baseTheme.copyWith(
-				primaryColor: Colors.blue[500],
+				primaryColor:     Colors.blue[500],
 				primaryColorDark: Colors.blue[700],
-				accentColor: Colors.blueAccent
+				accentColor:      Colors.blueAccent
 			),
 			home: Preferences.school == null ? StartPage() : MainPage(),
 			routes: {
@@ -30,5 +29,4 @@ class MyApp extends StatelessWidget
 				"/main":  (context) => MainPage()
 			}
 		);
-	}
 }

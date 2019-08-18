@@ -2,7 +2,7 @@
 class School
 {
 	/// All schools as <id, name>
-	static var _schools = {
+	static final _schools = {
 		"hb":        "University of Borås",
 		"hig":       "Kristianstad University",
 		"hv":        "Högskolan Väst",

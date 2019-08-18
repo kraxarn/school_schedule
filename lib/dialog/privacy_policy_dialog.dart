@@ -35,10 +35,8 @@ class PrivacyPolicyState extends State<PrivacyPolicyDialog>
 	}
 	
 	@override
-	Widget build(BuildContext context)
-	{
-		// Return a basic view
-		return Scaffold(
+	Widget build(BuildContext context) =>
+		Scaffold(
 			appBar: AppBar(
 				title: Text("Privacy Policy"),
 			),
@@ -51,5 +49,4 @@ class PrivacyPolicyState extends State<PrivacyPolicyDialog>
 				),
 			)
 		);
-	}
 }

@@ -6,12 +6,12 @@ import '../school.dart';
 /// Starting page for choosing school
 class StartPage extends StatelessWidget
 {
-	_pushMain(BuildContext context)
+	void _pushMain(BuildContext context)
 	{
 		Navigator.of(context).pushReplacementNamed("/main");
 	}
 	
-	_saveSchool(BuildContext context, String schoolId) async
+	void _saveSchool(BuildContext context, String schoolId) async
 	{
 		// Erase old login information
 		if (Preferences.username != null)
@@ -28,9 +28,8 @@ class StartPage extends StatelessWidget
 	}
 	
 	@override
-	Widget build(BuildContext context)
-	{
-		return Scaffold(
+	Widget build(BuildContext context) =>
+		Scaffold(
 			appBar: AppBar(
 				title: Text("Select School"),
 			),
@@ -45,5 +44,4 @@ class StartPage extends StatelessWidget
 				}).toList()
 			),
 		);
-	}
 }

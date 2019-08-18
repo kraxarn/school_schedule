@@ -20,7 +20,7 @@ class CourseListState extends State<CourseListDialog>
 			_saved.addAll(Preferences.savedCourses);
 	}
 	
-	_save() => Preferences.savedCourses = _saved;
+	void _save() => Preferences.savedCourses = _saved;
 	
 	List<Widget> _buildStatusMessage(String message) =>
 		[

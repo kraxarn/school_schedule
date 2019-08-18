@@ -30,14 +30,14 @@ class SettingsState extends State<SettingsPage>
 		240: "4 hours"
 	};
 	
-	_buildCard(List<Widget> children) =>
+	Widget _buildCard(List<Widget> children) =>
 		Card(
 			child: Column(
 				children: children
 			),
 		);
 	
-	_buildTitle(BuildContext context, String title) =>
+	Widget _buildTitle(BuildContext context, String title) =>
 		ListTile(
 			title: Text(
 				title,
@@ -45,14 +45,14 @@ class SettingsState extends State<SettingsPage>
 			)
 		);
 	
-	_buildButton(String title, String subtitle, void Function() onTap) =>
+	Widget _buildButton(String title, String subtitle, void Function() onTap) =>
 		ListTile(
 			title: Text(title),
 			subtitle: subtitle == null ? null : Text(subtitle),
 			onTap: onTap,
 		);
 	
-	_buildButtonBar(List<Widget> children) =>
+	Widget _buildButtonBar(List<Widget> children) =>
 		ButtonTheme.bar(
 			child: ButtonBar(
 				children: children
@@ -60,7 +60,7 @@ class SettingsState extends State<SettingsPage>
 		);
 	
 	/// Card for general settings
-	_buildGeneralCard(BuildContext context)
+	Widget _buildGeneralCard(BuildContext context)
 	{
 		// Children for both Android/iOS
 		final children = <Widget>[
@@ -133,7 +133,7 @@ class SettingsState extends State<SettingsPage>
 	}
 	
 	/// Card for account settings
-	_buildAccountCard(BuildContext context)
+	Widget _buildAccountCard(BuildContext context)
 	{
 		return _buildCard([
 			_buildTitle(context, "Account"),
@@ -150,7 +150,7 @@ class SettingsState extends State<SettingsPage>
 		]);
 	}
 	
-	_buildAboutCard()
+	Widget _buildAboutCard()
 	{
 		if (_version == "version" || _build == "build")
 		{
@@ -187,10 +187,10 @@ class SettingsState extends State<SettingsPage>
 		]);
 	}
 	
-	_logOut() =>
+	void _logOut() =>
 		setState(() => Preferences.username = Preferences.password = null);
 	
-	_showLogin(context)
+	void _showLogin(context)
 	{
 		Navigator.of(context).push(MaterialPageRoute(
 			builder: (builder) {
@@ -204,9 +204,8 @@ class SettingsState extends State<SettingsPage>
 	}
 	
 	@override
-	Widget build(BuildContext context)
-	{
-		return Scaffold(
+	Widget build(BuildContext context) =>
+		Scaffold(
 			key: _scaffoldKey,
 			appBar: AppBar(
 				title: Text("Settings"),
@@ -220,5 +219,4 @@ class SettingsState extends State<SettingsPage>
 				],
 			),
 		);
-	}
 }

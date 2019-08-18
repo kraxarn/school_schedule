@@ -47,9 +47,8 @@ class MainState extends State<MainPage> with SingleTickerProviderStateMixin
 	}
 	
 	@override
-	Widget build(BuildContext context)
-	{
-		return Scaffold(
+	Widget build(BuildContext context) =>
+		Scaffold(
 			appBar: AppBar(
 				title: Text("KronoX"),
 				actions: <Widget>[
@@ -74,7 +73,6 @@ class MainState extends State<MainPage> with SingleTickerProviderStateMixin
 				children: _tabPages,
 			)
 		);
-	}
 }
 
 
