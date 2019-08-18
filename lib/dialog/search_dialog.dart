@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:html/parser.dart' show parse;
 import 'package:school_schedule/course_name.dart';
 
 import '../preferences.dart';
@@ -66,6 +67,32 @@ class SearchState extends State<SearchDialog>
 		});
 		
 		return results;
+	}
+	
+	/// Testing search with HTML parser
+	/// (don't use, about 100-200 ms slower)
+	Future<Map<String, String>> _searchHtml(String keyword) async
+	{
+		final response = await _http.read(
+			"${Preferences.school.baseUrl}ajax/ajax_sokResurser.jsp"
+				"?sokord=$keyword&startDatum=idag&slutDatum="
+				"&intervallTyp=a&intervallAntal=1");
+		
+		final results = parse(response).firstChild.children[1].children
+			.firstWhere((child) => child.className == "resursLista").children;
+		
+		final courses = Map<String, String>();
+		
+		for (final result in results)
+		{
+			if (courses.length > 20)
+				break;
+			
+			final content = result.firstChild.firstChild.text.split(',');
+			courses[content[0].trim()] = _decode(content[1].trim());
+		}
+		
+		return courses;
 	}
 	
 	Widget _createResult(String title, String subtitle)
