@@ -13,6 +13,15 @@ class StartPage extends StatelessWidget
 	
 	_saveSchool(BuildContext context, String schoolId) async
 	{
+		// Erase old login information
+		if (Preferences.username != null)
+			Preferences.username = Preferences.password = null;
+		
+		// Erase old saved courses
+		// (We just check to not unnecessarily write null
+		if (Preferences.savedCourses != null)
+			Preferences.savedCourses = null;
+		
 		// Save to preferences and go to main page
 		Preferences.school = School(schoolId);
 		_pushMain(context);
