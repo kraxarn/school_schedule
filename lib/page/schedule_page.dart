@@ -5,9 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 
+import '../dialog/search_dialog.dart';
+import '../dialog/course_list_dialog.dart';
 import '../calendar_event.dart';
 import '../preferences.dart';
-import '../dialog/search_dialog.dart';
 import '../course_name.dart';
 import '../demo.dart';
 
@@ -334,17 +335,23 @@ class ScheduleState extends State<SchedulePage>
 		return events;
 	}
 	
-	/// Open search dialog
-	_openSearch() async
+	/// Open a dialog and refresh schedule after close
+	void _openFullscreenDialog(Widget Function(BuildContext) dialogBuilder) async
 	{
 		await Navigator.of(context).push(MaterialPageRoute(
-			builder: (builder) {
-				return SearchDialog();
-			},
+			builder: dialogBuilder,
 			fullscreenDialog: true
 		));
 		_refreshSchedule();
 	}
+	
+	/// Open search dialog
+	void _openSearch() =>
+		_openFullscreenDialog((context) => SearchDialog());
+	
+	/// Opens the course list dialog
+	void _openCourseList() =>
+		_openFullscreenDialog((context) => CourseListDialog());
 	
 	@override
 	void initState()
@@ -357,6 +364,19 @@ class ScheduleState extends State<SchedulePage>
 	@override
 	Widget build(BuildContext context) =>
 		Scaffold(
+			appBar: AppBar(
+				title: Text("Schedule"),
+				actions: <Widget>[
+					IconButton(
+						icon: Icon(Icons.list),
+						onPressed: () => _openCourseList(),
+					),
+					IconButton(
+						icon: Icon(Icons.search),
+						onPressed: () => _openSearch()
+					)
+				],
+			),
 			body: RefreshIndicator(
 				child: Column(
 					children: <Widget>[
@@ -373,13 +393,6 @@ class ScheduleState extends State<SchedulePage>
 				onRefresh: () {
 					return _refreshSchedule();
 				},
-			),
-			floatingActionButton: FloatingActionButton(
-				child: Icon(Icons.search),
-				onPressed: () {
-					_openSearch();
-				},
-				backgroundColor: Theme.of(context).accentColor,
 			)
 		);
 }
