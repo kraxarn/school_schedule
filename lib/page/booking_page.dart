@@ -457,7 +457,7 @@ class BookedResourcesState extends State<BookedResourcesDialog>
 		_booked = bookings == null ? [
 			ListTile(
 				title: Text(
-					"No results found for the specified location",
+					"No booked resources found for the specified location",
 					textAlign: TextAlign.center,
 				),
 			)
