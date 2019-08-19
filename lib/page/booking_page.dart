@@ -300,63 +300,78 @@ class BookingState extends State<BookingPage>
 	
 	Widget _buildFilterSettings()
 	{
+		final textStyle = TextStyle(
+			color: Colors.white
+		);
+		
 		return ListView(
 			children: <Widget>[
 				ListTile(
 					title: Text(
 						"Booking",
-						style: Theme.of(context).textTheme.title,
+						style: Theme.of(context).textTheme.title.apply(
+							color: Colors.white
+						),
 					),
 					trailing: IconButton(
-						icon: Icon(Icons.list),
+						icon: Icon(
+							Icons.list,
+							color: Colors.white,
+						),
 						onPressed: () => _showBookedResources(),
 					),
 				),
 				// Location tile
 				ListTile(
-					leading: Icon(Icons.location_on),
-					title: Text("Location"),
-					trailing: DropdownButton<String>(
-						value: _currentLocation == null ? null : _currentLocation.value,
-						onChanged: (value)
+					leading: Icon(
+						Icons.location_on,
+						color: Colors.white,
+					),
+					title: Text(
+						"Location",
+						style: textStyle,
+					),
+					trailing: PopupMenuButton(
+						child: _currentLocation == null
+							? null : Text(
+							_currentLocation.value,
+							style: textStyle,
+						),
+						itemBuilder: (builder) => _locations.values
+							.map<PopupMenuItem<String>>((value) =>
+							PopupMenuItem(
+								child: Text(
+									value
+								),
+								value: value,
+							)
+						).toList(),
+						onSelected: (value)
 						{
-							setState(() => _currentLocation = _locations.entries.firstWhere((entry) => entry.value == value));
+							setState(() =>
+								_currentLocation = _locations.entries
+									.firstWhere((entry) =>
+										entry.value == value));
 							_search();
 						},
-						items: _locations.values.map<DropdownMenuItem<String>>((value) =>
-							DropdownMenuItem(
-								child: Text(value),
-								value: value
-							)
-						).toList()
 					),
 				),
 				// Day tile
 				ListTile(
-					leading: Icon(Icons.today),
-					title: Text("Day"),
-					trailing: Text(_formatDate(_date)),
-					onTap: () => _selectDate(),
-				),
-				// Showing all booked resources
-				/*ExpansionTile(
-					title: Text("Booked resources"),
-					children: _booked,
-					onExpansionChanged: (visible) async
-					{
-						_showingBookedResources = visible;
-						// Default to show locating indicator
-						setState(() => _booked = [
-							Padding(
-								padding: EdgeInsets.all(12.0),
-								child: CircularProgressIndicator(),
-							)
-						]);
-						// Refresh if showing
-						if (visible)
-							_refreshBookedResources();
-					}
-				)*/
+					leading: Icon(
+						Icons.today,
+						color: Colors.white,
+					),
+					title: Text(
+						"Day",
+						style: textStyle,
+					),
+					trailing: Text(
+						_formatDate(_date),
+						style: textStyle,
+					),
+					onTap: () => _selectDate()
+				)
 			]
 		);
 	}
