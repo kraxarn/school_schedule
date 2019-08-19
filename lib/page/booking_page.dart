@@ -290,7 +290,8 @@ class BookingState extends State<BookingPage>
 		return results.map((result) {
 			return ListTile(
 				title: Text(result.title),
-				subtitle: Text(result.subtitle),
+				subtitle: Text(result.subtitle
+					.replaceAll(", ", ",").replaceAll(",", ", ")),
 				trailing: Text("${result.states.where((state) =>
 					!Booking.isBooked(state)).length} available"),
 				onTap: () => _showTimesDialog(result),
