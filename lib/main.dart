@@ -20,8 +20,8 @@ class MyApp extends StatelessWidget
 		MaterialApp(
 			title: "KronoX",
 			theme: _baseTheme.copyWith(
-				primaryColor:     Colors.blue[500],
-				primaryColorDark: Colors.blue[700],
+				primaryColor:     Colors.blue[700],
+				primaryColorDark: Colors.blue[900],
 				accentColor:      Colors.blueAccent
 			),
 			home: Preferences.school == null ? StartPage() : MainPage(),
