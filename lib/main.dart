@@ -22,7 +22,8 @@ class MyApp extends StatelessWidget
 			theme: _baseTheme.copyWith(
 				primaryColor:     Colors.blue[700],
 				primaryColorDark: Colors.blue[900],
-				accentColor:      Colors.blueAccent
+				accentColor:      Preferences.darkMode
+					? Colors.indigoAccent[200] : Colors.indigoAccent[400]
 			),
 			home: Preferences.school == null ? StartPage() : MainPage(),
 			routes: {
