@@ -323,39 +323,39 @@ class BookingState extends State<BookingPage>
 					),
 				),
 				// Location tile
-				ListTile(
-					leading: Icon(
-						Icons.location_on,
-						color: Colors.white,
-					),
-					title: Text(
-						"Location",
-						style: textStyle,
-					),
-					trailing: PopupMenuButton(
-						child: _currentLocation == null
-							? null : Text(
+				PopupMenuButton(
+					offset: Offset.fromDirection(0.0),
+					child: ListTile(
+						leading: Icon(
+							Icons.location_on,
+							color: Colors.white,
+						),
+						title: Text(
+							"Location",
+							style: textStyle,
+						),
+						trailing: Text(
 							_currentLocation.value,
 							style: textStyle,
 						),
-						itemBuilder: (builder) => _locations.values
-							.map<PopupMenuItem<String>>((value) =>
-							PopupMenuItem(
-								child: Text(
-									value
-								),
-								value: value,
-							)
-						).toList(),
-						onSelected: (value)
-						{
-							setState(() =>
-								_currentLocation = _locations.entries
-									.firstWhere((entry) =>
-										entry.value == value));
-							_search();
-						},
 					),
+					itemBuilder: (builder) => _locations.values
+						.map<PopupMenuItem<String>>((value) =>
+						PopupMenuItem(
+							child: Text(
+								value
+							),
+							value: value,
+						)
+					).toList(),
+					onSelected: (value)
+					{
+						setState(() =>
+							_currentLocation = _locations.entries
+								.firstWhere((entry) =>
+									entry.value == value));
+						_search();
+					}
 				),
 				// Day tile
 				ListTile(
