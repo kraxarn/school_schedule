@@ -119,7 +119,13 @@ class SearchState extends State<SearchDialog>
 					title: TextField(
 						autofocus: true,
 						decoration: InputDecoration(
-							hintText: "Search"
+							hintText: "Search",
+							hintStyle: TextStyle(
+								color: Color.fromARGB(128, 255, 255, 255)
+							)
+						),
+						style: TextStyle(
+							color: Colors.white,
 						),
 						onChanged: (value) {
 							_enteringText = value.length > 3;
