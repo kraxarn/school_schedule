@@ -131,6 +131,15 @@ class Preferences
 		_prefs.then((prefs) => prefs.setBool("google_sync", value));
 	}
 	
+	/// Last used location for booking
+	static String _lastLocation;
+	static String get lastLocation => _lastLocation;
+	static set lastLocation(String value)
+	{
+		_lastLocation = value;
+		_prefs.then((prefs) => prefs.setString("last_location", value));
+	}
+	
 	/// Get default encrypter
 	static Encrypter get _encrypter =>
 		Encrypter(AES(Key.fromUtf8(_uniqueId)));
@@ -154,6 +163,7 @@ class Preferences
 		_googleSync   = prefs.getBool("google_sync");
 		_username     = prefs.getString("username");
 		_password     = prefs.getString("password");
+		_lastLocation = prefs.getString("last_location");
 		
 		// Get unique ID before decrypting
 		_uniqueId = await UniqueIdentifier.serial;

@@ -42,7 +42,11 @@ class BookingState extends State<BookingPage>
 	
 	BookingState()
 	{
-		if (_locations != null)
+		if (Preferences.lastLocation != null
+			&& _locations.containsKey(Preferences.lastLocation))
+			_currentLocation = _locations.entries
+				.firstWhere((entry) => entry.key == Preferences.lastLocation);
+		else if (_locations != null)
 			_currentLocation = _locations.entries.first;
 	}
 	
@@ -355,6 +359,7 @@ class BookingState extends State<BookingPage>
 								.firstWhere((entry) =>
 									entry.value == value));
 						_search();
+						Preferences.lastLocation = _currentLocation.key;
 					}
 				),
 				// Day tile
