@@ -102,7 +102,7 @@ class BookingState extends State<BookingPage>
 	}
 	
 	/// Perform search
-	void _search() async
+	Future<void> _search() async
 	{
 		// Don't if we're missing stuff
 		if (_locations == null || Preferences.username == null)
@@ -406,15 +406,18 @@ class BookingState extends State<BookingPage>
 						flexibleSpace: _buildFilterSettings(),
 					),
 				],
-				body: ListView(
-					padding: EdgeInsets.all(0.0),
-					children: _loading ? [
-						LinearProgressIndicator(
-							backgroundColor: Color.fromARGB(0, 0, 0, 0),
-						)
-					] : _buildResourceList(),
-				),
-			),
+				body: RefreshIndicator(
+					child: ListView(
+						padding: EdgeInsets.all(0.0),
+						children: _loading ? [
+							LinearProgressIndicator(
+								backgroundColor: Color.fromARGB(0, 0, 0, 0),
+							)
+						] : _buildResourceList(),
+					),
+					onRefresh: () => _search(),
+				)
+			)
 		);
 	}
 }
