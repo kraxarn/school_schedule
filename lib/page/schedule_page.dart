@@ -11,6 +11,7 @@ import '../calendar_event.dart';
 import '../preferences.dart';
 import '../course_name.dart';
 import '../demo.dart';
+import '../user_colors.dart';
 
 class SchedulePage extends StatefulWidget
 {
@@ -177,7 +178,12 @@ class ScheduleState extends State<SchedulePage>
 					Text(event.start.day.toString())
 				],
 			),
-			title:    Text(event.summary),
+			title: Text(
+				event.summary,
+				style: Preferences.courseColors ? TextStyle(
+					color: UserColors().getColor(event.courseId).color
+				) : null,
+			),
 			subtitle: Text(
 				"${_timeToString(event.start)} - ${_timeToString(event.end)}"
 			),
