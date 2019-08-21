@@ -5,6 +5,8 @@ import 'package:path_provider/path_provider.dart';
 
 class CourseName
 {
+	// TODO: Maybe integrate this into CourseSettings (as nickname)
+	
 	/// List of all known course names
 	static final _courseNames = Map<String, String>();
 	
