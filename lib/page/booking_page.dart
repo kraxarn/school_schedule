@@ -67,12 +67,20 @@ class BookingState extends State<BookingPage>
 	
 	/// Build message for not being signed in
 	Widget _buildStatusMessage(String message) =>
-		Padding(
-			padding: EdgeInsets.all(32.0),
-			child: Text(
-				message,
-				textAlign: TextAlign.center,
+		Scaffold(
+			appBar: AppBar(
+				title: Text("Booking"),
 			),
+			body: Padding(
+				padding: EdgeInsets.all(32.0),
+				child: Align(
+					alignment: Alignment.topCenter,
+					child: Text(
+						message,
+						textAlign: TextAlign.center,
+					)
+				),
+			)
 		);
 	
 	/// Copy date with only year, month, day
