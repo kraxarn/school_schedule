@@ -28,9 +28,10 @@ class LoginDialogState extends State<LoginDialog>
 	final _http = HttpClient();
 	
 	/// Create a text field for a form
-	Widget _buildTextField(String label, bool obscureText,
+	Widget _buildTextField(String label, bool obscureText, bool autoFocus,
 		TextEditingController controller, String Function(String) validator) =>
 		TextFormField(
+			autofocus: autoFocus,
 			controller: controller,
 			obscureText: obscureText,
 			decoration: InputDecoration(
@@ -103,7 +104,7 @@ class LoginDialogState extends State<LoginDialog>
 								right:  32.0,
 								bottom: 16.0
 							),
-							child: _buildTextField("Username", false,
+							child: _buildTextField("Username", false, true,
 								_usernameController, (value) =>
 								value.isEmpty
 									? "Please enter username" : null),
@@ -114,7 +115,7 @@ class LoginDialogState extends State<LoginDialog>
 								right:  32.0,
 								bottom: 16.0
 							),
-							child: _buildTextField("Password", true,
+							child: _buildTextField("Password", true, false,
 								_passwordController, (value) =>
 								value.isEmpty
 									? "Please enter password" : null)
