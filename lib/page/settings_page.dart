@@ -1,13 +1,13 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
-import 'package:flutter/foundation.dart';
 
-import '../preferences.dart';
+import '../dialog/license_dialog.dart';
 import '../dialog/login_dialog.dart';
 import '../dialog/privacy_policy_dialog.dart';
-import '../dialog/license_dialog.dart';
+import '../preferences.dart';
 
 class SettingsPage extends StatefulWidget
 {
@@ -91,6 +91,15 @@ class SettingsState extends State<SettingsPage>
 					setState(() => Preferences.darkMode = checked);
 				}
 			),
+			SwitchListTile(
+				title: Text("Course colors"),
+				subtitle: Text("Set different title colors depending on course in schedule"),
+				value: Preferences.courseColors,
+				onChanged: (checked)
+				{
+					setState(() => Preferences.courseColors = checked);
+				}
+			),
 			_buildButtonBar([])
 		];
 		
@@ -98,7 +107,7 @@ class SettingsState extends State<SettingsPage>
 		// Until implemented, debug only
 		if (!kReleaseMode && Platform.isAndroid)
 		{
-			children.insertAll(3, [
+			children.insertAll(4, [
 				SwitchListTile(
 					title: Text("Sync with device calendar"),
 					subtitle: Text(
