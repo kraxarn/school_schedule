@@ -235,7 +235,7 @@ class ScheduleState extends State<SchedulePage>
 	}
 	
 	/// Build centered and padded status message
-	_buildStatusMessage(String text) =>
+	List<Widget> _buildStatusMessage(String text) =>
 		[
 			Padding(
 				padding: EdgeInsets.all(32.0),
@@ -246,8 +246,11 @@ class ScheduleState extends State<SchedulePage>
 			)
 		];
 	
+	bool _isSameDay(DateTime d1, DateTime d2) =>
+		d1.year == d2.year && d1.month == d2.month && d1.day == d2.day;
+	
 	/// Build a calendar event
-	Widget _buildEvent(CalendarEvent event, bool printDate) =>
+	Widget _buildEvent(CalendarEvent event, bool printDate, bool isToday) =>
 		ListTile(
 			leading: printDate ? Column(
 				mainAxisAlignment: MainAxisAlignment.center,
@@ -255,10 +258,18 @@ class ScheduleState extends State<SchedulePage>
 				children: <Widget>[
 					Text(
 						_weekdayToString(event.start.weekday),
-						style: Theme.of(context).textTheme.caption,
+						style: Theme.of(context).textTheme.caption.copyWith(
+							color: isToday ? Theme.of(context).accentColor : null
+						),
 					),
-					Text(event.start.day.toString())
+					Text(
+						event.start.day.toString(),
+						style: TextStyle(
+							color: isToday ? Theme.of(context).accentColor : null
+						),
+					)
 				],
+				
 			) : SizedBox(),
 			title: Text(
 				event.summary,
@@ -335,8 +346,9 @@ class ScheduleState extends State<SchedulePage>
 				var lastDate = -1;
 				for (final event in monthEvents)
 				{
-					// Add to all events if not the same as last date
-					events.add(_buildEvent(event, event.start.day != lastDate));
+					// Add to all events and set parameters
+					events.add(_buildEvent(event, event.start.day != lastDate,
+						_isSameDay(now, event.start)));
 					// Update last date for next lap
 					lastDate = event.start.day;
 					
