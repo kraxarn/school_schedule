@@ -247,9 +247,9 @@ class ScheduleState extends State<SchedulePage>
 		];
 	
 	/// Build a calendar event
-	Widget _buildEvent(CalendarEvent event) =>
+	Widget _buildEvent(CalendarEvent event, bool printDate) =>
 		ListTile(
-			leading: Column(
+			leading: printDate ? Column(
 				mainAxisAlignment: MainAxisAlignment.center,
 				crossAxisAlignment: CrossAxisAlignment.center,
 				children: <Widget>[
@@ -259,7 +259,7 @@ class ScheduleState extends State<SchedulePage>
 					),
 					Text(event.start.day.toString())
 				],
-			),
+			) : SizedBox(),
 			title: Text(
 				event.summary,
 				style: Preferences.courseColors ? TextStyle(
@@ -332,9 +332,15 @@ class ScheduleState extends State<SchedulePage>
 			}
 			else
 			{
-				monthEvents
-					.forEach((event) => events
-					.add(_buildEvent(event)));
+				var lastDate = -1;
+				for (final event in monthEvents)
+				{
+					// Add to all events if not the same as last date
+					events.add(_buildEvent(event, event.start.day != lastDate));
+					// Update last date for next lap
+					lastDate = event.start.day;
+					
+				}
 			}
 		}
 		
