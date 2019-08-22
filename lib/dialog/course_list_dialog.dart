@@ -40,21 +40,16 @@ class CourseListState extends State<CourseListDialog>
 			)
 		];
 	
-	Widget _createColor(Color color, String name)
-	{
-		return ListTile(
-			leading: Container(
-				width: 32.0,
-				height: 32.0,
-				decoration: BoxDecoration(
-					shape: BoxShape.circle,
+	Widget _createColor(Color color, String name) =>
+		SimpleDialogOption(
+			child: Text(
+				name,
+				style: TextStyle(
 					color: color
-				),
+				)
 			),
-			onTap: () => Navigator.of(context).pop(name),
-			title: Text(name),
+			onPressed: () => Navigator.of(context).pop(name),
 		);
-	}
 	
 	Future<String> _openColorPicker() =>
 		showDialog<String>(
