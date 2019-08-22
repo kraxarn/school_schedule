@@ -164,37 +164,6 @@ class ScheduleState extends State<SchedulePage>
 	int _getMonthsBetween(DateTime from, DateTime to) =>
 		((to.year - from.year) * 12) + (to.month - from.month);
 	
-	/// Build a calendar event
-	Widget _buildEvent(CalendarEvent event) =>
-		ListTile(
-			leading: Column(
-				mainAxisAlignment: MainAxisAlignment.center,
-				crossAxisAlignment: CrossAxisAlignment.center,
-				children: <Widget>[
-					Text(
-						_weekdayToString(event.start.weekday),
-						style: Theme.of(context).textTheme.caption,
-					),
-					Text(event.start.day.toString())
-				],
-			),
-			title: Text(
-				event.summary,
-				style: Preferences.courseColors ? TextStyle(
-					color: UserColors().getColor(event.courseId).color
-				) : null,
-			),
-			subtitle: Text(
-				"${_timeToString(event.start)} - ${_timeToString(event.end)}"
-			),
-			trailing: Text(
-				"${event.courseId.split('-')[0]}\n"
-				"${event.location.split(' ')[0]}",
-				textAlign: TextAlign.end
-			),
-			onTap: () => _showEventInfo(event)
-		);
-	
 	/// Refresh the schedule
 	Future<void> _refreshSchedule() async
 	{
@@ -276,6 +245,37 @@ class ScheduleState extends State<SchedulePage>
 				)
 			)
 		];
+	
+	/// Build a calendar event
+	Widget _buildEvent(CalendarEvent event) =>
+		ListTile(
+			leading: Column(
+				mainAxisAlignment: MainAxisAlignment.center,
+				crossAxisAlignment: CrossAxisAlignment.center,
+				children: <Widget>[
+					Text(
+						_weekdayToString(event.start.weekday),
+						style: Theme.of(context).textTheme.caption,
+					),
+					Text(event.start.day.toString())
+				],
+			),
+			title: Text(
+				event.summary,
+				style: Preferences.courseColors ? TextStyle(
+					color: UserColors().getColor(event.courseId).color
+				) : null,
+			),
+			subtitle: Text(
+				"${_timeToString(event.start)} - ${_timeToString(event.end)}"
+			),
+			trailing: Text(
+				"${event.courseId.split('-')[0]}\n"
+					"${event.location.split(' ')[0]}",
+				textAlign: TextAlign.end
+			),
+			onTap: () => _showEventInfo(event)
+		);
 	
 	/// Build all events
 	List<Widget> _buildEvents()
