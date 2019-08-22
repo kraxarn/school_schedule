@@ -58,7 +58,7 @@ class CourseListState extends State<CourseListDialog>
 				SimpleDialog(
 					title: Text("Select Color"),
 					children: UserColors().colors.map((color) =>
-						_createColor(color.baseColor, color.toString())
+						_createColor(color.color, color.toString())
 					).toList()
 				)
 		);
