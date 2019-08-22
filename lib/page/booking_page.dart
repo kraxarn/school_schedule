@@ -320,12 +320,18 @@ class BookingState extends State<BookingPage>
 		return ListView(
 			children: <Widget>[
 				ListTile(
-					title: Text(
-						"Booking",
-						style: Theme.of(context).textTheme.title.apply(
-							color: Colors.white
+					title: Padding(
+						padding: EdgeInsets.only(
+							left: 16.0
+						),
+						child: Text(
+							"Booking",
+							style: Theme.of(context).textTheme.title.apply(
+								color: Colors.white
+							),
 						),
 					),
+					contentPadding: EdgeInsets.all(0.0),
 					trailing: IconButton(
 						icon: Icon(
 							Icons.list,
