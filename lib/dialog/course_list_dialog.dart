@@ -63,16 +63,6 @@ class CourseListState extends State<CourseListDialog>
 				)
 		);
 	
-	PopupMenuItem _buildMenuOption(IconData icon, String title, String value) =>
-		PopupMenuItem(
-			child: ListTile(
-				contentPadding: EdgeInsets.all(0.0),
-				leading: Icon(icon),
-				title: Text(title),
-			),
-			value: value,
-		);
-	
 	/// Build a result showing a delete button
 	Widget _buildResult(String title, String subtitle) =>
 		ListTile(
