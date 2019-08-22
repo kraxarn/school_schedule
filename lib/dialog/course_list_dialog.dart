@@ -81,8 +81,12 @@ class CourseListState extends State<CourseListDialog>
 			subtitle: Text(subtitle),
 			trailing: IconButton(
 				icon: Icon(Icons.delete),
-				onPressed: () {
-					// TODO: I forgot what I had here
+				onPressed: ()
+				{
+					setState(() => _saved.remove(title));
+					_save();
+					CourseName.remove(title);
+					CourseSettings.remove(title);
 				},
 			),
 			leading: IconButton(
