@@ -9,10 +9,10 @@ class BookingPage extends StatefulWidget
 {
 	@override
 	State createState() =>
-		BookingState();
+		BookingPageState();
 }
 
-class BookingState extends State<BookingPage>
+class BookingPageState extends State<BookingPage>
 {
 	/// Form key for comment entry when booking
 	final _formCommentKey = GlobalKey<FormState>();
@@ -41,7 +41,7 @@ class BookingState extends State<BookingPage>
 	/// Currently selected location as <id, name>
 	MapEntry<String, String> _currentLocation;
 	
-	BookingState()
+	BookingPageState()
 	{
 		if (Preferences.lastLocation != null
 			&& _locations.containsKey(Preferences.lastLocation))
