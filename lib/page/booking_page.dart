@@ -378,6 +378,13 @@ class BookingPageState extends State<BookingPage>
 					content: TimeSelectDialog(dialog),
 					actions: <Widget>[
 						FlatButton(
+							child: Text("RESET"),
+							onPressed: () =>
+								Navigator.of(context).pop([
+									_startTimes.first, _endTimes.last
+								]),
+						),
+						FlatButton(
 							child: Text("CANCEL"),
 							onPressed: () =>
 								Navigator.of(context).pop(),
@@ -385,7 +392,9 @@ class BookingPageState extends State<BookingPage>
 						FlatButton(
 							child: Text("OK"),
 							onPressed: () =>
-								Navigator.of(context).pop([dialog.start, dialog.end]),
+								Navigator.of(context).pop([
+									dialog.start, dialog.end
+								]),
 						)
 					],
 				)
