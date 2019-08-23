@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:school_schedule/booking/booking.dart';
 
 import '../tool/preferences.dart';
+import '../tool/date_formatter.dart';
 import '../booking/booking_tabs.dart';
 
 class BookingPage extends StatefulWidget
@@ -56,14 +57,6 @@ class BookingState extends State<BookingPage>
 		super.initState();
 		_search();
 	}
-	
-	/// Adds a leading zero if < 10
-	String _addLeading(int value) =>
-		value < 10 ? "0$value" : "$value";
-	
-	/// Format date as YYYY-MM-DD
-	String _formatDate(DateTime date) =>
-		"${date.year}-${_addLeading(date.month)}-${_addLeading(date.day)}";
 	
 	/// Build message for not being signed in
 	Widget _buildStatusMessage(String message) =>
@@ -387,7 +380,7 @@ class BookingState extends State<BookingPage>
 						style: textStyle,
 					),
 					trailing: Text(
-						_formatDate(_date),
+						DateFormatter.asFullDate(_date),
 						style: textStyle,
 					),
 					onTap: () => _selectDate()

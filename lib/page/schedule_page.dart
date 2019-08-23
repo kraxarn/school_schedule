@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
+import 'package:school_schedule/tool/date_formatter.dart';
 
 import '../dialog/search_dialog.dart';
 import '../dialog/course_list_dialog.dart';
@@ -147,11 +148,18 @@ class ScheduleState extends State<SchedulePage>
 							),
 							_buildEventDivider(),
 							_buildEventInfoRow(
-								"Start", event.start.toString()
+								"Start",
+								DateFormatter.asFullDateTime(event.start)
 							),
 							_buildEventDivider(),
 							_buildEventInfoRow(
-								"End", event.end.toString()
+								"End",
+								DateFormatter.asFullDateTime(event.end)
+							),
+							_buildEventDivider(),
+							_buildEventInfoRow(
+								"Last Modified",
+								DateFormatter.asFullDateTime(event.lastModified)
 							),
 						],
 					)
