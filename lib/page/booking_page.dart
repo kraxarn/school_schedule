@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:school_schedule/booking/booking.dart';
 
 import '../tool/preferences.dart';
 import '../tool/date_formatter.dart';
 import '../booking/booking_tabs.dart';
+import '../booking/booking.dart';
 
 class BookingPage extends StatefulWidget
 {
@@ -35,14 +35,27 @@ class BookingPageState extends State<BookingPage>
 	/// If progress indicator should be shown
 	var _loading = false;
 	
-	// All results to show in the list
+	/// All results to show in the list
 	var _results = List<BookingRoom>();
+	
+	/// All available start times
+	List<int> _startTimes;
+	
+	/// Selected start time
+	int _startTime;
+	
+	/// All available end times
+	List<int> _endTimes;
+	
+	/// Selected end time
+	int _endTime;
 	
 	/// Currently selected location as <id, name>
 	MapEntry<String, String> _currentLocation;
 	
 	BookingPageState()
 	{
+		// TODO: Constructor or initState?
 		if (Preferences.lastLocation != null
 			&& _locations.containsKey(Preferences.lastLocation))
 			_currentLocation = _locations.entries
@@ -55,25 +68,42 @@ class BookingPageState extends State<BookingPage>
 	void initState()
 	{
 		super.initState();
-		_search();
+		
+		_search().then((_)
+		{
+			// Load times after search is complete
+			// (otherwise _times isn't loaded)
+			if (_times.isNotEmpty)
+			{
+				_startTimes = _getStartHours();
+				_startTime  = _startTimes.first;
+				_endTimes   = _getEndHours();
+				_endTime    = _endTimes.last;
+			}
+		});
+		
 	}
 	
-	/// Build message for not being signed in
+	/// Builds a padded, centered text
+	Widget _buildStatusText(String message) =>
+		Padding(
+			padding: EdgeInsets.all(32.0),
+			child: Align(
+				alignment: Alignment.topCenter,
+				child: Text(
+					message,
+					textAlign: TextAlign.center,
+				)
+			),
+		);
+	
+	/// Builds status message including scaffold
 	Widget _buildStatusMessage(String message) =>
 		Scaffold(
 			appBar: AppBar(
 				title: Text("Booking"),
 			),
-			body: Padding(
-				padding: EdgeInsets.all(32.0),
-				child: Align(
-					alignment: Alignment.topCenter,
-					child: Text(
-						message,
-						textAlign: TextAlign.center,
-					)
-				),
-			)
+			body: _buildStatusText(message)
 		);
 	
 	/// Copy date with only year, month, day
@@ -279,29 +309,97 @@ class BookingPageState extends State<BookingPage>
 		);
 	}
 	
+	bool _isInTime(BookingRoom room)
+	{
+		for (var i = 0; i < room.states.length; i++)
+		{
+			// Shortcut for getting state
+			final state = room.states[i];
+			
+			// Ignore if not free
+			if (state != BookingState.free)
+				continue;
+			
+			// Check if it's within the selected time span
+			if (_startTimes[i] >= _startTime && _endTimes[i] <= _endTime)
+				return true;
+		}
+		
+		return false;
+	}
+	
 	/// Build list of resources
 	List<Widget> _buildResourceList()
 	{
-		final results = _results.where((result) => !result.isBooked());
+		final results = _results
+			.where((result) => !result.isBooked() && _isInTime(result));
 		
 		if (results.isEmpty)
 			return [
-				_loading ? SizedBox() : _buildStatusMessage(
-					"No available resources found for the "
-						"specified location and day"
+				_loading ? SizedBox() : _buildStatusText(
+					"No available resources found that matches "
+						"the specified options"
 				)
 			];
 		
-		return results.map((result) {
-			return ListTile(
+		return results.map((result) =>
+			ListTile(
 				title: Text(result.title),
 				subtitle: Text(result.subtitle
 					.replaceAll(", ", ",").replaceAll(",", ", ")),
 				trailing: Text("${result.states.where((state) =>
 					!Booking.isBooked(state)).length} available"),
 				onTap: () => _showTimesDialog(result),
-			);
-		}).toList();
+			)).toList();
+	}
+	
+	List<int> _getStartHours() =>
+		_times.map((time) => int.parse(time.substring(0, time.indexOf(':')))).toList();
+	
+	List<int> _getEndHours() =>
+		_times.map((time) => int.parse(time.substring(time.lastIndexOf(' ') + 1, time.lastIndexOf(':')))).toList();
+	
+	/// Select time for filter
+	void _selectTime() async
+	{
+		// TODO: This is a bad solution, but it works
+		final dialog = TimeSelectState(
+			_startTime,
+			_endTime,
+			_startTimes,
+			_endTimes,
+		);
+		
+		final result = await showDialog<List<int>>(
+			context: context,
+			builder: (builder) =>
+				AlertDialog(
+					title: Text("Select time span"),
+					content: TimeSelectDialog(dialog),
+					actions: <Widget>[
+						FlatButton(
+							child: Text("CANCEL"),
+							onPressed: () =>
+								Navigator.of(context).pop(),
+						),
+						FlatButton(
+							child: Text("OK"),
+							onPressed: () =>
+								Navigator.of(context).pop([dialog.start, dialog.end]),
+						)
+					],
+				)
+		);
+		
+		if (result != null)
+		{
+			setState(()
+			{
+				_startTime = result[0];
+				_endTime   = result[1];
+			});
+			_search();
+		}
 	}
 	
 	Widget _buildFilterSettings()
@@ -384,7 +482,26 @@ class BookingPageState extends State<BookingPage>
 						style: textStyle,
 					),
 					onTap: () => _selectDate()
-				)
+				),
+				// Time tile
+				ListTile(
+					leading: Icon(
+						Icons.timelapse,
+						color: Colors.white,
+					),
+					title: Text(
+						"Time",
+						style: textStyle,
+					),
+					trailing: Text((_startTime == null || _endTime == null)
+						|| (_startTime == _startTimes.first && _endTime == _endTimes.last)
+						? "Any" :
+							"${DateFormatter.addLeading(_startTime)}:00 - "
+							"${DateFormatter.addLeading(_endTime)}:00",
+						style: textStyle,
+					),
+					onTap: () => _selectTime()
+				),
 			]
 		);
 	}
@@ -414,7 +531,7 @@ class BookingPageState extends State<BookingPage>
 						pinned:   true,
 						snap:     true,
 						floating: true,
-						expandedHeight: 168.0,
+						expandedHeight: 224.0,
 						flexibleSpace: _buildFilterSettings(),
 					),
 				],
@@ -520,4 +637,76 @@ class BookedResourcesState extends State<BookedResourcesDialog>
 				children: _booked,
 			)
 		);
+}
+
+class TimeSelectDialog extends StatefulWidget
+{
+	final TimeSelectState _state;
+	
+	TimeSelectDialog(this._state);
+	
+	@override
+	State createState() => _state;
+}
+
+class TimeSelectState extends State<TimeSelectDialog>
+{
+	int start;
+	int end;
+	
+	List<int> _starts;
+	List<int> _ends;
+	
+	TimeSelectState(this.start, this.end, this._starts, this._ends);
+	
+	@override
+	Widget build(BuildContext context)
+	{
+		return Table(
+			children: [
+				TableRow(
+					children: [
+						ListTile(
+							title: Text("From"),
+							trailing: DropdownButton(
+								items: _starts.where((time) => time < end)
+									.map((time) =>
+										DropdownMenuItem(
+											value: time,
+											child: Text(
+												"${DateFormatter.addLeading(time)}:00"
+											),
+										)
+									).toList(),
+								value: start,
+								onChanged: (value) {
+									setState(() => start = value);
+								},
+							),
+						)
+					]
+				),
+				TableRow(
+					children: [
+						ListTile(
+							title: Text("To"),
+							trailing: DropdownButton(
+								items: _ends.where((time) => time > start)
+									.map((time) =>
+										DropdownMenuItem(
+											value: time,
+											child: Text(
+												"${DateFormatter.addLeading(time)}:00"
+											),
+										)
+									).toList(),
+								value: end,
+								onChanged: (value) => setState(() => end = value),
+							),
+						)
+					]
+				)
+			],
+		);
+	}
 }
