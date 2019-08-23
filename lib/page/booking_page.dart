@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:school_schedule/booking/booking.dart';
 
-import '../preferences.dart';
+import '../tool/preferences.dart';
 import '../booking/booking_tabs.dart';
 
 class BookingPage extends StatefulWidget

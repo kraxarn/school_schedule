@@ -7,11 +7,11 @@ import 'package:path_provider/path_provider.dart';
 
 import '../dialog/search_dialog.dart';
 import '../dialog/course_list_dialog.dart';
-import '../calendar_event.dart';
-import '../preferences.dart';
-import '../course_name.dart';
+import '../tool/calendar_event.dart';
+import '../tool/preferences.dart';
+import '../tool/course_name.dart';
 import '../demo.dart';
-import '../user_colors.dart';
+import '../tool/user_colors.dart';
 
 class SchedulePage extends StatefulWidget
 {

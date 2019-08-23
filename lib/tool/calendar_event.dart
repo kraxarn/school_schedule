@@ -1,5 +1,6 @@
 import 'package:http/http.dart' as http;
-import 'package:school_schedule/school.dart';
+
+import '../tool/school.dart';
 
 /*
  * iCal properties:

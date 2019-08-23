@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../preferences.dart';
-import '../school.dart';
+import '../tool/preferences.dart';
+import '../tool/school.dart';
 
 /// Starting page for choosing school
 class StartPage extends StatelessWidget

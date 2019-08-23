@@ -4,7 +4,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' show parse;
-import 'package:school_schedule/preferences.dart';
+
+import '../tool/preferences.dart';
 
 enum BookingState
 {

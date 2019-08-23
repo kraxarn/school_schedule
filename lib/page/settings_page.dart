@@ -7,7 +7,7 @@ import 'package:package_info/package_info.dart';
 import '../dialog/license_dialog.dart';
 import '../dialog/login_dialog.dart';
 import '../dialog/privacy_policy_dialog.dart';
-import '../preferences.dart';
+import '../tool/preferences.dart';
 
 class SettingsPage extends StatefulWidget
 {

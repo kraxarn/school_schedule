@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:school_schedule/course_name.dart';
 
-import '../preferences.dart';
+import '../tool/course_name.dart';
+import '../tool/preferences.dart';
 
 class SearchDialog extends StatefulWidget
 {

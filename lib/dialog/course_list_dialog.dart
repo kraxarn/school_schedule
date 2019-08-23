@@ -1,10 +1,10 @@
 
 import 'package:flutter/material.dart';
-import 'package:school_schedule/preferences.dart';
-import 'package:school_schedule/user_colors.dart';
 
-import '../course_name.dart';
-import '../course_settings.dart';
+import '../tool/preferences.dart';
+import '../tool/user_colors.dart';
+import '../tool/course_name.dart';
+import '../tool/course_settings.dart';
 
 class CourseListDialog extends StatefulWidget
 {

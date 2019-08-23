@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'page/main_page.dart';
 import 'page/start_page.dart';
-import 'preferences.dart';
+import 'tool/preferences.dart';
 
 void main() =>
 	Preferences.create().then((result) {

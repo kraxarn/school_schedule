@@ -1,5 +1,5 @@
 
-import 'package:school_schedule/calendar_event.dart';
+import 'tool/calendar_event.dart';
 
 class Demo
 {

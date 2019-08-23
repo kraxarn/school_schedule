@@ -1,7 +1,8 @@
 
-import 'package:school_schedule/preferences.dart';
+
 import 'package:flutter/material.dart';
 
+import '../tool/preferences.dart';
 import 'course_settings.dart';
 
 class UserColor

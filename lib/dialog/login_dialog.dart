@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-import '../account.dart';
+import '../tool/account.dart';
 
 class LoginDialog extends StatefulWidget
 {
