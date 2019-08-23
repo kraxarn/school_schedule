@@ -162,10 +162,18 @@ class Preferences
 	static String _decrypt(String value) =>
 		_encrypter.decrypt64(value, iv: _iv);
 	
+	static School _getSchool(SharedPreferences prefs)
+	{
+		final school = prefs.getString("school");
+		if (school == null)
+			return null;
+		return School(school);
+	}
+	
 	static Future<bool> create() async
 	{
 		var prefs = await SharedPreferences.getInstance();
-		_school       = School(prefs.getString("school"));
+		_school       = _getSchool(prefs);
 		_savedCourses = prefs.getStringList("courses");
 		_darkMode     = prefs.getString("theme") == "dark";
 		_deviceSync   = prefs.getBool("device_sync");
