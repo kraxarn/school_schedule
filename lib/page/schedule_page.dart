@@ -203,25 +203,32 @@ class ScheduleState extends State<SchedulePage>
 		}
 		
 		final tempEvents = List<CalendarEvent>();
+		var error = false;
 		
+		// Get events four courses and save to tempEvents
 		for (var course in _savedCourses)
+			await CalendarEvent.getCalendar(_http, school, course)
+				.then((cal) =>
+					tempEvents.addAll(CalendarEvent.parseMultiple(cal)))
+				.catchError((e) => error = true);
+		
+		// Only set state if current page
+		if (MainState.navBarIndex == 0 && tempEvents.isNotEmpty)
 		{
-			try
-			{
-				var cal = await CalendarEvent.getCalendar(_http, school, course);
-				tempEvents.addAll(CalendarEvent.parseMultiple(cal));
-			}
-			catch (e)
-			{
-				print(e);
-				return;
-			}
+			_events.clear();
+			setState(() => _events.addAll(tempEvents));
 		}
 		
-		_events.clear();
-		setState(() => _events.addAll(tempEvents));
+		// Check if something went wrong
+		// No need to save to cache if error
+		if (error)
+			Scaffold.of(context).showSnackBar(SnackBar(
+				content: Text("Connection failed, try again later"),
+			));
+		else
+			_saveToCache();
+		
 		_refreshing = false;
-		_saveToCache();
 	}
 	
 	/// Save current event list to cache
