@@ -38,16 +38,18 @@ class MainState extends State<MainPage> with SingleTickerProviderStateMixin
 	];
 	
 	/// Current tab displayed
-	var _navBarIndex = 0;
+	/// (static so we can access it from the other pages easily)
+	/// (should never have more than one instance anyway)
+	static var navBarIndex = 0;
 	
 	@override
 	Widget build(BuildContext context) =>
 		Scaffold(
-			body: _tabPages[_navBarIndex],
+			body: _tabPages[navBarIndex],
 			bottomNavigationBar: BottomNavigationBar(
 				items: _navBarItems,
-				currentIndex: _navBarIndex,
-				onTap: (index) => setState(() => _navBarIndex = index),
+				currentIndex: navBarIndex,
+				onTap: (index) => setState(() => navBarIndex = index),
 			)
 		);
 }

@@ -4,6 +4,7 @@ import '../tool/preferences.dart';
 import '../tool/date_formatter.dart';
 import '../booking/booking_tabs.dart';
 import '../booking/booking.dart';
+import '../page/main_page.dart';
 
 class BookingPage extends StatefulWidget
 {
@@ -179,7 +180,8 @@ class BookingPageState extends State<BookingPage>
 		}
 		
 		// Tell we're finished loading
-		setState(() => _loading = false);
+		if (MainState.navBarIndex == 1)
+			setState(() => _loading = false);
 	}
 	
 	/// Show dialog for picking time after selecting resource
