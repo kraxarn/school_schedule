@@ -192,13 +192,14 @@ class BookingPageState extends State<BookingPage>
 			builder: (context) =>
 				SimpleDialog(
 					title: Text("Select time"),
-					children: _times.where((time) => !Booking.isBooked(room.states[i++])).map((time) => ListTile(
+					children: _times.where((time) =>
+					!Booking.isBooked(room.states[i++]))
+					.map((time) => ListTile(
 						title: Text(time),
 						onTap: ()
 						{
 							Navigator.of(context).pop();
 							_showConfirmDialog(room, time);
-							print("roomId: ${room.title}, timeIndex: ${_times.indexOf(time)}, timeString: $time");
 						},
 					)).toList(),
 				)
