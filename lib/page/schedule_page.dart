@@ -4,15 +4,17 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
-import 'package:school_schedule/tool/date_formatter.dart';
 
 import '../dialog/search_dialog.dart';
 import '../dialog/course_list_dialog.dart';
 import '../tool/calendar_event.dart';
 import '../tool/preferences.dart';
 import '../tool/course_name.dart';
-import '../demo.dart';
+import '../tool/date_formatter.dart';
 import '../tool/user_colors.dart';
+import '../demo.dart';
+import '../page/main_page.dart';
+
 
 class SchedulePage extends StatefulWidget
 {
@@ -66,14 +68,6 @@ class ScheduleState extends State<SchedulePage>
 			case 7:  return "SUN";
 			default: return "???";
 		}
-	}
-	
-	/// Format time as HH:MM
-	String _timeToString(DateTime time)
-	{
-		final hours   = time.hour   < 10 ? "0${time.hour}"   : "${time.hour}";
-		final minutes = time.minute < 10 ? "0${time.minute}" : "${time.minute}";
-		return "$hours:$minutes";
 	}
 	
 	/// Get name of month
@@ -293,7 +287,8 @@ class ScheduleState extends State<SchedulePage>
 				) : null,
 			),
 			subtitle: Text(
-				"${_timeToString(event.start)} - ${_timeToString(event.end)}"
+				"${DateFormatter.asTime(event.start)} - "
+					"${DateFormatter.asTime(event.end)}"
 			),
 			trailing: Text(
 				"${event.courseId.split('-')[0]}\n"
