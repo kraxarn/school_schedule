@@ -23,13 +23,15 @@ class Booking
 {
 	final _http = HttpClient();
 	
-	Future<String> _get(String url) async
-	{
-		final request = await _http.getUrl(Uri.parse(url));
-		request.cookies.add(await Preferences.sessionCookie);
-		final response = await request.close();
-		return await response.transform(utf8.decoder).join();
-	}
+	Future<String> _get(String url) async =>
+		_http.getUrl(Uri.parse(url))
+			.then((request) async
+			{
+				request.cookies.add(await Preferences.sessionCookie);
+				final response = await request.close();
+				return await response.transform(utf8.decoder).join();
+			})
+			.catchError((error) => null);
 	
 	/// Adds a leading zero if < 10
 	String _addLeading(int value) =>
@@ -71,6 +73,10 @@ class Booking
 				"&op=hamtaBokningar"
 				"&datum=${_formatDate(date)}"
 		);
+		
+		// Something went wrong
+		if (response == null)
+			return null;
 		
 		if (response.contains("inte rättigheter"))
 		{
