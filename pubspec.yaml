@@ -19,12 +19,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  shared_preferences: any
-  http: any
-  flutter_markdown: any
-  package_info: any
-  path_provider: any
-  html: any
+  shared_preferences: ^0.5.3
+  http: ^0.12.0
+  flutter_markdown: ^0.2.0
+  package_info: ^0.4.0
+  path_provider: ^1.2.0
+  html: ^0.14.0
   unique_identifier: ^0.0.3
   encrypt: ^3.2.0
 
