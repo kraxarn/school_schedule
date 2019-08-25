@@ -91,15 +91,6 @@ class SettingsState extends State<SettingsPage>
 					setState(() => Preferences.darkMode = checked);
 				}
 			),
-			SwitchListTile(
-				title: Text("Course colors"),
-				subtitle: Text("Set different title colors depending on course in schedule"),
-				value: Preferences.courseColors,
-				onChanged: (checked)
-				{
-					setState(() => Preferences.courseColors = checked);
-				}
-			),
 			_buildButtonBar([])
 		];
 		
@@ -107,7 +98,7 @@ class SettingsState extends State<SettingsPage>
 		// Until implemented, debug only
 		if (!kReleaseMode && Platform.isAndroid)
 		{
-			children.insertAll(4, [
+			children.insertAll(3, [
 				SwitchListTile(
 					title: Text("Sync with device calendar"),
 					subtitle: Text(
@@ -146,6 +137,27 @@ class SettingsState extends State<SettingsPage>
 		
 		return _buildCard(children);
 	}
+	
+	/// Card for schedule settings
+	Widget _buildScheduleCard() =>
+		_buildCard([
+			_buildTitle(context, "Schedule"),
+			SwitchListTile(
+				title: Text("Course colors"),
+				subtitle: Text("Set different title colors depending on course"),
+				value: Preferences.courseColors,
+				onChanged: (checked) =>
+					setState(() => Preferences.courseColors = checked)
+			),
+			SwitchListTile(
+				title: Text("Week numbers"),
+				subtitle: Text("Show week numbers"),
+				value: Preferences.showWeek,
+				onChanged: (checked) =>
+					setState(() => Preferences.showWeek = checked)
+			),
+			_buildButtonBar([])
+		]);
 	
 	/// Card for account settings
 	Widget _buildAccountCard()
@@ -232,6 +244,7 @@ class SettingsState extends State<SettingsPage>
 				padding: EdgeInsets.all(16.0),
 				children: [
 					_buildGeneralCard(),
+					_buildScheduleCard(),
 					_buildAccountCard(),
 					_buildAboutCard()
 				],
