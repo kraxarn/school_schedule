@@ -34,8 +34,11 @@ class ScheduleState extends State<SchedulePage>
 	/// Reusable HTTP instance for schedule refreshing
 	final _http = http.Client();
 	
-	// If we're refreshing, used when displaying progress indicator
+	/// If we're refreshing, used when displaying progress indicator
 	var _refreshing = false;
+	
+	/// When we last refreshed the schedule
+	static DateTime _lastRefresh;
 	
 	/// Build title with bottom border
 	Widget _buildTitle(String text) =>
@@ -169,6 +172,11 @@ class ScheduleState extends State<SchedulePage>
 	/// Refresh the schedule
 	Future<void> _refreshSchedule() async
 	{
+		// See if refresh was <15 minutes ago
+		if (_lastRefresh != null
+			&& DateTime.now().difference(_lastRefresh).inMinutes < 15)
+			return;
+		
 		// Test if we're using KronoX demo
 		if (Preferences.school.id == null)
 		{
@@ -220,7 +228,10 @@ class ScheduleState extends State<SchedulePage>
 				content: Text("Connection failed, try again later"),
 			));
 		else
+		{
 			_saveToCache();
+			_lastRefresh = DateTime.now();
+		}
 		
 		_refreshing = false;
 	}
@@ -424,7 +435,10 @@ class ScheduleState extends State<SchedulePage>
 						)
 					],
 				),
-				onRefresh: () {
+				onRefresh: ()
+				{
+					// Set to null to force refresh
+					_lastRefresh = null;
 					return _refreshSchedule();
 				},
 			)
