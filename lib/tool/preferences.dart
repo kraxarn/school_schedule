@@ -149,6 +149,15 @@ class Preferences
 		_prefs.then((prefs) => prefs.setBool("course_colors", value));
 	}
 	
+	/// Show week number in schedule
+	static bool _showWeek;
+	static bool get showWeek => _showWeek ?? false;
+	static set showWeek(bool value)
+	{
+		_showWeek = value;
+		_prefs.then((prefs) => prefs.setBool("show_week", value));
+	}
+	
 	/// Get default encrypter
 	static Encrypter get _encrypter =>
 		Encrypter(AES(Key.fromUtf8(_uniqueId)));

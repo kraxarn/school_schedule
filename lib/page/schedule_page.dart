@@ -266,6 +266,20 @@ class ScheduleState extends State<SchedulePage>
 			)
 		];
 	
+	Widget _buildSubtitle(String text) =>
+		Padding (
+			padding: EdgeInsets.only(
+				left: 72.0,
+				top: 8.0,
+				bottom: 8.0
+			),
+			child: Text(
+				text,
+				style: Theme.of(context).textTheme.caption,
+				
+			)
+		);
+	
 	bool _isSameDay(DateTime d1, DateTime d2) =>
 		d1.year == d2.year && d1.month == d2.month && d1.day == d2.day;
 	
@@ -365,14 +379,22 @@ class ScheduleState extends State<SchedulePage>
 			else
 			{
 				var lastDate = -1;
+				var lastWeek = -1;
+				
 				for (final event in monthEvents)
 				{
+					final week = DateFormatter.getWeekNumber(event.start);
+					
+					if (week != lastWeek && Preferences.showWeek)
+						events.add(_buildSubtitle("WEEK $week"));
+					
 					// Add to all events and set parameters
 					events.add(_buildEvent(event, event.start.day != lastDate,
 						_isSameDay(now, event.start)));
-					// Update last date for next lap
-					lastDate = event.start.day;
 					
+					// Update for next lap
+					lastDate = event.start.day;
+					lastWeek = week;
 				}
 			}
 		}
