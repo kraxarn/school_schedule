@@ -9,6 +9,10 @@ class DateFormatter
 	static DateTime startOfYear(DateTime date) =>
 		DateTime(date.year);
 	
+	/// Year offset for calculating week
+	static int getYearOffset(DateTime date) =>
+		date.year - 2018;
+	
 	/// Formats as YYYY-MM-DD
 	static String asFullDate(DateTime date) =>
 		"${date.year}-${addLeading(date.month)}-${addLeading(date.day)}";
@@ -23,5 +27,6 @@ class DateFormatter
 	
 	/// Gets the week number for the specific date
 	static int getWeekNumber(DateTime date) =>
-		((date.difference(startOfYear(date)).inDays / 7.0).floor() % 52) + 1;
+		(((date.difference(startOfYear(date)).inDays +
+			getYearOffset(date)) / 7.0).floor() % 52) + 1;
 }
