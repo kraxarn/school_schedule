@@ -158,6 +158,15 @@ class Preferences
 		_prefs.then((prefs) => prefs.setBool("show_week", value));
 	}
 	
+	/// Highlight event time collisions
+	static bool _showEventCollision;
+	static bool get showEventCollision => _showEventCollision ?? false;
+	static set showEventCollision(bool value)
+	{
+		_showEventCollision = value;
+		_prefs.then((prefs) => prefs.setBool("show_event_collision", value));
+	}
+	
 	/// Get default encrypter
 	static Encrypter get _encrypter =>
 		Encrypter(AES(Key.fromUtf8(_uniqueId)));

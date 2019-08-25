@@ -156,6 +156,15 @@ class SettingsState extends State<SettingsPage>
 				onChanged: (checked) =>
 					setState(() => Preferences.showWeek = checked)
 			),
+			SwitchListTile(
+				title: Text("Highlight collisions"),
+				subtitle: Text(
+					"Color time when multiple events occur at the same time"
+				),
+				value: Preferences.showEventCollision,
+				onChanged: (checked) =>
+					setState(() => Preferences.showEventCollision = checked)
+			),
 			_buildButtonBar([])
 		]);
 	

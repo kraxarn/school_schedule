@@ -284,7 +284,8 @@ class ScheduleState extends State<SchedulePage>
 		d1.year == d2.year && d1.month == d2.month && d1.day == d2.day;
 	
 	/// Build a calendar event
-	Widget _buildEvent(CalendarEvent event, bool printDate, bool isToday) =>
+	Widget _buildEvent(CalendarEvent event, bool printDate,
+		bool isToday, bool highlightTime) =>
 		ListTile(
 			leading: printDate ? Column(
 				mainAxisAlignment: MainAxisAlignment.center,
@@ -313,7 +314,10 @@ class ScheduleState extends State<SchedulePage>
 			),
 			subtitle: Text(
 				"${DateFormatter.asTime(event.start)} - "
-					"${DateFormatter.asTime(event.end)}"
+					"${DateFormatter.asTime(event.end)}",
+				style: highlightTime ? TextStyle(
+					color: Colors.red
+				) : null,
 			),
 			trailing: Text(
 				"${event.courseId.split('-')[0]}\n"
@@ -322,6 +326,16 @@ class ScheduleState extends State<SchedulePage>
 			),
 			onTap: () => _showEventInfo(event)
 		);
+	
+	/// If the date occurs within the event
+	bool _isWithin(DateTime date, CalendarEvent event) =>
+		event.start.difference(date).isNegative
+			&& !event.end.difference(date).isNegative;
+	
+	/// Return if the events have time that collides
+	/// (If either e1.start or e1.end is within e2)
+	bool _collide(CalendarEvent e1, CalendarEvent e2) =>
+		_isWithin(e1.start, e2) || _isWithin(e1.end, e2);
 	
 	/// Build all events
 	List<Widget> _buildEvents()
@@ -381,16 +395,34 @@ class ScheduleState extends State<SchedulePage>
 				var lastDate = -1;
 				var lastWeek = -1;
 				
-				for (final event in monthEvents)
+				//for (final event in monthEvents)
+				for (var i = 0; i < monthEvents.length; i++)
 				{
+					final event = monthEvents[i];
+					
+					final prev = i > 0
+						? monthEvents[i - 1] : null;
+					final next = i < monthEvents.length - 1
+						? monthEvents[i + 1] : null;
+					
 					final week = DateFormatter.getWeekNumber(event.start);
 					
 					if (week != lastWeek && Preferences.showWeek)
 						events.add(_buildSubtitle("WEEK $week"));
 					
+					// Check if it collides with previous or next
+					var highlightTime = false;
+					if (Preferences.showEventCollision)
+						highlightTime = (prev != null
+							&& prev.start.day == event.start.day
+							&& _collide(event, prev))
+							|| (next != null
+								&& next.start.day == event.start.day
+								&& _collide(event, next));
+					
 					// Add to all events and set parameters
 					events.add(_buildEvent(event, event.start.day != lastDate,
-						_isSameDay(now, event.start)));
+						_isSameDay(now, event.start), highlightTime));
 					
 					// Update for next lap
 					lastDate = event.start.day;
