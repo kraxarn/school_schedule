@@ -15,6 +15,5 @@ class DateFormatter
 	
 	/// Formats as YYYY-MM-DD HH:MM
 	static String asFullDateTime(DateTime date) =>
-		"${asFullDate(date)} "
-			"${addLeading(date.hour)}:${addLeading(date.minute)}";
+		"${asFullDate(date)} ${asTime(date)}";
 }
