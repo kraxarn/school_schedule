@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../tool/preferences.dart';
 import '../tool/date_formatter.dart';
@@ -519,6 +520,41 @@ class BookingPageState extends State<BookingPage>
 		);
 	}
 	
+	Widget _buildNotSupportedPage() =>
+		Scaffold(
+			appBar: AppBar(
+				title: Text("Booking"),
+			),
+			body: Padding(
+				padding: EdgeInsets.all(32.0),
+				child: Column(
+					children: <Widget>[
+						Text(
+							"Resource booking for your selected school is "
+								"currently not supported",
+							textAlign: TextAlign.center,
+						),
+						SizedBox(
+							height: 32.0,
+						),
+						RaisedButton(
+							child: Text("I want to help!"),
+							onPressed: () =>
+								launch(
+									"https://github.com/kraxarn/"
+										"school_schedule/wiki/"
+										"How-to-help-with-booking"
+								),
+						),
+						Text(
+							"(it's not difficult)",
+							style: Theme.of(context).textTheme.caption,
+						)
+					],
+				),
+			)
+		);
+	
 	@override
 	Widget build(BuildContext context)
 	{
@@ -529,6 +565,8 @@ class BookingPageState extends State<BookingPage>
 				"Resource booking is currently not supported when having "
 					"the demo school selected"
 			);
+		if (_locations == null)
+			return _buildNotSupportedPage();
 		
 		// Check if logged in
 		if (Preferences.username == null)
