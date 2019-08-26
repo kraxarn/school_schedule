@@ -44,6 +44,10 @@ class SearchState extends State<SearchDialog>
 	{
 		// TODO: Does nothing if already searching, should cancel
 		
+		// Check if using demo
+		if (Preferences.school.id == null)
+			return null;
+		
 		final response = await _http.read(
 			"${Preferences.school.baseUrl}ajax/ajax_sokResurser.jsp"
 				"?sokord=$keyword&startDatum=idag&slutDatum="
