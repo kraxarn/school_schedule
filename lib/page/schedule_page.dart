@@ -346,7 +346,7 @@ class ScheduleState extends State<SchedulePage>
 			];
 		
 		// Check if no saved courses
-		if (_savedCourses == null || _savedCourses.isEmpty)
+		if (Preferences.school.id != null && (_savedCourses == null || _savedCourses.isEmpty))
 			return _buildStatusMessage("No courses found, press the search button to add");
 		
 		// Check if no events for saved courses
