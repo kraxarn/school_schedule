@@ -232,6 +232,9 @@ class SettingsState extends State<SettingsPage>
 	/// Show login dialog
 	void _showLogin(context)
 	{
+		if (Preferences.school.id == null)
+			return;
+		
 		Navigator.of(context).push(MaterialPageRoute(
 			builder: (builder) {
 				return LoginDialog();
