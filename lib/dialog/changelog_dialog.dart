@@ -59,7 +59,7 @@ class ChangelogDialogState extends State<ChangelogDialog>
 			appBar: AppBar(
 				title: Text(
 					_versionName == null
-						? "Changelog" : "Changelog for version $_versionName"
+						? "What's new" : "What's new in version $_versionName"
 				)
 			),
 			body: _loading ? Center(
