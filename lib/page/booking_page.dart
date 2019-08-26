@@ -711,9 +711,8 @@ class TimeSelectState extends State<TimeSelectDialog>
 	TimeSelectState(this.start, this.end, this._starts, this._ends);
 	
 	@override
-	Widget build(BuildContext context)
-	{
-		return Table(
+	Widget build(BuildContext context) => 
+		Table(
 			children: [
 				TableRow(
 					children: [
@@ -759,5 +758,4 @@ class TimeSelectState extends State<TimeSelectDialog>
 				)
 			],
 		);
-	}
 }
