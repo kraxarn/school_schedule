@@ -170,10 +170,10 @@ class ScheduleState extends State<SchedulePage>
 		((to.year - from.year) * 12) + (to.month - from.month);
 	
 	/// Refresh the schedule
-	Future<void> _refreshSchedule() async
+	Future<void> _refreshSchedule(bool force) async
 	{
 		// See if refresh was <15 minutes ago
-		if (_lastRefresh != null
+		if (!force && _lastRefresh != null
 			&& DateTime.now().difference(_lastRefresh).inMinutes < 15)
 			return;
 		
@@ -441,7 +441,7 @@ class ScheduleState extends State<SchedulePage>
 			builder: dialogBuilder,
 			fullscreenDialog: true
 		));
-		_refreshSchedule();
+		_refreshSchedule(true);
 	}
 	
 	/// Open search dialog
@@ -457,7 +457,7 @@ class ScheduleState extends State<SchedulePage>
 	{
 		super.initState();
 		_loadFromCache();
-		_refreshSchedule();
+		_refreshSchedule(false);
 	}
 	
 	@override
@@ -489,12 +489,7 @@ class ScheduleState extends State<SchedulePage>
 						)
 					],
 				),
-				onRefresh: ()
-				{
-					// Set to null to force refresh
-					_lastRefresh = null;
-					return _refreshSchedule();
-				},
+				onRefresh: () => _refreshSchedule(true),
 			)
 		);
 }
