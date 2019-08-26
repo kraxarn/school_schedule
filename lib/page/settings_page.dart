@@ -7,6 +7,7 @@ import 'package:package_info/package_info.dart';
 import '../dialog/license_dialog.dart';
 import '../dialog/login_dialog.dart';
 import '../dialog/privacy_policy_dialog.dart';
+import '../dialog/changelog_dialog.dart';
 import '../tool/preferences.dart';
 
 class SettingsPage extends StatefulWidget
@@ -195,13 +196,13 @@ class SettingsState extends State<SettingsPage>
 				setState(()
 				{
 					_version = "Version ${info.version}";
-					_build = "Build ${info.buildNumber}";
+					_build   = "Build ${info.buildNumber}";
 				}));
 		}
 		
 		return _buildCard([
 			_buildTitle(context, "About"),
-			_buildButton(_version, _build, null),
+			_buildButton(_version, _build, () => _showChangelog()),
 			_buildButton("Privacy policy", null, ()
 			{
 				Navigator.of(context).push(MaterialPageRoute(
@@ -240,6 +241,16 @@ class SettingsState extends State<SettingsPage>
 		
 		if (Preferences.username != null)
 			setState(() {});
+	}
+	
+	void _showChangelog()
+	{
+		Navigator.of(context).push(MaterialPageRoute(
+			builder: (builder) {
+				return ChangelogDialog();
+			},
+			fullscreenDialog: true
+		));
 	}
 	
 	@override
