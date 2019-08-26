@@ -58,6 +58,7 @@ class BookingPageState extends State<BookingPage>
 	{
 		// TODO: Constructor or initState?
 		if (Preferences.lastLocation != null
+			&& _locations != null
 			&& _locations.containsKey(Preferences.lastLocation))
 			_currentLocation = _locations.entries
 				.firstWhere((entry) => entry.key == Preferences.lastLocation);
@@ -523,10 +524,10 @@ class BookingPageState extends State<BookingPage>
 	{
 		// Check if supported school
 		// TODO
-		if (_locations == null)
+		if (Preferences.school.id == null)
 			return _buildStatusMessage(
-				"Resource booking for your selected school is currently not "
-					"supported, contact me if you want to help me out"
+				"Resource booking is currently not supported when having "
+					"the demo school selected"
 			);
 		
 		// Check if logged in
