@@ -367,6 +367,10 @@ class BookingPageState extends State<BookingPage>
 	/// Select time for filter
 	void _selectTime() async
 	{
+		// Ignore if loading
+		if (_loading)
+			return;
+		
 		// TODO: This is a bad solution, but it works
 		final dialog = TimeSelectState(
 			_startTime,
