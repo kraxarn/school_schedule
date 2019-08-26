@@ -27,6 +27,7 @@ dependencies:
   html: ^0.14.0
   unique_identifier: ^0.0.3
   encrypt: ^3.2.0
+  url_launcher: ^5.1.2
 
 dev_dependencies:
   flutter_test:
