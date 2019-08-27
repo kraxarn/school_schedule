@@ -367,8 +367,8 @@ class BookingPageState extends State<BookingPage>
 	/// Select time for filter
 	void _selectTime() async
 	{
-		// Ignore if loading
-		if (_loading)
+		// Ignore if no times fetched yet
+		if (_startTimes == null || _endTimes == null)
 			return;
 		
 		// TODO: This is a bad solution, but it works
