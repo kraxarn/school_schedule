@@ -25,9 +25,9 @@ dependencies:
   package_info: ^0.4.0
   path_provider: ^1.2.0
   html: ^0.14.0
-  device_id: ^0.2.0
   encrypt: ^3.2.0
   url_launcher: ^5.1.2
+  unique_identifier: ^0.0.3
 
 dev_dependencies:
   flutter_test:

@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:device_id/device_id.dart';
 import 'package:encrypt/encrypt.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:unique_identifier/unique_identifier.dart';
 
 import 'account.dart';
 import 'course_name.dart';
@@ -201,7 +201,7 @@ class Preferences
 		_lastLocation = prefs.getString("last_location");
 		
 		// Get unique ID before decrypting
-		_uniqueId = await DeviceId.getID;
+		_uniqueId = await UniqueIdentifier.serial;
 		
 		// Password is encrypted, so requires decryption
 		if (_password != null)
