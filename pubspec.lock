@@ -43,20 +43,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.14.11"
-  convert:
-    dependency: transitive
-    description:
-      name: convert
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.1"
-  crypto:
-    dependency: transitive
-    description:
-      name: crypto
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.2"
   csslib:
     dependency: transitive
     description:
@@ -64,6 +50,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.16.1"
+  device_id:
+    dependency: "direct main"
+    description:
+      name: device_id
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.0"
   encrypt:
     dependency: "direct main"
     description:
@@ -88,13 +81,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_udid:
-    dependency: "direct main"
-    description:
-      name: flutter_udid
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.0"
   html:
     dependency: "direct main"
     description:
