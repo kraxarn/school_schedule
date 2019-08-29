@@ -22,8 +22,7 @@ class CourseSettings
 	
 	/// Formats course ID
 	static String _getId(String courseId) =>
-		courseId.contains("-")
-			? courseId.substring(0, courseId.indexOf("-")) : courseId;
+		courseId.split('-')[0];
 	
 	/// Load course settings from file
 	static Future<bool> load() async
