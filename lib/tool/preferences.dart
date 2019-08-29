@@ -6,6 +6,7 @@ import 'package:unique_identifier/unique_identifier.dart';
 
 import 'account.dart';
 import 'course_name.dart';
+import 'course_settings.dart';
 import 'school.dart';
 
 /// Application preferences
@@ -208,6 +209,7 @@ class Preferences
 			_password = _decrypt(prefs.getString("password"));
 		
 		await CourseName.load();
+		await CourseSettings.load();
 		return true;
 	}
 }
