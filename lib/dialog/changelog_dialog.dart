@@ -13,35 +13,32 @@ class ChangelogDialog extends StatefulWidget
 
 class ChangelogDialogState extends State<ChangelogDialog>
 {
-	String _versionName;
-	
 	var _loading = true;
 	
-	String _changelog;
+	var _changes = List<dynamic>();
 	
-	String _releaseDate;
+	String _version;
 	
 	void _loadChangelog() async
 	{
 		final client = http.Client();
 		
-		final version = (await PackageInfo.fromPlatform()).version;
+		_version = (await PackageInfo.fromPlatform()).version;
 		
+		String response;
+		try
+		{
+			response = await client.read(
+				"https://api.github.com/repos/kraxarn/school_schedule/releases"
+			);
+		}
+		catch (e)
+		{
+			setState(() => _loading = false);
+			return;
+		}
 		
-		final response = await client.get(
-			"https://api.github.com/repos/kraxarn/school_schedule/"
-				"releases/tags/v$version"
-		);
-		
-		// Check if something bad happened
-		if (response.statusCode != 200)
-			return setState(() => _loading = false);
-		
-		final json = jsonDecode(response.body);
-		_versionName = json["name"];
-		_changelog   = json["body"];
-		_releaseDate = json["published_at"].toString()
-			.replaceAll('T', ' ').replaceAll('Z', '');
+		_changes = jsonDecode(response) as List<dynamic>;
 		
 		setState(() => _loading = false);
 	}
@@ -57,21 +54,49 @@ class ChangelogDialogState extends State<ChangelogDialog>
 	Widget build(BuildContext context) =>
 		Scaffold(
 			appBar: AppBar(
-				title: Text(
-					_versionName == null
-						? "What's new" : "What's new in version $_versionName"
-				)
+				title: Text("What's new")
 			),
 			body: _loading ? Center(
 				child: CircularProgressIndicator()
-			) : Scrollbar(
-				child: Markdown(
-					data: _changelog == null
-						? "There was an error fetching the changelog for "
-						"your current version. Are you disconnected or using "
-						"a developer build?"
-						: "Released at $_releaseDate\n\n$_changelog"
-				),
+			) : _changes.isNotEmpty ? ListView(
+				children: _changes.map((change) =>
+					ExpansionTile(
+						initiallyExpanded: (change["name"]) == _version,
+						title: Column(
+							crossAxisAlignment: CrossAxisAlignment.start,
+							children: <Widget>[
+								Text(change["name"]),
+								Text(
+									(change["published_at"] as String)
+										.substring(0,
+										(change["published_at"] as String)
+											.indexOf('T')),
+									style: Theme.of(context).textTheme.caption,
+								)
+							],
+						),
+						children: [
+							Padding(
+								padding: EdgeInsets.only(
+									left: 16.0,
+									right: 16.0,
+									bottom: 16.0
+								),
+								child: MarkdownBody(
+									data: change["body"] as String,
+								)
+							)
+						]
+					)).toList(),
+			) : Padding(
+				padding: EdgeInsets.all(32.0),
+				child: Align(
+					alignment: Alignment.topCenter,
+					child: Text(
+						"Connection failed, try again later",
+						textAlign: TextAlign.center
+					)
+				)
 			)
 		);
 }
