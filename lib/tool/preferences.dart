@@ -200,6 +200,8 @@ class Preferences
 		_username     = prefs.getString("username");
 		_password     = prefs.getString("password");
 		_lastLocation = prefs.getString("last_location");
+		_showWeek     = prefs.getBool("show_week");
+		_showEventCollision = prefs.getBool("show_event_collision");
 		
 		// Get unique ID before decrypting
 		_uniqueId = await UniqueIdentifier.serial;
