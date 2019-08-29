@@ -73,3 +73,6 @@
 
 # Ignore Android keystore info
 **/android/key.properties
+
+# Ignore iOS Podfile lock
+**/ios/Podfile.lock
