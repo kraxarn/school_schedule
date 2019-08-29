@@ -648,29 +648,54 @@ class BookedResourcesState extends State<BookedResourcesDialog>
 					textAlign: TextAlign.center,
 				),
 			)
-		] : bookings.map((booking) => booking.toListTile(() async
+		] : bookings.map((booking) => booking.toListTile(()
 		{
-			if (!await _booking.cancel(booking.id))
-				showDialog(
-					context: context,
-					builder: (builder) =>
-						AlertDialog(
-							title: Text("Error"),
-							content: Text(
-								"There was an error canceling the "
-									"selected resource"
+			showDialog(
+				context: context,
+				builder: (builder) =>
+					AlertDialog(
+						title: Text("Are you sure?"),
+						content: Text(
+							"Are you sure you want to cancel resource ${booking.location} on ${booking.date} at ${booking.timeSpan}?"
+						),
+						actions: <Widget>[
+							FlatButton(
+								child: Text("WAIT, NO"),
+								onPressed: () => Navigator.of(context).pop()
 							),
-							actions: <Widget>[
-								FlatButton(
-									child: Text("OK"),
-									onPressed: () =>
-										Navigator.of(context).pop(),
-								)
-							],
-						)
-				);
-			else
-				_refreshBookedResources();
+							FlatButton(
+								child: Text("YEAH"),
+								onPressed: () async
+								{
+									Navigator.of(context).pop();
+									
+									if (!await _booking.cancel(booking.id))
+										showDialog(
+											context: context,
+											builder: (builder) =>
+												AlertDialog(
+													title: Text("Error"),
+													content: Text(
+														"There was an error canceling the "
+															"selected resource"
+													),
+													actions: <Widget>[
+														FlatButton(
+															child: Text("OK"),
+															onPressed: () =>
+																Navigator.of(context).pop(),
+														)
+													],
+												)
+										);
+									else
+										_refreshBookedResources();
+								}
+							),
+						],
+					)
+			);
+			
 		})).toList());
 	}
 	
