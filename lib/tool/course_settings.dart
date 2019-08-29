@@ -34,7 +34,9 @@ class CourseSettings
 		_courseSettings.clear();
 		_courseSettings.addAll(
 			(jsonDecode(await file.readAsString()) as Map<String, dynamic>)
-				.map((key, value) => MapEntry<String, CourseSettings>(key, CourseSettings.fromJson(value))));
+				.map((key, value) =>
+					MapEntry<String, CourseSettings>(_getId(key),
+						CourseSettings.fromJson(value))));
 		return true;
 	}
 	
