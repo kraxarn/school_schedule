@@ -20,6 +20,11 @@ class CourseSettings
 	/// Map as <courseId, settings>
 	static final _courseSettings = Map<String, CourseSettings>();
 	
+	/// Formats course ID
+	static String _getId(String courseId) =>
+		courseId.contains("-")
+			? courseId.substring(0, courseId.indexOf("-")) : courseId;
+	
 	/// Load course settings from file
 	static Future<bool> load() async
 	{
@@ -40,12 +45,14 @@ class CourseSettings
 	
 	/// Get settings of specified course
 	static CourseSettings get(String courseId) =>
-		_courseSettings[courseId];
+		_courseSettings[_getId(courseId)];
 	
 	/// Updates course with specified settings
 	/// Also works if there are no current settings for the course
 	static void update(String courseId, CourseSettings settings)
 	{
+		courseId = _getId(courseId);
+		
 		if (_courseSettings.containsKey(courseId))
 			_courseSettings.remove(courseId);
 		
@@ -56,7 +63,7 @@ class CourseSettings
 	/// Remove a course settings from list and file
 	static void remove(String courseId)
 	{
-		_courseSettings.remove(courseId);
+		_courseSettings.remove(_getId(courseId));
 		_save();
 	}
 }

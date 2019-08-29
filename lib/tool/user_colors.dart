@@ -122,10 +122,6 @@ class UserColors
 		if (!Preferences.courseColors)
 			return null;
 		
-		// Only take the shortened course code
-		if (name.contains("-"))
-			name = name.substring(0, name.indexOf("-"));
-		
 		// Try to find saved color and return it
 		final settings = CourseSettings.get(name);
 		if (settings != null)
