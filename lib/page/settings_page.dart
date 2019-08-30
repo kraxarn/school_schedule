@@ -25,14 +25,6 @@ class SettingsState extends State<SettingsPage>
 	var _version = "version";
 	var _build   = "build";
 	
-	/// Allowed refresh intervals as <minutes, formatted>
-	final _refreshIntervals = {
-		0:   "Disabled",
-		15:  "15 minutes",
-		60:  "1 hour",
-		240: "4 hours"
-	};
-	
 	/// Build a card with children in a column
 	Widget _buildCard(List<Widget> children) =>
 		Card(
@@ -94,47 +86,6 @@ class SettingsState extends State<SettingsPage>
 			),
 			_buildButtonBar([])
 		];
-		
-		// Add device sync and refresh interval if Android
-		// Until implemented, debug only
-		if (!kReleaseMode && Platform.isAndroid)
-		{
-			children.insertAll(3, [
-				SwitchListTile(
-					title: Text("Sync with device calendar"),
-					subtitle: Text(
-						"Automatically add course events to device calendar"
-					),
-					value: Preferences.deviceSync,
-					onChanged: (checked)
-					{
-						// TODO
-					}
-				),
-				ListTile(
-					title: Text("Refresh interval"),
-					subtitle: Text(
-						"How often to refresh the schedule in the background"
-					),
-					trailing: DropdownButton<String>(
-						value: _refreshIntervals[Preferences.refreshInterval],
-						onChanged: (value) =>
-							setState(() => Preferences.refreshInterval =
-								_refreshIntervals.entries
-									.firstWhere((entry) =>
-									entry.value == value).key
-							),
-						items: _refreshIntervals.values
-							.map<DropdownMenuItem<String>>((value) =>
-							DropdownMenuItem(
-								child: Text(value),
-								value: value
-							)
-						).toList()
-					)
-				)
-			]);
-		}
 		
 		return _buildCard(children);
 	}
