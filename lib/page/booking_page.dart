@@ -16,9 +16,6 @@ class BookingPage extends StatefulWidget
 
 class BookingPageState extends State<BookingPage>
 {
-	/// Form key for comment entry when booking
-	final _formCommentKey = GlobalKey<FormState>();
-	
 	/// Current selected date
 	var _date = DateTime.now();
 	
@@ -187,7 +184,7 @@ class BookingPageState extends State<BookingPage>
 	}
 	
 	/// Show dialog for picking time after selecting resource
-	void _showTimesDialog(BookingRoom room)
+	/*void _showTimesDialog(BookingRoom room)
 	{
 		var i = 0;
 		
@@ -208,13 +205,11 @@ class BookingPageState extends State<BookingPage>
 					)).toList(),
 				)
 		);
-	}
+	}*/
 	
 	/// Show confirm dialog with comment entry
-	void _showConfirmDialog(BookingRoom room, String time)
+	void _showConfirmDialog(BookingRoom room, String time, String comment)
 	{
-		final commentController = TextEditingController();
-		
 		showDialog(
 			context: context,
 			builder: (builder) =>
@@ -225,28 +220,9 @@ class BookingPageState extends State<BookingPage>
 						mainAxisAlignment: MainAxisAlignment.start,
 						children: <Widget>[
 							Text(
-								"Are you sure you want to book resource "
+								"Are you sure you want to book "
 								"${room.title} at $time?"
-							),
-							SizedBox(
-								height: 16.0,
-							),
-							Form(
-								key: _formCommentKey,
-								child: TextFormField(
-									controller: commentController,
-									decoration: InputDecoration(
-										labelText: "Comment",
-										border: OutlineInputBorder(
-											borderRadius: BorderRadius.all(
-												Radius.circular(8.0)
-											)
-										)
-									),
-									validator: (value) =>
-										value.isEmpty ? "Required" : null
-								),
-							),
+							)
 						],
 					),
 					actions: <Widget>[
@@ -258,11 +234,7 @@ class BookingPageState extends State<BookingPage>
 							child: Text("BOOK"),
 							onPressed: () async
 							{
-								// Check if comment is entered
-								if (!_formCommentKey.currentState.validate())
-									return;
-								
-								// Dismiss dialog
+								// We always want to dismiss the dialog
 								Navigator.of(context).pop();
 								
 								// Check if it was successful
@@ -270,13 +242,17 @@ class BookingPageState extends State<BookingPage>
 									date:      _date,
 									id:        room.title,
 									timeIndex: _times.indexOf(time),
-									comment:   commentController.text,
+									comment:   comment,
 									tabId:     _currentLocation.key
 								))
 								{
+									// Show confirmation
 									Scaffold.of(context).showSnackBar(SnackBar(
 										content: Text("Resource booked"),
 									));
+									
+									// Easiest way to collapse it again
+									await _search();
 								}
 								else
 									showDialog(
@@ -333,6 +309,10 @@ class BookingPageState extends State<BookingPage>
 		return false;
 	}
 	
+	Widget _buildResourceItem(BookingRoom room) =>
+		TimeSelect(_times, room, (time, comment) =>
+			_showConfirmDialog(room, time, comment));
+	
 	/// Build list of resources
 	List<Widget> _buildResourceList()
 	{
@@ -348,13 +328,26 @@ class BookingPageState extends State<BookingPage>
 			];
 		
 		return results.map((result) =>
-			ListTile(
-				title: Text(result.title),
-				subtitle: Text(result.subtitle
-					.replaceAll(", ", ",").replaceAll(",", ", ")),
+			ExpansionTile(
+				title: Column(
+					crossAxisAlignment: CrossAxisAlignment.start,
+					children: <Widget>[
+						Text(result.title),
+						Text(result.subtitle
+							.replaceAll(", ", ",").replaceAll(",", ", "),
+						style: Theme.of(context).textTheme.caption)
+					],
+				),
 				trailing: Text("${result.states.where((state) =>
 					!Booking.isBooked(state)).length} available"),
-				onTap: () => _showTimesDialog(result),
+				children: <Widget>[
+					Padding(
+						padding: EdgeInsets.symmetric(
+							horizontal: 16.0
+						),
+						child: _buildResourceItem(result)
+					)
+				],
 			)).toList();
 	}
 	
@@ -372,7 +365,7 @@ class BookingPageState extends State<BookingPage>
 			return;
 		
 		// TODO: This is a bad solution, but it works
-		final dialog = TimeSelectState(
+		final dialog = TimeFilterSelectState(
 			_startTime,
 			_endTime,
 			_startTimes,
@@ -384,7 +377,7 @@ class BookingPageState extends State<BookingPage>
 			builder: (builder) =>
 				AlertDialog(
 					title: Text("Select time span"),
-					content: TimeSelectDialog(dialog),
+					content: TimeFilterSelectDialog(dialog),
 					actions: <Widget>[
 						FlatButton(
 							child: Text("RESET"),
@@ -621,7 +614,7 @@ class BookedResourcesDialog extends StatefulWidget
 class BookedResourcesState extends State<BookedResourcesDialog>
 {
 	/// Resources booked list
-	var _booked = List<Widget>();
+	var _booked = List<ListTile>();
 	
 	/// Instance of Booking to get bookings
 	final Booking _booking;
@@ -719,17 +712,126 @@ class BookedResourcesState extends State<BookedResourcesDialog>
 		);
 }
 
-class TimeSelectDialog extends StatefulWidget
+class TimeSelect extends StatefulWidget
 {
-	final TimeSelectState _state;
+	final BookingRoom _room;
 	
-	TimeSelectDialog(this._state);
+	final List<String> _times;
+	
+	final Function(String time, String comment) _onBooked;
+	
+	TimeSelect(this._times, this._room, this._onBooked);
+	
+	@override
+	State createState() =>
+		TimeSelectState(_times, _room, _onBooked);
+}
+
+class TimeSelectState extends State<TimeSelect>
+{
+	/// Form key for comment entry when booking
+	final _formCommentKey = GlobalKey<FormState>();
+	
+	final _commentController = TextEditingController();
+	
+	final BookingRoom _room;
+	
+	List<String> _times;
+	
+	String _time;
+	
+	final Function(String time, String comment) _onBooked;
+	
+	TimeSelectState(times, this._room, this._onBooked)
+	{
+		// Only select available times
+		var i = 0;
+		_times = (times.where((time) =>
+			!Booking.isBooked(_room.states[i++])) as Iterable<String>).toList();
+		
+		// TODO: Select first that matches filter settings
+		_time = _times.first;
+	}
+	
+	DropdownButton _buildTimeSelection() =>
+		DropdownButton(
+			items: _times.map((time) => DropdownMenuItem(
+				child: Text(time),
+				value: time
+			)).toList(),
+			value: _time,
+			onChanged: (value) => setState(() => _time = value)
+		);
+	
+	@override
+	Widget build(BuildContext context)
+	{
+		return Column(
+			crossAxisAlignment: CrossAxisAlignment.start,
+			children: <Widget>[
+				Row(
+					children: <Widget>[
+						Text("Time:"),
+						SizedBox(
+							width: 16.0
+						),
+						_buildTimeSelection()
+					],
+				),
+				SizedBox(
+					height: 16.0
+				),
+				Form(
+					key: _formCommentKey,
+					child: TextFormField(
+						controller: _commentController,
+						decoration: InputDecoration(
+							labelText: "Comment",
+							border: OutlineInputBorder(
+								borderRadius: BorderRadius.all(
+									Radius.circular(8.0)
+								)
+							)
+						),
+						validator: (value) =>
+						value.isEmpty ? "Required" : null
+					),
+				),
+				ButtonTheme.bar(
+					child: ButtonBar(
+						children: [
+							FlatButton(
+								child: Text("BOOK"),
+								onPressed: ()
+								{
+									// Check if comment is entered
+									if (!_formCommentKey.currentState.validate())
+										return;
+									
+									// Call function from parent
+									_onBooked(_time, _commentController.text);
+								},
+							)
+						]
+					)
+				)
+			],
+		);
+	}
+}
+
+/// Widget for selecting time used in filter settings
+class TimeFilterSelectDialog extends StatefulWidget
+{
+	final TimeFilterSelectState _state;
+	
+	TimeFilterSelectDialog(this._state);
 	
 	@override
 	State createState() => _state;
 }
 
-class TimeSelectState extends State<TimeSelectDialog>
+class TimeFilterSelectState extends State<TimeFilterSelectDialog>
 {
 	int start;
 	int end;
@@ -737,7 +839,7 @@ class TimeSelectState extends State<TimeSelectDialog>
 	List<int> _starts;
 	List<int> _ends;
 	
-	TimeSelectState(this.start, this.end, this._starts, this._ends);
+	TimeFilterSelectState(this.start, this.end, this._starts, this._ends);
 	
 	@override
 	Widget build(BuildContext context) => 
