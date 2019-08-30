@@ -86,7 +86,7 @@ class SettingsState extends State<SettingsPage>
 			),
 			SwitchListTile(
 				title: Text("English course names"),
-				subtitle: Text("Force english course names during search"),
+				subtitle: Text("Force English course names during search"),
 				value: Preferences.englishCourseNames,
 				onChanged: (checked) =>
 					setState(() => Preferences.englishCourseNames = checked)
