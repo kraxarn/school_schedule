@@ -51,7 +51,8 @@ class SearchState extends State<SearchDialog>
 		final response = await _http.read(
 			"${Preferences.school.baseUrl}ajax/ajax_sokResurser.jsp"
 				"?sokord=$keyword&startDatum=idag&slutDatum="
-				"&intervallTyp=a&intervallAntal=1");
+				"&intervallTyp=a&intervallAntal=1"
+				"${Preferences.englishCourseNames ? "&sprak=en" : ""}");
 		
 		final results = Map<String, String>();
 		

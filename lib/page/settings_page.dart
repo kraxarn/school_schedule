@@ -84,6 +84,13 @@ class SettingsState extends State<SettingsPage>
 					setState(() => Preferences.darkMode = checked);
 				}
 			),
+			SwitchListTile(
+				title: Text("English course names"),
+				subtitle: Text("Force english course names during search"),
+				value: Preferences.englishCourseNames,
+				onChanged: (checked) =>
+					setState(() => Preferences.englishCourseNames = checked)
+			),
 			_buildButtonBar([])
 		];
 		

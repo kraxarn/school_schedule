@@ -168,6 +168,15 @@ class Preferences
 		_prefs.then((prefs) => prefs.setBool("show_event_collision", value));
 	}
 	
+	/// Force english course names
+	static bool _englishCourseNames;
+	static bool get englishCourseNames => _englishCourseNames ?? false;
+	static set englishCourseNames(bool value)
+	{
+		_englishCourseNames = value;
+		_prefs.then((prefs) => prefs.setBool("english_course_names", value));
+	}
+	
 	/// Get default encrypter
 	static Encrypter get _encrypter =>
 		Encrypter(AES(Key.fromUtf8(_uniqueId)));
@@ -202,6 +211,7 @@ class Preferences
 		_lastLocation = prefs.getString("last_location");
 		_showWeek     = prefs.getBool("show_week");
 		_showEventCollision = prefs.getBool("show_event_collision");
+		_englishCourseNames = prefs.getBool("english_course_names");
 		
 		// Get unique ID before decrypting
 		_uniqueId = await UniqueIdentifier.serial;
