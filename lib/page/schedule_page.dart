@@ -315,9 +315,13 @@ class ScheduleState extends State<SchedulePage>
 			subtitle: Text(
 				"${DateFormatter.asTime(event.start)} - "
 					"${DateFormatter.asTime(event.end)}",
-				style: highlightTime ? TextStyle(
-					color: Colors.red
-				) : null,
+				style: TextStyle(
+					color: highlightTime ? Colors.red : null,
+					fontWeight: _isWithin(DateTime.now(), event)
+						? FontWeight.bold : null,
+					decoration: event.end.difference(DateTime.now()).isNegative
+						? TextDecoration.lineThrough : null
+				)
 			),
 			trailing: Text(
 				"${event.courseId.split('-')[0]}\n"
