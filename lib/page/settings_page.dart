@@ -66,8 +66,30 @@ class SettingsState extends State<SettingsPage>
 			_buildTitle(context, "General"),
 			_buildButton("Change school", "Currently ${Preferences.school.name}", ()
 			{
-				Navigator.of(context).pop();
-				Navigator.of(context).pushReplacementNamed("/start");
+				showDialog(
+					context: context,
+					builder: (builder) =>
+						AlertDialog(
+							title: Text("Are you sure?"),
+							content: Text(
+								"Changing school removes your login and saved courses, are you sure you want to change school?"
+							),
+							actions: <Widget>[
+								FlatButton(
+									child: Text("NO"),
+									onPressed: () => Navigator.of(context).pop()
+								),
+								FlatButton(
+									child: Text("YES"),
+									onPressed: ()
+									{
+										Navigator.of(context).pop();
+										Navigator.of(context).pushReplacementNamed("/start");
+									}
+								)
+							]
+						)
+				);
 			}),
 			SwitchListTile(
 				title: Text("Dark theme"),
