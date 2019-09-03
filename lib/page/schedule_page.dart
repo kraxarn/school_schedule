@@ -233,7 +233,7 @@ class ScheduleState extends State<SchedulePage>
 			_lastRefresh = DateTime.now();
 		}
 		
-		_refreshing = false;
+		setState(() => _refreshing = false);
 	}
 	
 	/// Save current event list to cache
