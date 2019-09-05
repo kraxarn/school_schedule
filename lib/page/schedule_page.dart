@@ -40,6 +40,9 @@ class ScheduleState extends State<SchedulePage>
 	/// When we last refreshed the schedule
 	static DateTime _lastRefresh;
 	
+	/// Subtitle to show
+	static String _subtitle;
+	
 	/// Build title with bottom border
 	Widget _buildTitle(String text) =>
 		DecoratedBox(
@@ -368,6 +371,7 @@ class ScheduleState extends State<SchedulePage>
 		// Creates titles for a year
 		final events = List<Widget>();
 		final now = DateTime.now();
+		List<CalendarEvent> firstMonth;
 		for (var i = all.first.start.month; i <= all.first.start.month + months; i++)
 		{
 			// Temporary variables
@@ -383,6 +387,10 @@ class ScheduleState extends State<SchedulePage>
 					&& event.start.year == year).toList();
 			monthEvents.sort(((e1, e2) =>
 				e1.start.compareTo(e2.start)));
+			
+			// Check if first month
+			if (firstMonth == null)
+				firstMonth = monthEvents;
 			
 			// Insert message if empty
 			if (monthEvents.isEmpty)
@@ -435,6 +443,10 @@ class ScheduleState extends State<SchedulePage>
 			}
 		}
 		
+		// Update subtitle with events from first month
+		// (these are sorted, events are not)
+		setState(() => _subtitle = _getSubtitle(firstMonth));
+		
 		return events;
 	}
 	
@@ -456,6 +468,45 @@ class ScheduleState extends State<SchedulePage>
 	void _openCourseList() =>
 		_openFullscreenDialog((context) => CourseListDialog());
 	
+	/// Gets the time of the first and last event in list
+	/// (assumes events are sorted)
+	String _getFirstLastTime(List<CalendarEvent> events) =>
+		"${DateFormatter.asTime(events.first.start)} - "
+			"${DateFormatter.asTime(events.last.end)}";
+	
+	/// Gets all events for today
+	/// (assumes events are sorted)
+	List<CalendarEvent> _getEventsToday(List<CalendarEvent> events, DateTime date)
+	{
+		// To make it slightly faster than just a filter,
+		// we stop after we reach another day other than today
+		
+		final today = List<CalendarEvent>();
+		for (final event in events)
+		{
+			if (event.start.year     != date.year
+				|| event.start.month != date.month
+				|| event.start.day   != date.day)
+				return today;
+			
+			today.add(event);
+		}
+		
+		return today;
+	}
+	
+	String _getSubtitle(List<CalendarEvent> events)
+	{
+		// $month $day, $numEvents events, $firstTime - $lastTime
+		
+		final now   = DateTime.now();
+		final today = _getEventsToday(events, now);
+		
+		return "${_monthToString(now.month)} ${now.day}, "
+			"${today.length} event${today.length == 1 ? "" : "s"}"
+			"${today.length > 0 ? ", ${_getFirstLastTime(today)}" : ""}";
+	}
+	
 	@override
 	void initState()
 	{
@@ -468,7 +519,25 @@ class ScheduleState extends State<SchedulePage>
 	Widget build(BuildContext context) =>
 		Scaffold(
 			appBar: AppBar(
-				title: Text("Schedule"),
+				title: _subtitle == null || !Preferences.scheduleToday ?
+				Text("Schedule") : Column(
+					crossAxisAlignment: CrossAxisAlignment.start,
+					children: <Widget>[
+						SizedBox(
+							height: 8.0,
+						),
+						Text(
+							"Schedule",
+							style: Theme.of(context).textTheme.title.apply(
+								color: Colors.white
+							)
+						),
+						Text(
+							_subtitle,
+							style: Theme.of(context).textTheme.caption
+						)
+					],
+				),
 				actions: <Widget>[
 					IconButton(
 						icon: Icon(Icons.list),
