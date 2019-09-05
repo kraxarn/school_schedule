@@ -21,7 +21,7 @@ class CourseSettings
 	static final _courseSettings = Map<String, CourseSettings>();
 	
 	/// Formats course ID
-	static String _getId(String courseId) =>
+	static String getId(String courseId) =>
 		courseId.split('-')[0];
 	
 	/// Load course settings from file
@@ -34,7 +34,7 @@ class CourseSettings
 		_courseSettings.addAll(
 			(jsonDecode(await file.readAsString()) as Map<String, dynamic>)
 				.map((key, value) =>
-					MapEntry<String, CourseSettings>(_getId(key),
+					MapEntry<String, CourseSettings>(getId(key),
 						CourseSettings.fromJson(value))));
 		return true;
 	}
@@ -46,13 +46,13 @@ class CourseSettings
 	
 	/// Get settings of specified course
 	static CourseSettings get(String courseId) =>
-		_courseSettings[_getId(courseId)];
+		_courseSettings[getId(courseId)];
 	
 	/// Updates course with specified settings
 	/// Also works if there are no current settings for the course
 	static void update(String courseId, CourseSettings settings)
 	{
-		courseId = _getId(courseId);
+		courseId = getId(courseId);
 		
 		if (_courseSettings.containsKey(courseId))
 			_courseSettings.remove(courseId);
@@ -64,7 +64,7 @@ class CourseSettings
 	/// Remove a course settings from list and file
 	static void remove(String courseId)
 	{
-		_courseSettings.remove(_getId(courseId));
+		_courseSettings.remove(getId(courseId));
 		_save();
 	}
 }
