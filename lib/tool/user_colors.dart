@@ -128,6 +128,6 @@ class UserColors
 			return UserColors().colors[settings.color];
 		
 		// Default color for name
-		return colors[name.hashCode % colors.length];
+		return colors[CourseSettings.getId(name).hashCode % colors.length];
 	}
 }
