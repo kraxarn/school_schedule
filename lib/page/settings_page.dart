@@ -146,6 +146,15 @@ class SettingsState extends State<SettingsPage>
 				onChanged: (checked) =>
 					setState(() => Preferences.showEventCollision = checked)
 			),
+			SwitchListTile(
+				title: Text("Today view"),
+				subtitle: Text(
+					"Display a subtitle with events for today"
+				),
+				value: Preferences.scheduleToday,
+				onChanged: (checked) =>
+					setState(() => Preferences.scheduleToday = checked)
+			),
 			_buildButtonBar([])
 		]);
 	

@@ -177,6 +177,15 @@ class Preferences
 		_prefs.then((prefs) => prefs.setBool("english_course_names", value));
 	}
 	
+	// Show subtitle with events for today in schedule
+	static bool _scheduleToday;
+	static bool get scheduleToday => _scheduleToday ?? true;
+	static set scheduleToday(bool value)
+	{
+		_scheduleToday = value;
+		_prefs.then((prefs) => prefs.setBool("schedule_today", value));
+	}
+	
 	/// Get default encrypter
 	static Encrypter get _encrypter =>
 		Encrypter(AES(Key.fromUtf8(_uniqueId)));
@@ -212,6 +221,7 @@ class Preferences
 		_showWeek     = prefs.getBool("show_week");
 		_showEventCollision = prefs.getBool("show_event_collision");
 		_englishCourseNames = prefs.getBool("english_course_names");
+		_scheduleToday      = prefs.getBool("schedule_today");
 		
 		// Get unique ID before decrypting
 		_uniqueId = await UniqueIdentifier.serial;
