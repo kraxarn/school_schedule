@@ -183,30 +183,6 @@ class BookingPageState extends State<BookingPage>
 			setState(() => _loading = false);
 	}
 	
-	/// Show dialog for picking time after selecting resource
-	/*void _showTimesDialog(BookingRoom room)
-	{
-		var i = 0;
-		
-		showDialog(
-			context: context,
-			builder: (context) =>
-				SimpleDialog(
-					title: Text("Select time"),
-					children: _times.where((time) =>
-					!Booking.isBooked(room.states[i++]))
-					.map((time) => ListTile(
-						title: Text(time),
-						onTap: ()
-						{
-							Navigator.of(context).pop();
-							_showConfirmDialog(room, time);
-						},
-					)).toList(),
-				)
-		);
-	}*/
-	
 	/// Show confirm dialog with comment entry
 	void _showConfirmDialog(BookingRoom room, String time, String comment)
 	{
