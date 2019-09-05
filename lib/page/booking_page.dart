@@ -764,12 +764,11 @@ class TimeSelectState extends State<TimeSelect>
 		);
 	
 	@override
-	Widget build(BuildContext context)
-	{
-		return Column(
-			crossAxisAlignment: CrossAxisAlignment.start,
+	Widget build(BuildContext context) =>
+		Column(
 			children: <Widget>[
 				Row(
+					mainAxisAlignment: MainAxisAlignment.center,
 					children: <Widget>[
 						Text("Time:"),
 						SizedBox(
@@ -817,7 +816,6 @@ class TimeSelectState extends State<TimeSelect>
 				)
 			],
 		);
-	}
 }
 
 /// Widget for selecting time used in filter settings
