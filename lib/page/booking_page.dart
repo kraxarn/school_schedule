@@ -68,19 +68,7 @@ class BookingPageState extends State<BookingPage>
 	void initState()
 	{
 		super.initState();
-		
-		_search().then((_)
-		{
-			// Load times after search is complete
-			// (otherwise _times isn't loaded)
-			if (_times.isNotEmpty)
-			{
-				_startTimes = _getStartHours();
-				_startTime  = _startTimes.first;
-				_endTimes   = _getEndHours();
-				_endTime    = _endTimes.last;
-			}
-		});
+		_search(updateTimes: true);
 		
 	}
 	
@@ -137,7 +125,7 @@ class BookingPageState extends State<BookingPage>
 	}
 	
 	/// Perform search
-	Future<void> _search() async
+	Future<void> _search({bool updateTimes = false}) async
 	{
 		// Don't if we're missing stuff
 		if (_locations == null || Preferences.username == null)
@@ -176,6 +164,15 @@ class BookingPageState extends State<BookingPage>
 			// Save response for use later
 			_times   = response.times;
 			_results = response.rooms;
+		}
+		
+		// Check if we should update times
+		if (updateTimes && _times.isNotEmpty)
+		{
+			_startTimes = _getStartHours();
+			_startTime  = _startTimes.first;
+			_endTimes   = _getEndHours();
+			_endTime    = _endTimes.last;
 		}
 		
 		// Tell we're finished loading
@@ -450,7 +447,7 @@ class BookingPageState extends State<BookingPage>
 							_currentLocation = _locations.entries
 								.firstWhere((entry) =>
 									entry.value == value));
-						_search();
+						_search(updateTimes: true);
 						Preferences.lastLocation = _currentLocation.key;
 					}
 				),
