@@ -301,8 +301,12 @@ class BookingPageState extends State<BookingPage>
 				)
 			];
 		
-		return results.map((result) =>
-			ExpansionTile(
+		return results.map((result)
+		{
+			final resultLength = result.states.where((state) =>
+				!Booking.isBooked(state)).length;
+			
+			return ExpansionTile(
 				title: Column(
 					crossAxisAlignment: CrossAxisAlignment.start,
 					children: <Widget>[
@@ -312,8 +316,9 @@ class BookingPageState extends State<BookingPage>
 						style: Theme.of(context).textTheme.caption)
 					],
 				),
-				trailing: Text("${result.states.where((state) =>
-					!Booking.isBooked(state)).length} available"),
+				trailing: Text("$resultLength "
+					"${Preferences.localized(resultLength == 1
+					? "booking_available" : "bookings_available")}"),
 				children: <Widget>[
 					Padding(
 						padding: EdgeInsets.symmetric(
@@ -322,7 +327,8 @@ class BookingPageState extends State<BookingPage>
 						child: _buildResourceItem(result)
 					)
 				],
-			)).toList();
+			);
+		}).toList();
 	}
 	
 	List<int> _getStartHours() =>
@@ -350,18 +356,18 @@ class BookingPageState extends State<BookingPage>
 			context: context,
 			builder: (builder) =>
 				AlertDialog(
-					title: Text("Select time span"),
+					title: Text(Preferences.localized("select_time_span")),
 					content: TimeFilterSelectDialog(dialog),
 					actions: <Widget>[
 						FlatButton(
-							child: Text("RESET"),
+							child: Text(Preferences.localized("reset")),
 							onPressed: () =>
 								Navigator.of(context).pop([
 									_startTimes.first, _endTimes.last
 								]),
 						),
 						FlatButton(
-							child: Text("CANCEL"),
+							child: Text(Preferences.localized("cancel")),
 							onPressed: () =>
 								Navigator.of(context).pop(),
 						),
@@ -611,7 +617,7 @@ class BookedResourcesState extends State<BookedResourcesDialog>
 		_booked = bookings == null ? [
 			ListTile(
 				title: Text(
-					"No booked resources found for the specified location",
+					Preferences.localized("no_booked_for_location"),
 					textAlign: TextAlign.center,
 				),
 			)
@@ -744,7 +750,7 @@ class TimeSelectState extends State<TimeSelect>
 				Row(
 					mainAxisAlignment: MainAxisAlignment.center,
 					children: <Widget>[
-						Text("Time:"),
+						Text("${Preferences.localized("time")}:"),
 						SizedBox(
 							width: 16.0
 						),
@@ -759,7 +765,7 @@ class TimeSelectState extends State<TimeSelect>
 					child: TextFormField(
 						controller: _commentController,
 						decoration: InputDecoration(
-							labelText: "Comment",
+							labelText: Preferences.localized("comment"),
 							border: OutlineInputBorder(
 								borderRadius: BorderRadius.all(
 									Radius.circular(8.0)
@@ -767,14 +773,14 @@ class TimeSelectState extends State<TimeSelect>
 							)
 						),
 						validator: (value) =>
-						value.isEmpty ? "Required" : null
+						value.isEmpty ? Preferences.localized("required") : null
 					),
 				),
 				ButtonTheme.bar(
 					child: ButtonBar(
 						children: [
 							FlatButton(
-								child: Text("BOOK"),
+								child: Text(Preferences.localized("book")),
 								onPressed: ()
 								{
 									// Check if comment is entered
@@ -820,7 +826,7 @@ class TimeFilterSelectState extends State<TimeFilterSelectDialog>
 				TableRow(
 					children: [
 						ListTile(
-							title: Text("From"),
+							title: Text(Preferences.localized("from")),
 							trailing: DropdownButton(
 								items: _starts.where((time) => time < end)
 									.map((time) =>
@@ -842,7 +848,7 @@ class TimeFilterSelectState extends State<TimeFilterSelectDialog>
 				TableRow(
 					children: [
 						ListTile(
-							title: Text("To"),
+							title: Text(Preferences.localized("to")),
 							trailing: DropdownButton(
 								items: _ends.where((time) => time > start)
 									.map((time) =>

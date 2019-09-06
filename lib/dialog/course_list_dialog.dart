@@ -116,11 +116,11 @@ class CourseListState extends State<CourseListDialog>
 	Widget build(BuildContext context) =>
 		Scaffold(
 			appBar: AppBar(
-				title: Text("Saved Courses"),
+				title: Text(Preferences.localized("title_saved_courses")),
 			),
 			body: ListView(
 				children: _saved.isEmpty
-					? _buildStatusMessage("No saved courses found")
+					? _buildStatusMessage(Preferences.localized("no_saved_courses"))
 					: _saved.map((entry) =>
 						_buildResult(entry, CourseName.get(entry))
 					).toList()

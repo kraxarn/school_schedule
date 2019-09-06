@@ -53,6 +53,10 @@ class AppLocale
 			"week": "WEEK",
 			"event": "event",
 			"events": "events",
+			"title_saved_courses": "Saved Courses",
+			"no_saved_courses": "No saved courses found",
+			"search": "Search",
+			"no_search_results": "No results found",
 			//endregion
 			//region booking_page
 			"book": "BOOK",
@@ -65,7 +69,8 @@ class AppLocale
 				"maybe you reached your booking limit?",
 			"no_resources": "No available resources found that matches "
 				"the specified options",
-			"bookings_available": "{count} available",
+			"booking_available": "available",
+			"bookings_available": "available",
 			"select_time_span": "Select time span",
 			"location": "Location",
 			"day": "Day",
@@ -80,6 +85,8 @@ class AppLocale
 			"comment": "Comment",
 			"from": "From",
 			"to": "To",
+			"no_booked_for_location":
+				"No booked resources found for the specified location",
 			//endregion
 			//region settings_page
 			"english": "English",
@@ -152,6 +159,10 @@ class AppLocale
 			"week": "VECKA",
 			"event": "händelse",
 			"events": "händelser",
+			"title_saved_courses": "Sparade Kurser",
+			"no_saved_courses": "Inga sparade kurser hittades",
+			"search": "Sök",
+			"no_search_results": "Inga resultat hittades",
 			//endregion
 			//region booking_page
 			"book": "BOKA",
@@ -164,8 +175,9 @@ class AppLocale
 				"har du nått din bokningsbegränsning?",
 			"no_resources": "Inga tillgängliga resurser som passar "
 				"dina alternativ",
-			"bookings_available": "{count} tillgängliga",
-			"select_time_span": "Välj tid",
+			"booking_available": "ledig",
+			"bookings_available": "lediga",
+			"select_time_span": "Välj tidsintervall",
 			"location": "Plats",
 			"day": "Dag",
 			"time": "Tid",
@@ -179,6 +191,7 @@ class AppLocale
 			"comment": "Kommentar",
 			"from": "Från",
 			"to": "Till",
+			"no_booked_for_location": "Inga bokade resurser på valda platsen",
 			//endregion
 			//region settings_page
 			"english": "Engelska",

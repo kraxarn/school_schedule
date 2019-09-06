@@ -118,7 +118,7 @@ class SearchState extends State<SearchDialog>
 	Widget _buildStatusText() =>
 		_enteringText && _results.isEmpty ? Padding(
 			padding: EdgeInsets.all(32.0),
-			child: Text("No results found")
+			child: Text(Preferences.localized("no_search_results"))
 		) : SizedBox();
 	
 	/// Replace saved courses with temporary list
@@ -132,7 +132,7 @@ class SearchState extends State<SearchDialog>
 					title: TextField(
 						autofocus: true,
 						decoration: InputDecoration(
-							hintText: "Search",
+							hintText: Preferences.localized("search"),
 							hintStyle: TextStyle(
 								color: Color.fromARGB(128, 255, 255, 255)
 							)
