@@ -44,11 +44,8 @@ class MainState extends State<MainPage> with SingleTickerProviderStateMixin
 	static var navBarIndex = 0;
 	
 	@override
-	Widget build(BuildContext context)
-	{
-		Preferences.buildContext = context;
-		
-		return Scaffold(
+	Widget build(BuildContext context) =>
+		Scaffold(
 			body: _tabPages[navBarIndex],
 			bottomNavigationBar: BottomNavigationBar(
 				items: _navBarItems,
@@ -56,7 +53,6 @@ class MainState extends State<MainPage> with SingleTickerProviderStateMixin
 				onTap: (index) => setState(() => navBarIndex = index),
 			)
 		);
-	}
 }
 
 
