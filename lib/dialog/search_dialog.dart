@@ -57,7 +57,7 @@ class SearchState extends State<SearchDialog>
 				"${Preferences.school.baseUrl}ajax/ajax_sokResurser.jsp"
 					"?sokord=$keyword&startDatum=idag&slutDatum="
 					"&intervallTyp=a&intervallAntal=1"
-					"${Preferences.englishCourseNames ? "&sprak=en" : ""}");
+					"&sprak=${Preferences.locale.locale.languageCode}");
 		}
 		catch (e)
 		{
