@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'page/main_page.dart';
 import 'page/start_page.dart';
@@ -29,6 +30,14 @@ class MyApp extends StatelessWidget
 			routes: {
 				"/start": (context) => StartPage(),
 				"/main":  (context) => MainPage()
-			}
+			},
+			localizationsDelegates: [
+				GlobalMaterialLocalizations.delegate,
+				GlobalWidgetsLocalizations.delegate
+			],
+			supportedLocales: [
+				const Locale("en"),
+				const Locale("sv")
+			],
 		);
 }

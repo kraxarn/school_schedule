@@ -19,6 +19,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   shared_preferences: ^0.5.3
   http: ^0.12.0
   flutter_markdown: ^0.2.0
