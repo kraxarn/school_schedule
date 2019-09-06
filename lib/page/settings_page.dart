@@ -25,6 +25,11 @@ class SettingsState extends State<SettingsPage>
 	var _version = "version";
 	var _build   = "build";
 	
+	final _languages = {
+		"en": Preferences.localized("english"),
+		"sv": Preferences.localized("swedish")
+	};
+	
 	/// Build a card with children in a column
 	Widget _buildCard(List<Widget> children) =>
 		Card(
@@ -106,12 +111,19 @@ class SettingsState extends State<SettingsPage>
 					setState(() => Preferences.darkMode = checked);
 				}
 			),
-			SwitchListTile(
-				title: Text("English course names"),
-				subtitle: Text("Force English course names during search"),
-				value: Preferences.englishCourseNames,
-				onChanged: (checked) =>
-					setState(() => Preferences.englishCourseNames = checked)
+			ListTile(
+				title: Text(Preferences.localized("language_title")),
+				subtitle: Text(Preferences.localized("language_info")),
+				trailing: DropdownButton<String>(
+					value: Preferences.locale.locale.languageCode,
+					items: _languages.entries.map((value) =>
+						DropdownMenuItem(
+							child: Text(value.value),
+							value: value.key,
+						)).toList(),
+					onChanged: (value) =>
+						setState(() => Preferences.locale = value)
+				),
 			),
 			_buildButtonBar([])
 		];
