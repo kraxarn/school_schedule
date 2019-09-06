@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:encrypt/encrypt.dart';
+import 'package:flutter/material.dart' as material;
+import 'package:school_schedule/tool/app_locale.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:unique_identifier/unique_identifier.dart';
 
@@ -186,6 +188,46 @@ class Preferences
 		_prefs.then((prefs) => prefs.setBool("schedule_today", value));
 	}
 	
+	// Semi-temp for easier localization
+	static material.BuildContext buildContext;
+	
+	/// App language
+	static String _locale;
+	static AppLocale get locale
+	{
+		// No locale set, use device default
+		if (_locale == null)
+		{
+			// Something is wrong, default to en
+			if (buildContext == null)
+				_locale = "en";
+			else
+			{
+				// Get device locale
+				try
+				{
+					_locale = material.Localizations
+						.localeOf(buildContext).languageCode;
+				}
+				catch (e)
+				{
+					print("failed to get device locale: $e");
+					_locale = "en";
+				}
+			}
+		}
+		
+		// We don't need build context anymore, remove to save memory
+		buildContext = null;
+		
+		return AppLocale(material.Locale(_locale));
+	}
+	static set locale(String locale)
+	{
+		_locale = locale;
+		_prefs.then((prefs) => prefs.setString("locale", locale));
+	}
+	
 	/// Get default encrypter
 	static Encrypter get _encrypter =>
 		Encrypter(AES(Key.fromUtf8(_uniqueId)));
@@ -207,6 +249,9 @@ class Preferences
 		return School(school);
 	}
 	
+	static String localized(String value) =>
+		locale.get(value);
+	
 	static Future<bool> create() async
 	{
 		var prefs = await SharedPreferences.getInstance();
@@ -219,6 +264,7 @@ class Preferences
 		_password     = prefs.getString("password");
 		_lastLocation = prefs.getString("last_location");
 		_showWeek     = prefs.getBool("show_week");
+		_locale       = prefs.getString("locale");
 		_showEventCollision = prefs.getBool("show_event_collision");
 		_englishCourseNames = prefs.getBool("english_course_names");
 		_scheduleToday      = prefs.getBool("schedule_today");
