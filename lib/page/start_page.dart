@@ -7,10 +7,8 @@ import '../tool/school.dart';
 class StartPage extends StatelessWidget
 {
 	/// Replace current page with main page
-	void _pushMain(BuildContext context)
-	{
+	void _pushMain(BuildContext context) =>
 		Navigator.of(context).pushReplacementNamed("/main");
-	}
 	
 	/// Save school to preferences and replace page
 	/// (also removes any leftover preferences)
@@ -31,10 +29,14 @@ class StartPage extends StatelessWidget
 	}
 	
 	@override
-	Widget build(BuildContext context) =>
-		Scaffold(
+	Widget build(BuildContext context)
+	{
+		// Just to be sure
+		Preferences.buildContext = context;
+		
+		return Scaffold(
 			appBar: AppBar(
-				title: Text("Select School"),
+				title: Text(Preferences.localized("title_start")),
 			),
 			body: ListView(
 				children: School.allSchools.entries.map((school) {
@@ -47,4 +49,5 @@ class StartPage extends StatelessWidget
 				}).toList()
 			),
 		);
+	}
 }
