@@ -201,11 +201,11 @@ class BookingPageState extends State<BookingPage>
 					),
 					actions: <Widget>[
 						FlatButton(
-							child: Text("CANCEL"),
+							child: Text(Preferences.localized("cancel")),
 							onPressed: () => Navigator.of(context).pop(),
 						),
 						FlatButton(
-							child: Text("BOOK"),
+							child: Text(Preferences.localized("book")),
 							onPressed: () async
 							{
 								// We always want to dismiss the dialog
@@ -222,7 +222,9 @@ class BookingPageState extends State<BookingPage>
 								{
 									// Show confirmation
 									Scaffold.of(context).showSnackBar(SnackBar(
-										content: Text("Resource booked"),
+										content: Text(
+											Preferences.localized("resource_booked")
+										),
 									));
 									
 									// Easiest way to collapse it again
@@ -627,17 +629,20 @@ class BookedResourcesState extends State<BookedResourcesDialog>
 				context: context,
 				builder: (builder) =>
 					AlertDialog(
-						title: Text("Are you sure?"),
+						title: Text(Preferences.localized("are_you_sure")),
 						content: Text(
-							"Are you sure you want to cancel resource ${booking.location} on ${booking.date} at ${booking.timeSpan}?"
+							Preferences.localized("cancel_resource_confirm")
+								.replaceFirst("{location}", booking.location)
+								.replaceFirst("{date}", booking.date)
+								.replaceFirst("{time}", booking.timeSpan)
 						),
 						actions: <Widget>[
 							FlatButton(
-								child: Text("WAIT, NO"),
+								child: Text(Preferences.localized("no")),
 								onPressed: () => Navigator.of(context).pop()
 							),
 							FlatButton(
-								child: Text("YEAH"),
+								child: Text(Preferences.localized("yes")),
 								onPressed: () async
 								{
 									Navigator.of(context).pop();

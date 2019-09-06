@@ -60,6 +60,7 @@ class AppLocale
 			//endregion
 			//region booking_page
 			"book": "BOOK",
+			"cancel_booking": "CANCEL",
 			"search_error": "Something went wrong while loading available "
 				"resources, check your connection and try again",
 			"book_confirm": "Are you sure you want to book "
@@ -166,6 +167,7 @@ class AppLocale
 			//endregion
 			//region booking_page
 			"book": "BOKA",
+			"cancel_booking": "AVBOKA",
 			"search_error": "Någet gick fel under laddning av resurser, "
 				"kolla din anslutning och försök igen",
 			"book_confirm": "Är du säker att du vill boka "

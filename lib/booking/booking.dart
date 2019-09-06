@@ -228,7 +228,7 @@ class BookedRoom
 			title: Text(location),
 			subtitle: Text("$date, $timeSpan"),
 			trailing: FlatButton(
-				child: Text("CANCEL"),
+				child: Text(Preferences.localized("cancel_booking")),
 				onPressed: cancelPressed,
 			),
 		);
