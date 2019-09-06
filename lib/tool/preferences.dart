@@ -170,15 +170,6 @@ class Preferences
 		_prefs.then((prefs) => prefs.setBool("show_event_collision", value));
 	}
 	
-	/// Force english course names
-	static bool _englishCourseNames;
-	static bool get englishCourseNames => _englishCourseNames ?? false;
-	static set englishCourseNames(bool value)
-	{
-		_englishCourseNames = value;
-		_prefs.then((prefs) => prefs.setBool("english_course_names", value));
-	}
-	
 	// Show subtitle with events for today in schedule
 	static bool _scheduleToday;
 	static bool get scheduleToday => _scheduleToday ?? true;
@@ -266,7 +257,6 @@ class Preferences
 		_showWeek     = prefs.getBool("show_week");
 		_locale       = prefs.getString("locale");
 		_showEventCollision = prefs.getBool("show_event_collision");
-		_englishCourseNames = prefs.getBool("english_course_names");
 		_scheduleToday      = prefs.getBool("schedule_today");
 		
 		// Get unique ID before decrypting
