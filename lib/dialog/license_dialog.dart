@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:http/http.dart' as http;
 
+import '../tool/preferences.dart';
+
 class LicenseDialog extends StatefulWidget
 {
 	@override
@@ -57,7 +59,7 @@ class LicenseState extends State<LicenseDialog>
 	Widget build(BuildContext context) =>
 		Scaffold(
 			appBar: AppBar(
-				title: Text("Licenses"),
+				title: Text(Preferences.localized("licenses")),
 			),
 			body: _loading ? Center(
 				child: CircularProgressIndicator()

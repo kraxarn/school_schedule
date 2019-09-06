@@ -61,41 +61,12 @@ class ScheduleState extends State<SchedulePage>
 		);
 	
 	/// Get 3 character name of weekday
-	String _weekdayToString(int weekday)
-	{
-		switch (weekday)
-		{
-			case 1:  return "MON";
-			case 2:  return "TUE";
-			case 3:  return "WED";
-			case 4:  return "THU";
-			case 5:  return "FRI";
-			case 6:  return "SAT";
-			case 7:  return "SUN";
-			default: return "???";
-		}
-	}
+	String _weekdayToString(int weekday) =>
+		Preferences.localized("week_days").split(',')[weekday - 1];
 	
 	/// Get name of month
-	String _monthToString(int month)
-	{
-		switch (month)
-		{
-			case 1:  return "Janurary";
-			case 2:  return "February";
-			case 3:  return "March";
-			case 4:  return "April";
-			case 5:  return "May";
-			case 6:  return "June";
-			case 7:  return "July";
-			case 8:  return "August";
-			case 9:  return "September";
-			case 10: return "October";
-			case 11: return "November";
-			case 12: return "December";
-			default: return "Unknown";
-		}
-	}
+	String _monthToString(int month) =>
+		Preferences.localized("months").split(',')[month - 1];
 	
 	/// Build table row for event info
 	TableRow _buildEventInfoRow(String title, String info) =>
@@ -130,35 +101,37 @@ class ScheduleState extends State<SchedulePage>
 						defaultVerticalAlignment: TableCellVerticalAlignment.middle,
 						children: [
 							_buildEventInfoRow(
-								"Course Code", event.courseId
+								Preferences.localized("course_code"),
+								event.courseId
 							),
 							_buildEventDivider(),
 							_buildEventInfoRow(
-								"Course Name",
+								Preferences.localized("course_name"),
 								CourseName.get(event.fullCourseId) ?? "(none)"
 							),
 							_buildEventDivider(),
 							_buildEventInfoRow(
-								"Signature", event.signature
+								Preferences.localized("signature"),
+								event.signature
 							),
 							_buildEventDivider(),
 							_buildEventInfoRow(
-								"Locations",
+								Preferences.localized("locations"),
 								event.location.replaceAll(" ", ", ")
 							),
 							_buildEventDivider(),
 							_buildEventInfoRow(
-								"Start",
+								Preferences.localized("start"),
 								DateFormatter.asFullDateTime(event.start)
 							),
 							_buildEventDivider(),
 							_buildEventInfoRow(
-								"End",
+								Preferences.localized("end"),
 								DateFormatter.asFullDateTime(event.end)
 							),
 							_buildEventDivider(),
 							_buildEventInfoRow(
-								"Last Modified",
+								Preferences.localized("last_modified"),
 								DateFormatter.asFullDateTime(event.lastModified)
 							),
 						],
@@ -503,7 +476,7 @@ class ScheduleState extends State<SchedulePage>
 		final today = _getEventsToday(events, now);
 		
 		return "${_monthToString(now.month)} ${now.day}, "
-			"${today.length} event${today.length == 1 ? "" : "s"}"
+			"${today.length} ${Preferences.localized(today.length == 1 ? "event" : "events")}"
 			"${today.length > 0 ? ", ${_getFirstLastTime(today)}" : ""}";
 	}
 	
@@ -520,14 +493,14 @@ class ScheduleState extends State<SchedulePage>
 		Scaffold(
 			appBar: AppBar(
 				title: _subtitle == null || !Preferences.scheduleToday ?
-				Text("Schedule") : Column(
+				Text(Preferences.localized("title_schedule")) : Column(
 					crossAxisAlignment: CrossAxisAlignment.start,
 					children: <Widget>[
 						SizedBox(
 							height: 8.0,
 						),
 						Text(
-							"Schedule",
+							Preferences.localized("title_schedule"),
 							style: Theme.of(context).textTheme.title.apply(
 								color: Colors.white
 							)

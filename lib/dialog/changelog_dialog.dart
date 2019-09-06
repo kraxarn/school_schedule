@@ -5,6 +5,8 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:http/http.dart' as http;
 import 'package:package_info/package_info.dart';
 
+import '../tool/preferences.dart';
+
 class ChangelogDialog extends StatefulWidget
 {
 	@override
@@ -54,7 +56,7 @@ class ChangelogDialogState extends State<ChangelogDialog>
 	Widget build(BuildContext context) =>
 		Scaffold(
 			appBar: AppBar(
-				title: Text("What's new")
+				title: Text(Preferences.localized("whats_new"))
 			),
 			body: _loading ? Center(
 				child: CircularProgressIndicator()

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:http/http.dart' as http;
 
+import '../tool/preferences.dart';
+
 class PrivacyPolicyDialog extends StatefulWidget
 {
 	@override
@@ -36,7 +38,7 @@ class PrivacyPolicyState extends State<PrivacyPolicyDialog>
 	Widget build(BuildContext context) =>
 		Scaffold(
 			appBar: AppBar(
-				title: Text("Privacy Policy"),
+				title: Text(Preferences.localized("privacy_policy")),
 			),
 			// Show centered progress indicator while loading
 			body: _loading ? Center(

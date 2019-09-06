@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'schedule_page.dart';
 import 'booking_page.dart';
 import 'settings_page.dart';
+import '../tool/preferences.dart';
 
 class MainPage extends StatefulWidget
 {
@@ -25,15 +26,15 @@ class MainState extends State<MainPage> with SingleTickerProviderStateMixin
 	[
 		BottomNavigationBarItem(
 			icon: Icon(Icons.calendar_today),
-			title: Text("Schedule")
+			title: Text(Preferences.localized("title_schedule"))
 		),
 		BottomNavigationBarItem(
 			icon: Icon(Icons.access_time),
-			title: Text("Booking")
+			title: Text(Preferences.localized("title_booking"))
 		),
 		BottomNavigationBarItem(
 			icon: Icon(Icons.settings),
-			title: Text("Settings")
+			title: Text(Preferences.localized("title_settings"))
 		)
 	];
 	

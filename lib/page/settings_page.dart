@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 
@@ -68,8 +65,11 @@ class SettingsState extends State<SettingsPage>
 	{
 		// Children for both Android/iOS
 		final children = <Widget>[
-			_buildTitle(context, "General"),
-			_buildButton("Change school", "Currently ${Preferences.school.name}", ()
+			_buildTitle(context, Preferences.localized("title_general")),
+			_buildButton(
+				Preferences.localized("change_school_title"),
+				Preferences.localized("change_school_info")
+					.replaceFirst("{name}", Preferences.school.name), ()
 			{
 				showDialog(
 					context: context,
@@ -97,8 +97,8 @@ class SettingsState extends State<SettingsPage>
 				);
 			}),
 			SwitchListTile(
-				title: Text("Dark theme"),
-				subtitle: Text("Use a dark theme for the app"),
+				title: Text(Preferences.localized("dark_theme_title")),
+				subtitle: Text(Preferences.localized("dark_theme_info")),
 				value: Preferences.darkMode,
 				onChanged: (checked)
 				{
@@ -134,34 +134,34 @@ class SettingsState extends State<SettingsPage>
 	/// Card for schedule settings
 	Widget _buildScheduleCard() =>
 		_buildCard([
-			_buildTitle(context, "Schedule"),
+			_buildTitle(context, Preferences.localized("title_schedule")),
 			SwitchListTile(
-				title: Text("Course colors"),
-				subtitle: Text("Set different title colors depending on course"),
+				title: Text(Preferences.localized("course_colors_title")),
+				subtitle: Text(Preferences.localized("course_colors_info")),
 				value: Preferences.courseColors,
 				onChanged: (checked) =>
 					setState(() => Preferences.courseColors = checked)
 			),
 			SwitchListTile(
-				title: Text("Week numbers"),
-				subtitle: Text("Show week numbers"),
+				title: Text(Preferences.localized("week_numbers_title")),
+				subtitle: Text(Preferences.localized("week_numbers_info")),
 				value: Preferences.showWeek,
 				onChanged: (checked) =>
 					setState(() => Preferences.showWeek = checked)
 			),
 			SwitchListTile(
-				title: Text("Highlight collisions"),
+				title: Text(Preferences.localized("highlight_collisions_title")),
 				subtitle: Text(
-					"Color time when multiple events occur at the same time"
+					Preferences.localized("highlight_collisions_info")
 				),
 				value: Preferences.showEventCollision,
 				onChanged: (checked) =>
 					setState(() => Preferences.showEventCollision = checked)
 			),
 			SwitchListTile(
-				title: Text("Today view"),
+				title: Text(Preferences.localized("today_view_title")),
 				subtitle: Text(
-					"Display a subtitle with events for today"
+					Preferences.localized("today_view_info")
 				),
 				value: Preferences.scheduleToday,
 				onChanged: (checked) =>
@@ -174,14 +174,16 @@ class SettingsState extends State<SettingsPage>
 	Widget _buildAccountCard()
 	{
 		return _buildCard([
-			_buildTitle(context, "Account"),
-			_buildButton(Preferences.username == null
-				? "Not logged in" : "Logged in",
-				Preferences.username == null
-					? "You're currently not logged in to your school account"
-					: "You're logged in as ${Preferences.username}", null
+			_buildTitle(context, Preferences.localized("title_account")),
+			_buildButton(Preferences.localized(Preferences.username == null
+				? "logged_out_title" : "logged_in_title"),
+				Preferences.localized(Preferences.username == null
+					? "logged_out_info"
+					: "logged_in_info")
+					.replaceFirst("{username}",Preferences.username), null
 			),
-			_buildButton(Preferences.username == null ? "Log in" : "Log out",
+			_buildButton(Preferences.localized(Preferences.username == null
+				? "log_in" : "log_out"),
 				null, () => Preferences.username == null
 					? _showLogin(context) : _logOut()),
 			_buildButtonBar([])
@@ -202,9 +204,9 @@ class SettingsState extends State<SettingsPage>
 		}
 		
 		return _buildCard([
-			_buildTitle(context, "About"),
+			_buildTitle(context, Preferences.localized("title_about")),
 			_buildButton(_version, _build, () => _showChangelog()),
-			_buildButton("Privacy policy", null, ()
+			_buildButton(Preferences.localized("privacy_policy"), null, ()
 			{
 				Navigator.of(context).push(MaterialPageRoute(
 					builder: (builder) {
@@ -213,7 +215,7 @@ class SettingsState extends State<SettingsPage>
 					fullscreenDialog: true
 				));
 			}),
-			_buildButton("Licenses", null, ()
+			_buildButton(Preferences.localized("licenses"), null, ()
 			{
 				Navigator.of(context).push(MaterialPageRoute(
 					builder: (builder) {
@@ -262,7 +264,7 @@ class SettingsState extends State<SettingsPage>
 		Scaffold(
 			key: _scaffoldKey,
 			appBar: AppBar(
-				title: Text("Settings"),
+				title: Text(Preferences.localized("title_settings")),
 			),
 			body: ListView(
 				padding: EdgeInsets.all(16.0),

@@ -89,7 +89,7 @@ class BookingPageState extends State<BookingPage>
 	Widget _buildStatusMessage(String message) =>
 		Scaffold(
 			appBar: AppBar(
-				title: Text("Booking"),
+				title: Text(Preferences.localized("title_booking")),
 			),
 			body: _buildStatusText(message)
 		);
@@ -187,14 +187,15 @@ class BookingPageState extends State<BookingPage>
 			context: context,
 			builder: (builder) =>
 				AlertDialog(
-					title: Text("Confirm"),
+					title: Text(Preferences.localized("confirm")),
 					content: Column(
 						mainAxisSize: MainAxisSize.min,
 						mainAxisAlignment: MainAxisAlignment.start,
 						children: <Widget>[
 							Text(
-								"Are you sure you want to book "
-								"${room.title} at $time?"
+								Preferences.localized("book_confirm")
+									.replaceFirst("{room}", room.title)
+									.replaceFirst("{time}", time)
 							)
 						],
 					),
@@ -400,7 +401,7 @@ class BookingPageState extends State<BookingPage>
 							left: 16.0
 						),
 						child: Text(
-							"Booking",
+							Preferences.localized("title_booking"),
 							style: Theme.of(context).textTheme.title.apply(
 								color: Colors.white
 							),
@@ -424,7 +425,7 @@ class BookingPageState extends State<BookingPage>
 							color: Colors.white,
 						),
 						title: Text(
-							"Location",
+							Preferences.localized("location"),
 							style: textStyle,
 						),
 						trailing: Text(
@@ -458,7 +459,7 @@ class BookingPageState extends State<BookingPage>
 						color: Colors.white,
 					),
 					title: Text(
-						"Day",
+						Preferences.localized("day"),
 						style: textStyle,
 					),
 					trailing: Text(
@@ -474,12 +475,12 @@ class BookingPageState extends State<BookingPage>
 						color: Colors.white,
 					),
 					title: Text(
-						"Time",
+						Preferences.localized("time"),
 						style: textStyle,
 					),
 					trailing: Text((_startTime == null || _endTime == null)
 						|| (_startTime == _startTimes.first && _endTime == _endTimes.last)
-						? "Any" :
+						? Preferences.localized("any_time") :
 							"${DateFormatter.addLeading(_startTime)}:00 - "
 							"${DateFormatter.addLeading(_endTime)}:00",
 						style: textStyle,
