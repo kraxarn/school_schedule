@@ -58,6 +58,11 @@ class AppLocale
 			"search": "Search",
 			"no_search_results": "No results found",
 			//endregion
+			//region course_list_dialog
+			"select_color": "Select color",
+			"colors": "Red,Pink,Purple,Deep purple,Indigo,Blue,Light blue,Cyan,"
+				"Teal,Green,Light green,Lime,Orange,Deep orange",
+			//endregion
 			//region booking_page
 			"book": "BOOK",
 			"cancel_booking": "CANCEL",
@@ -164,6 +169,11 @@ class AppLocale
 			"no_saved_courses": "Inga sparade kurser hittades",
 			"search": "Sök",
 			"no_search_results": "Inga resultat hittades",
+			//endregion
+			//region course_list_dialog
+			"select_color": "Välj färg",
+			"colors": "Röd,Rosa,Lila,Mörklila,Indigo,Blå,Ljusblå,Turkos,"
+				"Blågrön,Grön,Ljusgrön,Lime,Orange,Mörkorange",
 			//endregion
 			//region booking_page
 			"book": "BOKA",

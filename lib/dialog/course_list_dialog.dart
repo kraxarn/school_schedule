@@ -56,7 +56,7 @@ class CourseListState extends State<CourseListDialog>
 			context: context,
 			builder: (builder) =>
 				SimpleDialog(
-					title: Text("Select Color"),
+					title: Text(Preferences.localized("select_color")),
 					children: UserColors().colors.map((color) =>
 						_createColor(color.color, color.toString())
 					).toList()

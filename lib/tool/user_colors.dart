@@ -53,27 +53,8 @@ class UserColor
 	}
 	
 	@override
-	String toString()
-	{
-		switch (toIndex())
-		{
-			case 0:  return "Red";
-			case 1:  return "Pink";
-			case 2:  return "Purple";
-			case 3:  return "Deep Purple";
-			case 4:  return "Indigo";
-			case 5:  return "Blue";
-			case 6:  return "Light Blue";
-			case 7:  return "Cyan";
-			case 8:  return "Teal";
-			case 9:  return "Green";
-			case 10: return "Light Green";
-			case 11: return "Lime";
-			case 12: return "Orange";
-			case 13: return "Deep Orange";
-			default: return "Unknown";
-		}
-	}
+	String toString() =>
+		Preferences.localized("colors").split(',')[toIndex()];
 }
 
 class UserColors
