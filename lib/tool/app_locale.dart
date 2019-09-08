@@ -100,8 +100,12 @@ class AppLocale
 			"title_general": "General",
 			"change_school_title": "Change school",
 			"change_school_info": "Currently {name}",
+			"change_school_warning":
+				"Changing school removes your login and saved courses, "
+					"are you sure you want to change school?",
 			"dark_theme_title": "Dark theme",
 			"dark_theme_info": "Use a dark theme for the app",
+			"restart_app": "Restart app to apply changes",
 			"language_title": "Language",
 			"language_info": "Language to use in the app",
 			"title_schedule": "Schedule",
@@ -215,14 +219,18 @@ class AppLocale
 			"to": "Till",
 			"no_booked_for_location": "Inga bokade resurser på valda platsen",
 			//endregion
-			//region settings_page
+			//region settings_pag
 			"english": "Engelska",
 			"swedish": "Svenska",
 			"title_general": "Allmänt",
 			"change_school_title": "Byt skola",
 			"change_school_info": "Just nu {name}",
+			"change_school_warning":
+				"När du byter skola tas din inloggning och sparade kurser bort, "
+					"är du säker att du vill byta skola?",
 			"dark_theme_title": "Mörkt tema",
 			"dark_theme_info": "Använd ett mörkt tema för appen",
+			"restart_app": "Starta om appen för att tillämpa ändringarna",
 			"language_title": "Språk",
 			"language_info": "Språk att använda i appen",
 			"title_schedule": "Schema",

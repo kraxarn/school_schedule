@@ -201,7 +201,7 @@ class ScheduleState extends State<SchedulePage>
 		// No need to save to cache if error
 		if (error)
 			Scaffold.of(context).showSnackBar(SnackBar(
-				content: Text("Connection failed, try again later"),
+				content: Text(Preferences.localized("connection_failed")),
 			));
 		else
 		{
@@ -327,11 +327,11 @@ class ScheduleState extends State<SchedulePage>
 		
 		// Check if no saved courses
 		if (Preferences.school.id != null && (_savedCourses == null || _savedCourses.isEmpty))
-			return _buildStatusMessage("No courses found, press the search button to add");
+			return _buildStatusMessage(Preferences.localized("no_courses"));
 		
 		// Check if no events for saved courses
 		if (_events.isEmpty)
-			return _buildStatusMessage("No events found for saved courses");
+			return _buildStatusMessage(Preferences.localized("no_events"));
 		
 		// Get first and last month for events
 		final all = List<CalendarEvent>();
@@ -370,7 +370,7 @@ class ScheduleState extends State<SchedulePage>
 			{
 				events.add(ListTile(
 					title: Text(
-						"No events for this month",
+						Preferences.localized("no_events_month"),
 						style: Theme.of(context).textTheme.caption,
 					),
 				));
@@ -393,7 +393,9 @@ class ScheduleState extends State<SchedulePage>
 					final week = DateFormatter.getWeekNumber(event.start);
 					
 					if (week != lastWeek && Preferences.showWeek)
-						events.add(_buildSubtitle("WEEK $week"));
+						events.add(_buildSubtitle(
+							"${Preferences.localized("week")} $week")
+						);
 					
 					// Check if it collides with previous or next
 					var highlightTime = false;

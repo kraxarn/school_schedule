@@ -298,8 +298,7 @@ class BookingPageState extends State<BookingPage>
 		if (results.isEmpty)
 			return [
 				_loading ? SizedBox() : _buildStatusText(
-					"No available resources found that matches "
-						"the specified options"
+					Preferences.localized("no_resources")
 				)
 			];
 		
@@ -550,7 +549,7 @@ class BookingPageState extends State<BookingPage>
 		// Check if logged in
 		if (Preferences.username == null)
 			return _buildStatusMessage(
-				"Booking requires you to sign in from the settings"
+				Preferences.localized("booking_sign_in")
 			);
 		
 		return Scaffold(

@@ -75,17 +75,17 @@ class SettingsState extends State<SettingsPage>
 					context: context,
 					builder: (builder) =>
 						AlertDialog(
-							title: Text("Are you sure?"),
+							title: Text(Preferences.localized("are_you_sure")),
 							content: Text(
-								"Changing school removes your login and saved courses, are you sure you want to change school?"
+								Preferences.localized("change_school_warning")
 							),
 							actions: <Widget>[
 								FlatButton(
-									child: Text("NO"),
+									child: Text(Preferences.localized("no")),
 									onPressed: () => Navigator.of(context).pop()
 								),
 								FlatButton(
-									child: Text("YES"),
+									child: Text(Preferences.localized("yes")),
 									onPressed: ()
 									{
 										Navigator.of(context).pop();
@@ -103,7 +103,7 @@ class SettingsState extends State<SettingsPage>
 				onChanged: (checked)
 				{
 					_scaffoldKey.currentState.showSnackBar(SnackBar(
-						content: Text("Restart app to apply changes"),
+						content: Text(Preferences.localized("restart_app")),
 						duration: Duration(
 							seconds: 2
 						)
