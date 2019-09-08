@@ -177,10 +177,10 @@ class SettingsState extends State<SettingsPage>
 			_buildTitle(context, Preferences.localized("title_account")),
 			_buildButton(Preferences.localized(Preferences.username == null
 				? "logged_out_title" : "logged_in_title"),
-				Preferences.localized(Preferences.username == null
-					? "logged_out_info"
-					: "logged_in_info")
-					.replaceFirst("{username}",Preferences.username), null
+				Preferences.username == null
+					? Preferences.localized("logged_out_info")
+					: Preferences.localized("logged_in_info")
+					.replaceFirst("{username}", Preferences.username), null
 			),
 			_buildButton(Preferences.localized(Preferences.username == null
 				? "log_in" : "log_out"),
