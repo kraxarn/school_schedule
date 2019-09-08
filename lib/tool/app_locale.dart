@@ -13,8 +13,7 @@ class AppLocale
 	static AppLocale of(BuildContext context) =>
 		Localizations.of(context, AppLocale);
 	
-	// TODO: Static, because memory
-	Map<String, Map<String, String>> _localizedValues =
+	static const Map<String, Map<String, String>> _localizedValues =
 	{
 		"en": {
 			//region generic
