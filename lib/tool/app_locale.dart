@@ -230,5 +230,5 @@ class AppLocale
 		}
 	};
 	
-	String get(String value) => _values[value];
+	String get(String value) => _values[value] ?? value;
 }
