@@ -125,7 +125,17 @@ class AppLocale
 			"title_about": "About",
 			"privacy_policy": "Privacy policy",
 			"licenses": "Licenses",
-			"whats_new": "What's new"
+			"whats_new": "What's new",
+			//endregion
+			//region login_dialog
+			"login_failed": "Login failed",
+			"incorrect_login": "Incorrect username or password",
+			"title_login": "School login",
+			"username": "Username",
+			"enter_username": "Please enter username",
+			"password": "Password",
+			"enter_password": "Please enter password",
+			"login": "LOGIN"
 			//endregion
 		},
 		"sv": {
@@ -235,7 +245,17 @@ class AppLocale
 			"title_about": "Om",
 			"privacy_policy": "Integritetspolicy",
 			"licenses": "Licenser",
-			"whats_new": "Vad är nytt"
+			"whats_new": "Vad är nytt",
+			//endregion
+			//region login_dialog
+			"login_failed": "Inloggning misslyckades",
+			"incorrect_login": "Fel användarnamn eller lösenord",
+			"title_login": "Skolinloggning",
+			"username": "Användarnamn",
+			"enter_username": "Var god ange användarnamn",
+			"password": "Lösenord",
+			"enter_password": "Var god ange lösenord",
+			"login": "LOGGA IN"
 			//endregion
 		}
 	};

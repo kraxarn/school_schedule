@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:school_schedule/tool/preferences.dart';
 
 import '../tool/account.dart';
 
@@ -52,7 +53,7 @@ class LoginDialogState extends State<LoginDialog>
 			context: context,
 			builder: (builder) =>
 				AlertDialog(
-					title: Text("Login Failed"),
+					title: Text(Preferences.localized("login_failed")),
 					content: Text(content),
 					actions: <Widget>[
 						FlatButton(
@@ -79,7 +80,7 @@ class LoginDialogState extends State<LoginDialog>
 		setState(() => _loggingIn = false);
 		
 		if (account == null)
-			_showResultDialog("Incorrect username or password");
+			_showResultDialog(Preferences.localized("incorrect_login"));
 		else
 			Navigator.of(context).pop();
 	}
@@ -88,7 +89,7 @@ class LoginDialogState extends State<LoginDialog>
 	Widget build(BuildContext context) =>
 		Scaffold(
 			appBar: AppBar(
-				title: Text("School Login"),
+				title: Text(Preferences.localized("title_login")),
 			),
 			body: Form(
 				key: _formKey,
@@ -104,10 +105,12 @@ class LoginDialogState extends State<LoginDialog>
 								right:  32.0,
 								bottom: 16.0
 							),
-							child: _buildTextField("Username", false, true,
+							child: _buildTextField(
+								Preferences.localized("username"), false, true,
 								_usernameController, (value) =>
 								value.isEmpty
-									? "Please enter username" : null),
+									? Preferences.localized("enter_username")
+									: null),
 						),
 						Padding(
 							padding: EdgeInsets.only(
@@ -115,10 +118,12 @@ class LoginDialogState extends State<LoginDialog>
 								right:  32.0,
 								bottom: 16.0
 							),
-							child: _buildTextField("Password", true, false,
+							child: _buildTextField(
+								Preferences.localized("password"), true, false,
 								_passwordController, (value) =>
 								value.isEmpty
-									? "Please enter password" : null)
+									? Preferences.localized("enter_password")
+									: null)
 						),
 						ButtonTheme.bar(
 							child: ButtonBar(
@@ -128,7 +133,9 @@ class LoginDialogState extends State<LoginDialog>
 											horizontal: 32.0
 										),
 										child: FlatButton(
-											child: Text("LOGIN"),
+											child: Text(
+												Preferences.localized("login")
+											),
 											onPressed: ()
 											{
 												if (_formKey.currentState
