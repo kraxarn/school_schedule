@@ -108,7 +108,6 @@ class AppLocale
 			"restart_app": "Restart app to apply changes",
 			"language_title": "Language",
 			"language_info": "Language to use in the app",
-			"title_schedule": "Schedule",
 			"course_colors_title": "Course colors",
 			"course_colors_info":
 				"Set different title colors depending on course",
@@ -233,7 +232,6 @@ class AppLocale
 			"restart_app": "Starta om appen för att tillämpa ändringarna",
 			"language_title": "Språk",
 			"language_info": "Språk att använda i appen",
-			"title_schedule": "Schema",
 			"course_colors_title": "Kursfärger",
 			"course_colors_info": "Färga titlar beroende på kurs",
 			"week_numbers_title": "Veckonummer",
