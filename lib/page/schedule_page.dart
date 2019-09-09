@@ -285,7 +285,8 @@ class ScheduleState extends State<SchedulePage>
 							_buildEventDivider(),
 							_buildEventInfoRow(
 								Preferences.localized("course_name"),
-								CourseName.get(event.fullCourseId) ?? "(none)"
+								CourseName.get(event.fullCourseId)
+									?? Preferences.localized("none")
 							),
 							_buildEventDivider(),
 							_buildEventInfoRow(
