@@ -104,7 +104,9 @@ class CalendarEvent
 					else
 						_courseId = _between(line, "Kurs.grp:", "Moment");
 					
-					_summary   = _between(line, "Moment:", "Aktivitetstyp");
+					// & seems to be the only thing having issues
+					_summary = _between(line, "Moment:", "Aktivitetstyp")
+						.replaceAll("&amp;", "&");
 					break;
 			}
 		});
