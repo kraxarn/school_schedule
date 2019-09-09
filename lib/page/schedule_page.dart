@@ -295,7 +295,9 @@ class ScheduleState extends State<SchedulePage>
 							_buildEventDivider(),
 							_buildEventInfoRow(
 								Preferences.localized("locations"),
-								event.location.replaceAll(" ", ", ") ?? "(none)"
+								event.location.isEmpty
+									? Preferences.localized("none")
+									: event.location.replaceAll(" ", ", ")
 							),
 							_buildEventDivider(),
 							_buildEventInfoRow(
