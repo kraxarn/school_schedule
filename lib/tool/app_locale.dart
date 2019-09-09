@@ -55,6 +55,8 @@ class AppLocale
 			"no_saved_courses": "No saved courses found",
 			"search": "Search",
 			"no_search_results": "No results found",
+			"time_was_ago": "was {time} ago",
+			"time_in": "in {time}",
 			//endregion
 			//region course_list_dialog
 			"select_color": "Select color",
@@ -179,6 +181,11 @@ class AppLocale
 			"no_saved_courses": "Inga sparade kurser hittades",
 			"search": "Sök",
 			"no_search_results": "Inga resultat hittades",
+			"time_was_ago": "var {time} sedan",
+			"time_in": "om {time}",
+			"days": "dagar",
+			"hour": "timme",
+			"hours": "timmar",
 			//endregion
 			//region course_list_dialog
 			"select_color": "Välj färg",

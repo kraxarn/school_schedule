@@ -214,10 +214,15 @@ class ScheduleState extends State<SchedulePage>
 		final hours = diff.inHours;
 		
 		if (days != 0)
-			return "${days < 0 ? "was" : "in"} ${days < 0 ? -days : days} "
-				"${days == 1 ? "day" : "days"} ago";
-		return "${hours < 0 ? "was" : "in"} ${hours < 0 ? -hours : hours} "
-			"${hours == 1 ? "hour" : "hours"} ago";
+			return "${Preferences.localized(days > 0
+				? "time_in" : "time_was_ago").replaceFirst("{time}",
+				"${days < 0 ? -days : days} ${Preferences.localized(
+					days == 1 ? "day" : "days").toLowerCase()}")}";
+		
+		return "${Preferences.localized(hours > 0
+			? "time_in" : "time_was_ago").replaceFirst("{time}",
+			"${hours < 0 ? -hours : hours} ${Preferences.localized(
+				hours == 1 ? "hour" : "hours")}")}";
 	}
 	
 	/// Build a calendar event
