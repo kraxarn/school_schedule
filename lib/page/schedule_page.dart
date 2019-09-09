@@ -89,58 +89,6 @@ class ScheduleState extends State<SchedulePage>
 			]
 		);
 	
-	/// Show modal sheet for displaying calendar event info
-	void _showEventInfo(CalendarEvent event)
-	{
-		showModalBottomSheet(
-			context: context,
-			builder: (builder) {
-				return Padding(
-					padding: EdgeInsets.all(32.0),
-					child: Table(
-						defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-						children: [
-							_buildEventInfoRow(
-								Preferences.localized("course_code"),
-								event.courseId
-							),
-							_buildEventDivider(),
-							_buildEventInfoRow(
-								Preferences.localized("course_name"),
-								CourseName.get(event.fullCourseId) ?? "(none)"
-							),
-							_buildEventDivider(),
-							_buildEventInfoRow(
-								Preferences.localized("signature"),
-								event.signature
-							),
-							_buildEventDivider(),
-							_buildEventInfoRow(
-								Preferences.localized("locations"),
-								event.location.replaceAll(" ", ", ")
-							),
-							_buildEventDivider(),
-							_buildEventInfoRow(
-								Preferences.localized("start"),
-								DateFormatter.asFullDateTime(event.start)
-							),
-							_buildEventDivider(),
-							_buildEventInfoRow(
-								Preferences.localized("end"),
-								DateFormatter.asFullDateTime(event.end)
-							),
-							_buildEventDivider(),
-							_buildEventInfoRow(
-								Preferences.localized("last_modified"),
-								DateFormatter.asFullDateTime(event.lastModified)
-							),
-						],
-					)
-				);
-			}
-		);
-	}
-	
 	/// Get number of months between first day of each month
 	int _getMonthsBetween(DateTime from, DateTime to) =>
 		((to.year - from.year) * 12) + (to.month - from.month);
@@ -259,10 +207,23 @@ class ScheduleState extends State<SchedulePage>
 	bool _isSameDay(DateTime d1, DateTime d2) =>
 		d1.year == d2.year && d1.month == d2.month && d1.day == d2.day;
 	
+	String _getDaysTo(DateTime d1, DateTime d2)
+	{
+		final diff  = d1.difference(d2);
+		final days  = diff.inDays;
+		final hours = diff.inHours;
+		
+		if (days != 0)
+			return "${days < 0 ? "was" : "in"} ${days < 0 ? -days : days} "
+				"${days == 1 ? "day" : "days"} ago";
+		return "${hours < 0 ? "was" : "in"} ${hours < 0 ? -hours : hours} "
+			"${hours == 1 ? "hour" : "hours"} ago";
+	}
+	
 	/// Build a calendar event
 	Widget _buildEvent(CalendarEvent event, bool printDate,
 		bool isToday, bool highlightTime) =>
-		ListTile(
+		ExpansionTile(
 			leading: printDate ? Column(
 				mainAxisAlignment: MainAxisAlignment.center,
 				crossAxisAlignment: CrossAxisAlignment.center,
@@ -282,29 +243,77 @@ class ScheduleState extends State<SchedulePage>
 				],
 				
 			) : SizedBox(),
-			title: Text(
-				event.summary,
-				style: Preferences.courseColors ? TextStyle(
-					color: UserColors().getColor(event.courseId).color
-				) : null,
-			),
-			subtitle: Text(
-				"${DateFormatter.asTime(event.start)} - "
-					"${DateFormatter.asTime(event.end)}",
-				style: TextStyle(
-					color: highlightTime ? Colors.red : null,
-					fontWeight: _isWithin(DateTime.now(), event)
-						? FontWeight.bold : null,
-					decoration: event.end.difference(DateTime.now()).isNegative
-						? TextDecoration.lineThrough : null
-				)
+			title: Column(
+				crossAxisAlignment: CrossAxisAlignment.start,
+				children: <Widget>[
+					// Title
+					Text(
+						event.summary,
+						style: Preferences.courseColors ? TextStyle(
+							color: UserColors().getColor(event.courseId).color
+						) : null,
+					),
+					// Subtitle
+					Text(
+						"${DateFormatter.asTime(event.start)} - "
+							"${DateFormatter.asTime(event.end)}",
+						style: Theme.of(context).textTheme.caption.copyWith(
+							color: highlightTime ? Colors.red : null,
+							fontWeight: _isWithin(DateTime.now(), event)
+								? FontWeight.bold : null,
+							decoration: event.end.difference(DateTime.now()).isNegative
+								? TextDecoration.lineThrough : null
+						),
+					)
+				],
 			),
 			trailing: Text(
 				"${event.courseId.split('-')[0]}\n"
 					"${event.location.split(' ')[0]}",
 				textAlign: TextAlign.end
 			),
-			onTap: () => _showEventInfo(event)
+			children: <Widget>[
+				Padding(
+					padding: EdgeInsets.all(16.0),
+					child: Table(
+						defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+						children: [
+							_buildEventInfoRow(
+								Preferences.localized("course_code"),
+								event.courseId
+							),
+							_buildEventDivider(),
+							_buildEventInfoRow(
+								Preferences.localized("course_name"),
+								CourseName.get(event.fullCourseId) ?? "(none)"
+							),
+							_buildEventDivider(),
+							_buildEventInfoRow(
+								Preferences.localized("signature"),
+								event.signature
+							),
+							_buildEventDivider(),
+							_buildEventInfoRow(
+								Preferences.localized("locations"),
+								event.location.replaceAll(" ", ", ")
+							),
+							_buildEventDivider(),
+							_buildEventInfoRow(
+								Preferences.localized("date_time"),
+								"${DateFormatter.asFullDateTime(event.start)} - "
+									"${_isSameDay(event.start, event.end)
+									? DateFormatter.asTime(event.end)
+									: DateFormatter.asFullDateTime(event.end)}\n(${_getDaysTo(event.start, DateTime.now())})"
+							),
+							_buildEventDivider(),
+							_buildEventInfoRow(
+								Preferences.localized("last_modified"),
+								DateFormatter.asFullDateTime(event.lastModified)
+							)
+						]
+					)
+				)
+			]
 		);
 	
 	/// If the date occurs within the event
