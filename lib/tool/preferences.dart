@@ -154,7 +154,7 @@ class Preferences
 	
 	/// Show week number in schedule
 	static bool _showWeek;
-	static bool get showWeek => _showWeek ?? false;
+	static bool get showWeek => _showWeek ?? true;
 	static set showWeek(bool value)
 	{
 		_showWeek = value;
@@ -163,7 +163,7 @@ class Preferences
 	
 	/// Highlight event time collisions
 	static bool _showEventCollision;
-	static bool get showEventCollision => _showEventCollision ?? false;
+	static bool get showEventCollision => _showEventCollision ?? true;
 	static set showEventCollision(bool value)
 	{
 		_showEventCollision = value;
