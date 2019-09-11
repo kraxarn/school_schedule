@@ -22,6 +22,7 @@ class CalendarEvent
 {
 	/// ID used with device calendar
 	String _id;
+	String get id => _id;
 	
 	/// Date and time of start
 	DateTime _start;
