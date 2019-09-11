@@ -144,8 +144,9 @@ class CalendarEvent
 	static DateTime _decodeDate(int value) =>
 		DateTime.fromMillisecondsSinceEpoch(value);
 	
-	CalendarEvent.fromJson(Map<String, dynamic> json) : _start = _decodeDate(json["start"]),
-			_end = _decodeDate(json["end"]), _lastModified = _decodeDate(json["last_modified"]),
+	CalendarEvent.fromJson(Map<String, dynamic> json) : _id = json["uid"],
+			_start = _decodeDate(json["start"]), _end = _decodeDate(json["end"]),
+			_lastModified = _decodeDate(json["last_modified"]),
 			_location = json["location"], _summary = json["summary"],
 			_courseId = json["course_id"], _signature = json["signature"];
 	
