@@ -67,7 +67,12 @@ class ChangelogDialogState extends State<ChangelogDialog>
 						title: Column(
 							crossAxisAlignment: CrossAxisAlignment.start,
 							children: <Widget>[
-								Text(change["name"]),
+								Text(
+									change["name"],
+									style: change["name"] == _version ? TextStyle(
+										fontWeight: FontWeight.bold
+									) : null,
+								),
 								Text(
 									(change["published_at"] as String)
 										.substring(0,
