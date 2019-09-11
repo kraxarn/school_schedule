@@ -120,7 +120,7 @@ class CalendarEvent
 		data = data.trim();
 		
 		// Dart's DateTime.parse doesn't work, so we have to make our own
-		return DateTime(
+		return DateTime.utc(
 			// Year
 			int.parse(data.substring(0, 4)),
 			// Month
@@ -128,13 +128,12 @@ class CalendarEvent
 			// Day
 			int.parse(data.substring(6, 8)),
 			// Hour
-			// (add 2 if Z (UTC) / convert to UTC+2)
-			int.parse(data.substring(9, 11)) + (data.endsWith('Z') ? 2 : 0),
+			int.parse(data.substring(9, 11)),
 			// Minute
 			int.parse(data.substring(11, 13)),
 			// Second (prob not needed, but why not)
 			int.parse(data.substring(13, 15)),
-		);
+		).toLocal();
 	}
 	
 	/// DateTime to int
