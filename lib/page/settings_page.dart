@@ -167,6 +167,15 @@ class SettingsState extends State<SettingsPage>
 				onChanged: (checked) =>
 					setState(() => Preferences.scheduleToday = checked)
 			),
+			SwitchListTile(
+				title: Text(Preferences.localized("hide_duplicates_title")),
+				subtitle: Text(
+					Preferences.localized("hide_duplicates_info")
+				),
+				value: Preferences.hideDuplicates,
+				onChanged: (checked) =>
+					setState(() => Preferences.hideDuplicates = checked)
+			),
 			_buildButtonBar([])
 		]);
 	

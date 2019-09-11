@@ -179,6 +179,15 @@ class Preferences
 		_prefs.then((prefs) => prefs.setBool("schedule_today", value));
 	}
 	
+	/// Hide duplicate events
+	static bool _hideDuplicates;
+	static bool get hideDuplicates => _hideDuplicates ?? false;
+	static set hideDuplicates(bool value)
+	{
+		_hideDuplicates = value;
+		_prefs.then((prefs) => prefs.setBool("hide_duplicates", value));
+	}
+	
 	// Semi-temp for easier localization
 	static material.BuildContext buildContext;
 	
