@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
 
@@ -93,6 +94,32 @@ class ScheduleState extends State<SchedulePage>
 	int _getMonthsBetween(DateTime from, DateTime to) =>
 		((to.year - from.year) * 12) + (to.month - from.month);
 	
+	List<CalendarEvent> _filterEvents(List<CalendarEvent> events)
+	{
+		if (!Preferences.hideDuplicates)
+			return events;
+		
+		final eventIds  = HashSet<String>();
+		final newEvents = List<CalendarEvent>();
+		
+		for (final event in events)
+		{
+			// For safety
+			if (event.id == null)
+			{
+				newEvents.add(event);
+				continue;
+			}
+			
+			if (!eventIds.contains(event.id))
+				newEvents.add(event);
+			
+			eventIds.add(event.id);
+		}
+		
+		return newEvents;
+	}
+	
 	/// Refresh the schedule
 	Future<void> _refreshSchedule(bool force) async
 	{
@@ -142,7 +169,7 @@ class ScheduleState extends State<SchedulePage>
 		if (MainState.navBarIndex == 0 && tempEvents.isNotEmpty)
 		{
 			_events.clear();
-			setState(() => _events.addAll(tempEvents));
+			setState(() => _events.addAll(_filterEvents(tempEvents)));
 		}
 		
 		// Check if something went wrong
@@ -172,10 +199,10 @@ class ScheduleState extends State<SchedulePage>
 		if (!(await file.exists()))
 			return;
 		final tempEvents = jsonDecode(await file.readAsString()) as List<dynamic>;
-		final events = tempEvents.map((value) => CalendarEvent.fromJson(value));
+		final events = tempEvents.map((value) => CalendarEvent.fromJson(value)).toList();
 		
 		_events.clear();
-		setState(() => _events.addAll(events));
+		setState(() => _events.addAll(_filterEvents(events)));
 	}
 	
 	/// Build centered and padded status message
