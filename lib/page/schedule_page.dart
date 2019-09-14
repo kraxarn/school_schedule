@@ -184,6 +184,14 @@ class ScheduleState extends State<SchedulePage>
 			_lastRefresh = DateTime.now();
 		}
 		
+		// Check if any events got filtered
+		final hiddenEvents = tempEvents.length - _events.length;
+		if (hiddenEvents > 0)
+			Scaffold.of(context).showSnackBar(SnackBar(
+				content: Text("Hiding $hiddenEvents events"),
+				duration: Duration(seconds: 2)
+			));
+		
 		setState(() => _refreshing = false);
 	}
 	
