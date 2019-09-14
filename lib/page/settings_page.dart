@@ -176,6 +176,15 @@ class SettingsState extends State<SettingsPage>
 				onChanged: (checked) =>
 					setState(() => Preferences.hideDuplicates = checked)
 			),
+			SwitchListTile(
+				title: Text(Preferences.localized("hide_past_events_title")),
+				subtitle: Text(
+					Preferences.localized("hide_past_events_info")
+				),
+				value: Preferences.hidePastEvents,
+				onChanged: (checked) =>
+					setState(() => Preferences.hidePastEvents = checked)
+			),
 			_buildButtonBar([])
 		]);
 	

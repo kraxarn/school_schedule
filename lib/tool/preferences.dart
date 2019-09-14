@@ -188,6 +188,15 @@ class Preferences
 		_prefs.then((prefs) => prefs.setBool("hide_duplicates", value));
 	}
 	
+	/// Always hide past events
+	static bool _hidePastEvents;
+	static bool get hidePastEvents =>  _hidePastEvents ?? true;
+	static set hidePastEvents(bool value)
+	{
+		_hidePastEvents = value;
+		_prefs.then((prefs) => prefs.setBool("hide_past_events", value));
+	}
+	
 	// Semi-temp for easier localization
 	static material.BuildContext buildContext;
 	
