@@ -443,6 +443,11 @@ class ScheduleState extends State<SchedulePage>
 				{
 					final event = monthEvents[i];
 					
+					// Check if we should always hide past events
+					if (Preferences.hidePastEvents
+						&& event.end.difference(now).isNegative)
+						continue;
+					
 					final prev = i > 0
 						? monthEvents[i - 1] : null;
 					final next = i < monthEvents.length - 1
