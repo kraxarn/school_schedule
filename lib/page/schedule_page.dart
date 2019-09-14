@@ -30,7 +30,7 @@ class ScheduleState extends State<SchedulePage>
 	List<String> get _savedCourses => Preferences.savedCourses;
 	
 	// All events to show in the list
-	final _events = List<CalendarEvent>();
+	static final _events = List<CalendarEvent>();
 	
 	/// Reusable HTTP instance for schedule refreshing
 	final _http = http.Client();
@@ -195,11 +195,17 @@ class ScheduleState extends State<SchedulePage>
 	/// Loads the current event list from cache
 	void _loadFromCache() async
 	{
-		final file = File("${(await getTemporaryDirectory()).path}/events.json");
+		if (_events.isNotEmpty)
+			return;
+		
+		final file = File(
+			"${(await getTemporaryDirectory()).path}/events.json");
 		if (!(await file.exists()))
 			return;
-		final tempEvents = jsonDecode(await file.readAsString()) as List<dynamic>;
-		final events = tempEvents.map((value) => CalendarEvent.fromJson(value)).toList();
+		final tempEvents = jsonDecode(
+			await file.readAsString()) as List<dynamic>;
+		final events = tempEvents.map((value) =>
+			CalendarEvent.fromJson(value)).toList();
 		
 		_events.clear();
 		setState(() => _events.addAll(_filterEvents(events)));
