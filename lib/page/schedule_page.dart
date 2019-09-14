@@ -188,7 +188,9 @@ class ScheduleState extends State<SchedulePage>
 		final hiddenEvents = tempEvents.length - _events.length;
 		if (hiddenEvents > 0)
 			Scaffold.of(context).showSnackBar(SnackBar(
-				content: Text("Hiding $hiddenEvents events"),
+				content: Text(Preferences.localized(hiddenEvents == 1
+					? "hiding_event" : "hiding_events")
+					.replaceFirst("{events}", "$hiddenEvents")),
 				duration: Duration(seconds: 2)
 			));
 		
