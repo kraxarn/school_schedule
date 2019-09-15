@@ -41,9 +41,6 @@ class ScheduleState extends State<SchedulePage>
 	/// When we last refreshed the schedule
 	static DateTime _lastRefresh;
 	
-	/// Subtitle to show
-	static String _subtitle;
-	
 	/// Build title with bottom border
 	Widget _buildTitle(String text) =>
 		DecoratedBox(
@@ -128,7 +125,7 @@ class ScheduleState extends State<SchedulePage>
 			&& DateTime.now().difference(_lastRefresh).inMinutes < 15)
 			return;
 		
-		// Test if we're using KronoX demo
+		// Test if we're using demo school
 		if (Preferences.school.id == null)
 		{
 			setState(() {
@@ -483,10 +480,6 @@ class ScheduleState extends State<SchedulePage>
 			}
 		}
 		
-		// Update subtitle with events from first month
-		// (these are sorted, events are not)
-		setState(() => _subtitle = _getSubtitle(firstMonth));
-		
 		return events;
 	}
 	
@@ -560,7 +553,7 @@ class ScheduleState extends State<SchedulePage>
 	Widget build(BuildContext context) =>
 		Scaffold(
 			appBar: AppBar(
-				title: _subtitle == null || !Preferences.scheduleToday ?
+				title: !Preferences.scheduleToday ?
 				Text(Preferences.localized("title_schedule")) : Column(
 					crossAxisAlignment: CrossAxisAlignment.start,
 					children: <Widget>[
@@ -574,7 +567,7 @@ class ScheduleState extends State<SchedulePage>
 							)
 						),
 						Text(
-							_subtitle,
+							_getSubtitle(_events),
 							style: Theme.of(context).textTheme.caption
 						)
 					],
