@@ -67,9 +67,10 @@ class ScheduleState extends State<SchedulePage>
 		Preferences.localized("months").split(',')[month - 1];
 	
 	/// Build table row for event info
-	TableRow _buildEventInfoRow(String title, String info) =>
+	TableRow _buildEventInfoRow(IconData icon, String title, String info) =>
 		TableRow(
 			children: [
+				Icon(icon),
 				Text(
 					title,
 					style: Theme.of(context).textTheme.subtitle,
@@ -82,6 +83,7 @@ class ScheduleState extends State<SchedulePage>
 	TableRow _buildEventDivider() =>
 		TableRow(
 			children: [
+				Divider(),
 				Divider(),
 				Divider()
 			]
@@ -322,24 +324,31 @@ class ScheduleState extends State<SchedulePage>
 					padding: EdgeInsets.all(16.0),
 					child: Table(
 						defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+						columnWidths: {
+							0: FixedColumnWidth(48.0)
+						},
 						children: [
 							_buildEventInfoRow(
+								Icons.school,
 								Preferences.localized("course_code"),
 								event.courseId
 							),
 							_buildEventDivider(),
 							_buildEventInfoRow(
+								Icons.text_fields,
 								Preferences.localized("course_name"),
 								CourseName.get(event.fullCourseId)
 									?? Preferences.localized("none")
 							),
 							_buildEventDivider(),
 							_buildEventInfoRow(
+								Icons.account_circle,
 								Preferences.localized("signature"),
 								event.signature
 							),
 							_buildEventDivider(),
 							_buildEventInfoRow(
+								Icons.location_on,
 								Preferences.localized("locations"),
 								event.location.isEmpty
 									? Preferences.localized("none")
@@ -347,6 +356,7 @@ class ScheduleState extends State<SchedulePage>
 							),
 							_buildEventDivider(),
 							_buildEventInfoRow(
+								Icons.timelapse,
 								Preferences.localized("date_time"),
 								"${DateFormatter.asFullDateTime(event.start)} - "
 									"${_isSameDay(event.start, event.end)
@@ -355,6 +365,7 @@ class ScheduleState extends State<SchedulePage>
 							),
 							_buildEventDivider(),
 							_buildEventInfoRow(
+								Icons.edit,
 								Preferences.localized("last_modified"),
 								DateFormatter.asFullDateTime(event.lastModified)
 							)
