@@ -76,6 +76,3 @@
 
 # Ignore iOS Podfile lock
 **/ios/Podfile.lock
-
-# Ignore Dart packages lock
-pubspec.lock
