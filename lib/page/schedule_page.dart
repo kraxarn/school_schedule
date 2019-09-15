@@ -542,8 +542,9 @@ class ScheduleState extends State<SchedulePage>
 		final now   = DateTime.now();
 		final today = _getEventsToday(events, now);
 		
-		return "${_monthToString(now.month)} ${now.day}, "
-			"${today.length} ${Preferences.localized(today.length == 1 ? "event" : "events")}"
+		return "${_weekdayToString(now.weekday)}, ${_monthToString(now.month)} "
+			"${now.day}, ${today.length} "
+			"${Preferences.localized(today.length == 1 ? "event" : "events")}"
 			"${today.length > 0 ? ", ${_getFirstLastTime(today)}" : ""}";
 	}
 	
