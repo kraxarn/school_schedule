@@ -21,10 +21,11 @@ class AppLocale
 			"confirm": "Confirm",
 			"cancel": "CANCEL",
 			"reset": "RESET",
-			"are_you_sure": "Are you sure?",
+			"are_you_sure": "Are you sure?", // TODO: NO
 			"no": "NO",
 			"yes": "YES",
 			"required": "Required",
+			"delete": "Delete?",
 			//endregion
 			//region start_page
 			"title_start": "Select School",
@@ -65,6 +66,8 @@ class AppLocale
 			"colors": "Red,Pink,Purple,Deep purple,Indigo,Blue,Light blue,Cyan,"
 				"Teal,Green,Light green,Lime,Orange,Deep orange",
 			"delete_course": "Are you sure you want to delete {code} ({name})?",
+			"option_color": "Color...",
+			"option_delete": "Delete...",
 			//endregion
 			//region booking_page
 			"book": "BOOK",
@@ -156,6 +159,7 @@ class AppLocale
 			"no": "NEJ",
 			"yes": "JA",
 			"required": "Obligatorisk",
+			"delete": "Radera?",
 			//endregion
 			//region start_page
 			"title_start": "Välj Skola",
@@ -199,6 +203,8 @@ class AppLocale
 			"colors": "Röd,Rosa,Lila,Mörklila,Indigo,Blå,Ljusblå,Turkos,"
 				"Blågrön,Grön,Ljusgrön,Lime,Orange,Mörkorange",
 			"delete_course": "Är du säker på att du vill radera {code} ({name})?",
+			"option_color": "Färg...",
+			"option_delete": "Radera...",
 			//endregion
 			//region booking_page
 			"book": "BOKA",
