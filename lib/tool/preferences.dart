@@ -276,6 +276,7 @@ class Preferences
 		_locale       = prefs.getString("locale");
 		_showEventCollision = prefs.getBool("show_event_collision");
 		_scheduleToday      = prefs.getBool("schedule_today");
+		_hidePastEvents     = prefs.getBool("hide_past_events");
 		
 		// Get unique ID before decrypting
 		_uniqueId = await UniqueIdentifier.serial;
