@@ -118,8 +118,6 @@ class AppLocale
 			"highlight_collisions_title": "Highlight collisions",
 			"highlight_collisions_info":
 				"Color time when multiple events occur at the same time",
-			"today_view_title": "Today view",
-			"today_view_info": "Display a subtitle with events for today",
 			"hide_duplicates_title": "Hide duplicates",
 			"hide_duplicates_info": "Don't show duplicate events",
 			"hide_past_events_title": "Hide past events",
@@ -251,8 +249,6 @@ class AppLocale
 			"highlight_collisions_title": "Markera kollisioner",
 			"highlight_collisions_info":
 				"Färga tider när händelser kolliderar",
-			"today_view_title": "Idag",
-			"today_view_info": "Visa en undertitel med händelser idag",
 			"hide_duplicates_title": "Dölj dupletter",
 			"hide_duplicates_info": "Visa inte duplicerade händelser",
 			"hide_past_events_title": "Dölj tidigare händelser",
