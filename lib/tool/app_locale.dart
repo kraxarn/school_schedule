@@ -64,6 +64,7 @@ class AppLocale
 			"select_color": "Select color",
 			"colors": "Red,Pink,Purple,Deep purple,Indigo,Blue,Light blue,Cyan,"
 				"Teal,Green,Light green,Lime,Orange,Deep orange",
+			"delete_course": "Are you sure you want to delete {code} ({name})?",
 			//endregion
 			//region booking_page
 			"book": "BOOK",
@@ -197,6 +198,7 @@ class AppLocale
 			"select_color": "Välj färg",
 			"colors": "Röd,Rosa,Lila,Mörklila,Indigo,Blå,Ljusblå,Turkos,"
 				"Blågrön,Grön,Ljusgrön,Lime,Orange,Mörkorange",
+			"delete_course": "Är du säker på att du vill radera {code} ({name})?",
 			//endregion
 			//region booking_page
 			"book": "BOKA",
