@@ -564,8 +564,7 @@ class ScheduleState extends State<SchedulePage>
 	Widget build(BuildContext context) =>
 		Scaffold(
 			appBar: AppBar(
-				title: !Preferences.scheduleToday ?
-				Text(Preferences.localized("title_schedule")) : Column(
+				title: Column(
 					crossAxisAlignment: CrossAxisAlignment.start,
 					children: <Widget>[
 						SizedBox(
