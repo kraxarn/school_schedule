@@ -31,7 +31,7 @@ class Preferences
 	
 	/// Saved courses
 	static List<String> _savedCourses;
-	static List<String> get savedCourses => _savedCourses;
+	static List<String> get savedCourses => _savedCourses ?? List<String>();
 	static set savedCourses(List<String> values)
 	{
 		_savedCourses = values;
@@ -188,6 +188,14 @@ class Preferences
 		_prefs.then((prefs) => prefs.setBool("hide_past_events", value));
 	}
 	
+	static List<String> _hiddenCourses;
+	static List<String> get hiddenCourses => _hiddenCourses ?? List<String>();
+	static set hiddenCourses(List<String> value)
+	{
+		_hiddenCourses = value;
+		_prefs.then((prefs) => prefs.setStringList("hidden_courses", value));
+	}
+	
 	// Semi-temp for easier localization
 	static material.BuildContext buildContext;
 	
@@ -268,6 +276,7 @@ class Preferences
 		_showEventCollision = prefs.getBool("show_event_collision");
 		_hideDuplicates     = prefs.getBool("hide_duplicates");
 		_hidePastEvents     = prefs.getBool("hide_past_events");
+		_hiddenCourses      = prefs.getStringList("hidden_courses");
 		
 		// Get unique ID before decrypting
 		_uniqueId = await UniqueIdentifier.serial;
