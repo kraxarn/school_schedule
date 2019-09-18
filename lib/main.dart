@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget
 	@override
 	Widget build(BuildContext context) =>
 		MaterialApp(
-			title: "KronoX",
+			title: "School Schedule",
 			theme: _baseTheme.copyWith(
 				primaryColor:     Colors.blue[700],
 				primaryColorDark: Colors.blue[900],
