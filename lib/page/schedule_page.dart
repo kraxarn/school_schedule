@@ -458,6 +458,10 @@ class ScheduleState extends State<SchedulePage>
 						&& event.end.difference(now).isNegative)
 						continue;
 					
+					// Check if it's a course we should hide
+					if (Preferences.hiddenCourses.contains(event.courseId))
+						continue;
+					
 					final prev = i > 0
 						? monthEvents[i - 1] : null;
 					final next = i < monthEvents.length - 1
