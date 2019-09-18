@@ -57,8 +57,8 @@ class AppLocale
 			"no_search_results": "No results found",
 			"time_was_ago": "was {time} ago",
 			"time_in": "in {time}",
-			"hiding_event": "Hiding {events} event",
-			"hiding_events": "Hiding {events} events",
+			"hiding_event": "Hiding {events} duplicate event",
+			"hiding_events": "Hiding {events} duplicate events",
 			//endregion
 			//region course_list_dialog
 			"select_color": "Select color",
@@ -192,8 +192,8 @@ class AppLocale
 			"days": "dagar",
 			"hour": "timme",
 			"hours": "timmar",
-			"hiding_event": "Döljer {events} händelse",
-			"hiding_events": "Döljer {events} händelser",
+			"hiding_event": "Döljer {events} duplicerade händelse",
+			"hiding_events": "Döljer {events} duplicerade händelser",
 			//endregion
 			//region course_list_dialog
 			"select_color": "Välj färg",
