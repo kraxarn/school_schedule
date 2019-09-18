@@ -40,7 +40,7 @@ class Preferences
 	
 	/// If dark mode is enabled
 	static bool _darkMode;
-	static bool get darkMode => _darkMode;
+	static bool get darkMode => _darkMode ?? false;
 	static set darkMode(bool value)
 	{
 		_darkMode = value;
