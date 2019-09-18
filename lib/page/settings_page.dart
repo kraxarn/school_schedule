@@ -159,15 +159,6 @@ class SettingsState extends State<SettingsPage>
 					setState(() => Preferences.showEventCollision = checked)
 			),
 			SwitchListTile(
-				title: Text(Preferences.localized("today_view_title")),
-				subtitle: Text(
-					Preferences.localized("today_view_info")
-				),
-				value: Preferences.scheduleToday,
-				onChanged: (checked) =>
-					setState(() => Preferences.scheduleToday = checked)
-			),
-			SwitchListTile(
 				title: Text(Preferences.localized("hide_duplicates_title")),
 				subtitle: Text(
 					Preferences.localized("hide_duplicates_info")

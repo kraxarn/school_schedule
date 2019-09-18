@@ -170,15 +170,6 @@ class Preferences
 		_prefs.then((prefs) => prefs.setBool("show_event_collision", value));
 	}
 	
-	// Show subtitle with events for today in schedule
-	static bool _scheduleToday;
-	static bool get scheduleToday => _scheduleToday ?? true;
-	static set scheduleToday(bool value)
-	{
-		_scheduleToday = value;
-		_prefs.then((prefs) => prefs.setBool("schedule_today", value));
-	}
-	
 	/// Hide duplicate events
 	static bool _hideDuplicates;
 	static bool get hideDuplicates => _hideDuplicates ?? false;
@@ -275,7 +266,7 @@ class Preferences
 		_showWeek     = prefs.getBool("show_week");
 		_locale       = prefs.getString("locale");
 		_showEventCollision = prefs.getBool("show_event_collision");
-		_scheduleToday      = prefs.getBool("schedule_today");
+		_hideDuplicates     = prefs.getBool("hide_duplicates");
 		_hidePastEvents     = prefs.getBool("hide_past_events");
 		
 		// Get unique ID before decrypting
