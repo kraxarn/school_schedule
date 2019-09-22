@@ -29,7 +29,7 @@ def keystorePropertiesFile = rootProject.file('key.properties')
 if (keystorePropertiesFile.exists()) {
    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 } else {
-    throw new Exception("no keystore")
+    println "warning: no keystore"
 }
 
 android {
