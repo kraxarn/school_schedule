@@ -166,6 +166,9 @@ class ScheduleState extends State<SchedulePage>
 		{
 			_events.clear();
 			setState(() => _events.addAll(_filterEvents(tempEvents)));
+
+			// Sort them to be sorted in cache and when showing later
+			_events.sort();
 		}
 		
 		// Check if something went wrong
