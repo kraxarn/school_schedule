@@ -127,7 +127,7 @@ class ScheduleState extends State<SchedulePage>
 			&& DateTime.now().difference(_lastRefresh).inMinutes < 15)
 			return;
 		
-		// Test if we're using demo school
+		// Check if we're using demo school
 		if (Preferences.school.id == null)
 		{
 			setState(() {
@@ -142,10 +142,7 @@ class ScheduleState extends State<SchedulePage>
 			return;
 		
 		_refreshing = true;
-		
-		// Get events
-		final school = Preferences.school;
-		
+
 		// We only set state here if events is empty
 		if (_savedCourses == null ||  _savedCourses.isEmpty)
 		{
@@ -159,7 +156,7 @@ class ScheduleState extends State<SchedulePage>
 		
 		// Get events four courses and save to tempEvents
 		for (var course in _savedCourses)
-			await CalendarEvent.getCalendar(_http, school, course)
+			await CalendarEvent.getCalendar(_http, Preferences.school, course)
 				.then((cal) =>
 					tempEvents.addAll(CalendarEvent.parseMultiple(cal)))
 				.catchError((e) => error = true);
