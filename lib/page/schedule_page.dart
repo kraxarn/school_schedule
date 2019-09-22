@@ -582,7 +582,10 @@ class ScheduleState extends State<SchedulePage>
 						),
 						Text(
 							_getSubtitle(_events),
-							style: Theme.of(context).textTheme.caption
+							style: Theme.of(context).textTheme.caption.apply(
+								// It's in the title, so always light color
+								color: ThemeData.dark().textTheme.caption.color
+							)
 						)
 					],
 				),
