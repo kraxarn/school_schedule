@@ -216,6 +216,10 @@ class Preferences
 				{
 					_locale = material.Localizations
 						.localeOf(buildContext).languageCode;
+
+					// Just to be sure
+					if (_locale != "en" && _locale != "sv")
+						_locale = "en";
 				}
 				catch (e)
 				{
