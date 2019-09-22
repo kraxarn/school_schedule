@@ -69,7 +69,6 @@ class BookingPageState extends State<BookingPage>
 	{
 		super.initState();
 		_search(updateTimes: true);
-		
 	}
 	
 	/// Builds a padded, centered text
