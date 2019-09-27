@@ -95,32 +95,6 @@ class ScheduleState extends State<SchedulePage>
 			]
 		);
 	
-	List<CalendarEvent> _filterEvents(List<CalendarEvent> events)
-	{
-		if (!Preferences.hideDuplicates)
-			return events;
-		
-		final eventIds  = HashSet<String>();
-		final newEvents = List<CalendarEvent>();
-		
-		for (final event in events)
-		{
-			// For safety
-			if (event.id == null)
-			{
-				newEvents.add(event);
-				continue;
-			}
-			
-			if (!eventIds.contains(event.id))
-				newEvents.add(event);
-			
-			eventIds.add(event.id);
-		}
-		
-		return newEvents;
-	}
-	
 	/// Refresh the schedule
 	Future<void> _refreshSchedule(bool force) async
 	{
@@ -167,7 +141,7 @@ class ScheduleState extends State<SchedulePage>
 		if (MainState.navBarIndex == 0 && tempEvents.isNotEmpty)
 		{
 			_events.clear();
-			setState(() => _events.addAll(_filterEvents(tempEvents)));
+			setState(() => _events.addAll(tempEvents));
 
 			// Sort them to be sorted in cache and when showing later
 			_events.sort((e1, e2) => e1.start.compareTo(e2.start));
@@ -219,7 +193,7 @@ class ScheduleState extends State<SchedulePage>
 			CalendarEvent.fromJson(value)).toList();
 		
 		_events.clear();
-		setState(() => _events.addAll(_filterEvents(events)));
+		setState(() => _events.addAll(events));
 	}
 	
 	/// Build centered and padded status message
@@ -411,6 +385,9 @@ class ScheduleState extends State<SchedulePage>
 		var lastDate  = DateTime.utc(0);
 		var lastWeek  = -1;
 		
+		// List of all event IDs for filtering duplicates
+		final eventIds = HashSet<String>();
+		
 		// Loop through all events
 		for (var i = 0; i < _events.length; i++)
 		{
@@ -423,6 +400,17 @@ class ScheduleState extends State<SchedulePage>
 				&& event.end.difference(now).isNegative)
 				|| (Preferences.hiddenCourses.contains(event.courseId)))
 				continue;
+			
+			// Check if duplicate
+			if (Preferences.hideDuplicates)
+			{
+				// If in set, continue
+				if (event.id != null && eventIds.contains(event.id))
+					continue;
+				
+				// Add event to list of events
+				eventIds.add(event.id);
+			}
 			
 			// Check if we skipped a month
 			if (lastDate.month - event.start.month > 1)
