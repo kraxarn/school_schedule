@@ -464,12 +464,11 @@ class ScheduleState extends State<SchedulePage>
 			if (Preferences.showEventCollision)
 				highlightTime = (prev != null
 					&& prev.start.day == event.start.day
-					&& (_collide(event, prev) || _collide(prev, event))
-					&& !eventIds.contains(prev.id))
+					&& (_collide(event, prev) || _collide(prev, event)))
 					|| (next != null
 						&& next.start.day == event.start.day
 						&& (_collide(event, next) || _collide(next, event))
-						&& !eventIds.contains(next.id));
+						&& (!Preferences.hideDuplicates || event.id != next.id));
 			
 			// Add to all events and set parameters
 			events.add(_buildEvent(event, event.start.day != lastDate.day,
