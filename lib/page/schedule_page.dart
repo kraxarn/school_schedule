@@ -58,6 +58,12 @@ class ScheduleState extends State<SchedulePage>
 			),
 		);
 	
+	/// Build a title with month and year
+	Widget _buildDateTitle(DateTime date) =>
+		_buildTitle(
+			"${_monthToString(date.month)} ${date.year}"
+		);
+		
 	/// Get 3 character name of weekday
 	String _weekdayToString(int weekday) =>
 		Preferences.localized("week_days").split(',')[weekday - 1];
@@ -88,10 +94,6 @@ class ScheduleState extends State<SchedulePage>
 				Divider()
 			]
 		);
-	
-	/// Get number of months between first day of each month
-	int _getMonthsBetween(DateTime from, DateTime to) =>
-		((to.year - from.year) * 12) + (to.month - from.month);
 	
 	List<CalendarEvent> _filterEvents(List<CalendarEvent> events)
 	{
@@ -401,100 +403,94 @@ class ScheduleState extends State<SchedulePage>
 		if (_events.isEmpty)
 			return _buildStatusMessage(Preferences.localized("no_events"));
 		
-		// Get first and last month for events
-		final all = List<CalendarEvent>();
-		all.addAll(_events);
-		all.sort((e1, e2) => e1.start.compareTo(e2.start));
-		
-		// Months between first and last event
-		final months = _getMonthsBetween(all.first.start, all.last.end);
-		
-		// Creates titles for a year
+		// List of all built widgets
+		final now    = DateTime.now();
 		final events = List<Widget>();
-		final now = DateTime.now();
-		List<CalendarEvent> firstMonth;
-		for (var i = all.first.start.month; i <= all.first.start.month + months; i++)
+		
+		// Temporary variables for use in loop
+		var lastDate  = DateTime.utc(0);
+		var lastWeek  = -1;
+		
+		// Loop through all events
+		for (var i = 0; i < _events.length; i++)
 		{
-			// Temporary variables
-			final year  = i <= 12 ? now.year : now.year + 1;
-			final month = i <= 12 ? i : i % 12;
+			// Get current event
+			final event = _events[i];
 			
-			// Add month title
-			events.add(_buildTitle("${_monthToString(month)} $year"));
+			// Check if we should always hide past events
+			// or if it's a course we should hide
+			if ((Preferences.hidePastEvents
+				&& event.end.difference(now).isNegative)
+				|| (Preferences.hiddenCourses.contains(event.courseId)))
+				continue;
 			
-			// Add all events in month
-			final monthEvents = _events
-				.where((event) => event.start.month == month
-					&& event.start.year == year).toList();
-			monthEvents.sort(((e1, e2) =>
-				e1.start.compareTo(e2.start)));
-			
-			// Check if first month
-			if (firstMonth == null)
-				firstMonth = monthEvents;
-			
-			// Insert message if empty
-			if (monthEvents.isEmpty)
+			// Check if we skipped a month
+			if (lastDate.month - event.start.month > 1)
 			{
-				events.add(ListTile(
-					title: Text(
-						Preferences.localized("no_events_month"),
-						style: Theme.of(context).textTheme.caption,
-					),
-				));
-			}
-			else
-			{
-				var lastDate = -1;
-				var lastWeek = -1;
+				// Get exact months difference
+				var diff = (((event.start.year - lastDate.year) * 12)
+					+ event.start.month - lastDate.month);
 				
-				//for (final event in monthEvents)
-				for (var i = 0; i < monthEvents.length; i++)
+				// Keep adding new months
+				while (--diff > 0)
 				{
-					final event = monthEvents[i];
+					// Get the new date with the month reduced
+					final newMonth = event.start.month - diff;
+					final newDate = DateTime(
+						event.start.year + (newMonth < 0 ? 1 : 0),
+						newMonth < 0 ? (newMonth + 12) : newMonth
+					);
 					
-					// Check if we should always hide past events
-					if (Preferences.hidePastEvents
-						&& event.end.difference(now).isNegative)
-						continue;
+					// Add month title
+					events.add(_buildDateTitle(newDate));
 					
-					// Check if it's a course we should hide
-					if (Preferences.hiddenCourses.contains(event.courseId))
-						continue;
-					
-					final prev = i > 0
-						? monthEvents[i - 1] : null;
-					final next = i < monthEvents.length - 1
-						? monthEvents[i + 1] : null;
-					
-					final week = DateFormatter.getWeekNumber(event.start);
-					
-					if (week != lastWeek && Preferences.showWeek)
-						events.add(_buildSubtitle(
-							"${Preferences.localized("week")} $week")
-						);
-					
-					// Check if it collides with previous or next
-					var highlightTime = false;
-					if (Preferences.showEventCollision)
-						highlightTime = (prev != null
-							&& prev.start.day == event.start.day
-							&& (_collide(event, prev) || _collide(prev, event)))
-							|| (next != null
-								&& next.start.day == event.start.day
-								&& (_collide(event, next) || _collide(next, event)));
-					
-					// Add to all events and set parameters
-					events.add(_buildEvent(event, event.start.day != lastDate,
-						_isSameDay(now, event.start), highlightTime));
-					
-					// Update for next lap
-					lastDate = event.start.day;
-					lastWeek = week;
+					// Add "no events for this month"
+					events.add(ListTile(
+						title: Text(
+							Preferences.localized("no_events_month"),
+							style: Theme.of(context).textTheme.caption,
+						),
+					));
 				}
 			}
+			
+			// Check if new month
+			if (lastDate.month != event.start.month
+				|| lastDate.year != event.start.year)
+				events.add(_buildDateTitle(event.start));
+			
+			// Previous and next events (if any)
+			final prev = i > 0 ? _events[i - 1] : null;
+			final next = i < _events.length - 1 ? _events[i + 1] : null;
+			
+			// Week of event
+			final week = DateFormatter.getWeekNumber(event.start);
+			
+			if (week != lastWeek && Preferences.showWeek)
+				events.add(_buildSubtitle(
+					"${Preferences.localized("week")} $week")
+				);
+			
+			// Check if it collides with previous or next
+			var highlightTime = false;
+			if (Preferences.showEventCollision)
+				highlightTime = (prev != null
+					&& prev.start.day == event.start.day
+					&& (_collide(event, prev) || _collide(prev, event)))
+					|| (next != null
+						&& next.start.day == event.start.day
+						&& (_collide(event, next) || _collide(next, event)));
+			
+			// Add to all events and set parameters
+			events.add(_buildEvent(event, event.start.day != lastDate.day,
+				_isSameDay(now, event.start), highlightTime));
+			
+			// Update for next lap
+			lastDate = event.start;
+			lastWeek = week;
 		}
 		
+		// Return final widget list
 		return events;
 	}
 	
