@@ -447,10 +447,6 @@ class ScheduleState extends State<SchedulePage>
 				|| lastDate.year != event.start.year)
 				events.add(_buildDateTitle(event.start));
 			
-			// Previous and next events (if any)
-			final prev = i > 0 ? _events[i - 1] : null;
-			final next = i < _events.length - 1 ? _events[i + 1] : null;
-			
 			// Week of event
 			final week = DateFormatter.getWeekNumber(event.start);
 			
@@ -458,6 +454,10 @@ class ScheduleState extends State<SchedulePage>
 				events.add(_buildSubtitle(
 					"${Preferences.localized("week")} $week")
 				);
+			
+			// Previous and next events (if any)
+			final prev = i > 0 ? _events[i - 1] : null;
+			final next = i < _events.length - 1 ? _events[i + 1] : null;
 			
 			// Check if it collides with previous or next
 			var highlightTime = false;
