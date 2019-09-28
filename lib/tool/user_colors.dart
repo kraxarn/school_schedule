@@ -49,6 +49,7 @@ class UserColor
 		if (_color == Colors.lime)       return 11;
 		if (_color == Colors.orange)     return 12;
 		if (_color == Colors.deepOrange) return 13;
+		if (_color == Colors.blueGrey)   return 14;
 		return 0;
 	}
 	
@@ -96,6 +97,8 @@ class UserColors
 		UserColor(Colors.orange, 800),
 		// f: deepOrange
 		UserColor(Colors.deepOrange, 900),
+		// 10: blueGrey
+		UserColor(Colors.blueGrey, 600)
 	];
 	
 	UserColor getColor(String name)

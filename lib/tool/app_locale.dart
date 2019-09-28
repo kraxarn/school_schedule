@@ -64,7 +64,7 @@ class AppLocale
 			//region course_list_dialog
 			"select_color": "Select color",
 			"colors": "Red,Pink,Purple,Deep purple,Indigo,Blue,Light blue,Cyan,"
-				"Teal,Green,Light green,Lime,Orange,Deep orange",
+				"Teal,Green,Light green,Lime,Orange,Deep orange,Blue grey",
 			"delete_course": "Are you sure you want to delete {code} ({name})?",
 			"option_color": "Color...",
 			"option_delete": "Delete...",
@@ -201,7 +201,7 @@ class AppLocale
 			//region course_list_dialog
 			"select_color": "Välj färg",
 			"colors": "Röd,Rosa,Lila,Mörklila,Indigo,Blå,Ljusblå,Turkos,"
-				"Blågrön,Grön,Ljusgrön,Lime,Orange,Mörkorange",
+				"Blågrön,Grön,Ljusgrön,Lime,Orange,Mörkorange,Blågrå",
 			"delete_course": "Är du säker på att du vill radera {code} ({name})?",
 			"option_color": "Färg...",
 			"option_delete": "Radera...",
