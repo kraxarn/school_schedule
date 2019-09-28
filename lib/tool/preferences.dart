@@ -143,15 +143,6 @@ class Preferences
 		_prefs.then((prefs) => prefs.setString("last_location", value));
 	}
 	
-	/// Course color titles
-	static bool _courseColors;
-	static bool get courseColors => _courseColors ?? true;
-	static set courseColors(bool value)
-	{
-		_courseColors = value;
-		_prefs.then((prefs) => prefs.setBool("course_colors", value));
-	}
-	
 	/// Show week number in schedule
 	static bool _showWeek;
 	static bool get showWeek => _showWeek ?? true;
