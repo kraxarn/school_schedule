@@ -136,13 +136,6 @@ class SettingsState extends State<SettingsPage>
 		_buildCard([
 			_buildTitle(context, Preferences.localized("title_schedule")),
 			SwitchListTile(
-				title: Text(Preferences.localized("course_colors_title")),
-				subtitle: Text(Preferences.localized("course_colors_info")),
-				value: Preferences.courseColors,
-				onChanged: (checked) =>
-					setState(() => Preferences.courseColors = checked)
-			),
-			SwitchListTile(
 				title: Text(Preferences.localized("week_numbers_title")),
 				subtitle: Text(Preferences.localized("week_numbers_info")),
 				value: Preferences.showWeek,
