@@ -76,6 +76,9 @@ class CourseListState extends State<CourseListDialog>
 					children: UserColors().colors.map((color) =>
 						_createColor(color.color, color.toString())
 					).toList()
+						..add(_createColor(
+							Theme.of(context).textTheme.title.color, "Default"
+						))
 				)
 		);
 	
@@ -85,6 +88,20 @@ class CourseListState extends State<CourseListDialog>
 		final color = await _openColorPicker();
 		if (color == null)
 			return;
+		
+		// Check if we're resetting to default
+		if (color == "Default")
+		{
+			// Get current settings
+			final settings = CourseSettings.get(title);
+			// If we have no settings, color is already default
+			if (settings == null)
+				return;
+			// Reset color
+			settings.color = null;
+			// Update settings and return
+			return setState(() => CourseSettings.update(title, settings));
+		}
 		
 		// Get settings for course and find color
 		var   settings   = CourseSettings.get(title);
