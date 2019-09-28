@@ -55,11 +55,14 @@ class CourseListState extends State<CourseListDialog>
 	
 	Widget _createColor(Color color, String name) =>
 		SimpleDialogOption(
-			child: Text(
-				name,
-				style: TextStyle(
-					color: color
-				)
+			child: Padding(
+				padding: EdgeInsets.all(4.0),
+				child: Text(
+					name,
+					style: TextStyle(
+						color: color
+					)
+				),
 			),
 			onPressed: () => Navigator.of(context).pop(name),
 		);
