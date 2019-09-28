@@ -74,5 +74,6 @@
 # Ignore Android keystore info
 **/android/key.properties
 
-# Ignore iOS Podfile lock
+# Ignore iOS stuff
 **/ios/Podfile.lock
+**/ios/Flutter/flutter_export_environment.sh
