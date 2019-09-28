@@ -108,7 +108,7 @@ class UserColors
 		
 		// Try to find saved color and return it
 		final settings = CourseSettings.get(name);
-		if (settings != null)
+		if (settings?.color != null)
 			return UserColors().colors[settings.color];
 		
 		// Default color for name
