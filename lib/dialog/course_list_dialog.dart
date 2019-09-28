@@ -56,7 +56,7 @@ class CourseListState extends State<CourseListDialog>
 	Widget _createColor(Color color, String name) =>
 		SimpleDialogOption(
 			child: Padding(
-				padding: EdgeInsets.all(4.0),
+				padding: EdgeInsets.all(6.0),
 				child: Text(
 					name,
 					style: TextStyle(
