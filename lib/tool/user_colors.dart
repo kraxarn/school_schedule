@@ -103,9 +103,6 @@ class UserColors
 	
 	UserColor getColor(String name)
 	{
-		if (!Preferences.courseColors)
-			return null;
-		
 		// Try to find saved color and return it
 		final settings = CourseSettings.get(name);
 		if (settings?.color != null)

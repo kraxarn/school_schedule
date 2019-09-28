@@ -114,9 +114,6 @@ class AppLocale
 			"restart_app": "Restart app to apply changes",
 			"language_title": "Language",
 			"language_info": "Language to use in the app",
-			"course_colors_title": "Course colors",
-			"course_colors_info":
-				"Set different title colors depending on course",
 			"week_numbers_title": "Week numbers",
 			"week_numbers_info": "Show week numbers",
 			"highlight_collisions_title": "Highlight collisions",
@@ -250,8 +247,6 @@ class AppLocale
 			"restart_app": "Starta om appen för att tillämpa ändringarna",
 			"language_title": "Språk",
 			"language_info": "Språk att använda i appen",
-			"course_colors_title": "Kursfärger",
-			"course_colors_info": "Färga titlar beroende på kurs",
 			"week_numbers_title": "Veckonummer",
 			"week_numbers_info": "Visa veckonummer",
 			"highlight_collisions_title": "Markera kollisioner",

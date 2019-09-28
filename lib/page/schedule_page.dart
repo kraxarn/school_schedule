@@ -272,9 +272,9 @@ class ScheduleState extends State<SchedulePage>
 					// Title
 					Text(
 						event.summary,
-						style: Preferences.courseColors ? TextStyle(
+						style: TextStyle(
 							color: UserColors().getColor(event.courseId).color
-						) : null,
+						)
 					),
 					// Subtitle
 					Text(
