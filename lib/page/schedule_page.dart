@@ -24,7 +24,7 @@ class SchedulePage extends StatefulWidget
 		ScheduleState();
 }
 
-class ScheduleState extends State<SchedulePage>
+class ScheduleState extends State<SchedulePage> with WidgetsBindingObserver
 {
 	/// Shortcut to getting saved courses
 	List<String> get _savedCourses => Preferences.savedCourses;
@@ -545,8 +545,25 @@ class ScheduleState extends State<SchedulePage>
 	void initState()
 	{
 		super.initState();
+		WidgetsBinding.instance.addObserver(this);
 		_loadFromCache();
 		_refreshSchedule(false);
+	}
+	
+	@override
+	void dispose()
+	{
+		// Remove observer for app state
+		WidgetsBinding.instance.removeObserver(this);
+		super.dispose();
+	}
+	
+	@override
+	void didChangeAppLifecycleState(AppLifecycleState state)
+	{
+		// Refresh schedule if we resumed app
+		if (state == AppLifecycleState.resumed)
+			_refreshSchedule(false);
 	}
 	
 	@override
