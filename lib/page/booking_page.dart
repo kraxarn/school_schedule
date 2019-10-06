@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../tool/preferences.dart';
 import '../tool/date_formatter.dart';
 import '../booking/booking_tabs.dart';
 import '../booking/booking.dart';
 import '../page/main_page.dart';
+import '../dialog/booking_help_dialog.dart';
 
 class BookingPage extends StatefulWidget
 {
@@ -497,6 +497,16 @@ class BookingPageState extends State<BookingPage>
 		);
 	}
 	
+	void _showBookingHelp()
+	{
+		Navigator.of(context).push(MaterialPageRoute(
+			builder: (builder) {
+				return BookingHelpDialog();
+			},
+			fullscreenDialog: true
+		));
+	}
+	
 	Widget _buildNotSupportedPage() =>
 		Scaffold(
 			appBar: AppBar(
@@ -516,12 +526,7 @@ class BookingPageState extends State<BookingPage>
 						),
 						RaisedButton(
 							child: Text("I want to help!"),
-							onPressed: () =>
-								launch(
-									"https://github.com/kraxarn/"
-										"school_schedule/wiki/"
-										"How-to-help-with-booking"
-								),
+							onPressed: () => _showBookingHelp()
 						),
 						Text(
 							"(it's not difficult)",
@@ -542,7 +547,7 @@ class BookingPageState extends State<BookingPage>
 				"Resource booking is currently not supported when having "
 					"the demo school selected"
 			);
-		if (_locations == null)
+		if (_locations == null || true)
 			return _buildNotSupportedPage();
 		
 		// Check if logged in

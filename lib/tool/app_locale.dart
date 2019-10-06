@@ -99,6 +99,7 @@ class AppLocale
 			"to": "To",
 			"no_booked_for_location":
 				"No booked resources found for the specified location",
+			"how_to_help": "How to help",
 			//endregion
 			//region settings_page
 			"english": "English",
@@ -233,6 +234,7 @@ class AppLocale
 			"from": "Från",
 			"to": "Till",
 			"no_booked_for_location": "Inga bokade resurser på valda platsen",
+			"how_to_help": "Hur du kan hjälpa",
 			//endregion
 			//region settings_pag
 			"english": "Engelska",
