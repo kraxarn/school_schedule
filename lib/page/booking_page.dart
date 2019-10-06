@@ -627,7 +627,7 @@ class BookedResourcesState extends State<BookedResourcesDialog>
 				context: context,
 				builder: (builder) =>
 					AlertDialog(
-						title: Text(Preferences.localized("are_you_sure")),
+						title: Text(Preferences.localized("cancel_question")),
 						content: Text(
 							Preferences.localized("cancel_resource_confirm")
 								.replaceFirst("{location}", booking.location)

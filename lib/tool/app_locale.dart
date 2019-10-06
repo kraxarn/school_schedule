@@ -21,7 +21,6 @@ class AppLocale
 			"confirm": "Confirm",
 			"cancel": "CANCEL",
 			"reset": "RESET",
-			"are_you_sure": "Are you sure?", // TODO: NO
 			"no": "NO",
 			"yes": "YES",
 			"required": "Required",
@@ -90,6 +89,7 @@ class AppLocale
 			"any_time": "Any",
 			"booking_sign_in": "Booking requires you to sign in from "
 				"the settings",
+			"cancel_question": "Cancel?",
 			"cancel_resource_confirm": "Are you sure you want to cancel "
 				"resource {location} on {date} at {time}?",
 			"cancel_resource_error": "There was an error canceling the "
@@ -106,6 +106,7 @@ class AppLocale
 			"title_general": "General",
 			"change_school_title": "Change school",
 			"change_school_info": "Currently {name}",
+			"change_question": "Change?",
 			"change_school_warning":
 				"Changing school removes your login and saved courses, "
 					"are you sure you want to change school?",
@@ -152,7 +153,6 @@ class AppLocale
 			"confirm": "Bekräfta",
 			"cancel": "AVBRYT",
 			"reset": "ÅTERSTÄLL",
-			"are_you_sure": "Är du säker?",
 			"no": "NEJ",
 			"yes": "JA",
 			"required": "Obligatorisk",
@@ -224,6 +224,7 @@ class AppLocale
 			"any_time": "Alla",
 			"booking_sign_in": "Bokning kräver att du loggar in från "
 				"inställningarna",
+			"cancel_question": "Avboka?",
 			"cancel_resource_confirm": "Är du säker att du vill avboka "
 				"resurs {location} på {date} till {time}?",
 			"cancel_resource_error": "Något gick fel när resursen "
@@ -239,6 +240,7 @@ class AppLocale
 			"title_general": "Allmänt",
 			"change_school_title": "Byt skola",
 			"change_school_info": "Just nu {name}",
+			"change_question": "Byta?",
 			"change_school_warning":
 				"När du byter skola tas din inloggning och sparade kurser bort, "
 					"är du säker att du vill byta skola?",

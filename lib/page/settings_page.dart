@@ -75,7 +75,7 @@ class SettingsState extends State<SettingsPage>
 					context: context,
 					builder: (builder) =>
 						AlertDialog(
-							title: Text(Preferences.localized("are_you_sure")),
+							title: Text(Preferences.localized("change_question")),
 							content: Text(
 								Preferences.localized("change_school_warning")
 							),
