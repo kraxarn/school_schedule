@@ -385,9 +385,6 @@ class ScheduleState extends State<SchedulePage> with WidgetsBindingObserver
 		var lastDate  = DateTime.utc(0);
 		var lastWeek  = -1;
 		
-		// List of all event IDs for filtering duplicates
-		final eventIds = HashSet<String>();
-		
 		// Loop through all events
 		for (var i = 0; i < _events.length; i++)
 		{
@@ -402,15 +399,11 @@ class ScheduleState extends State<SchedulePage> with WidgetsBindingObserver
 				continue;
 			
 			// Check if duplicate
-			if (Preferences.hideDuplicates)
-			{
-				// If in set, continue
-				if (event.id != null && eventIds.contains(event.id))
-					continue;
-				
-				// Add event to list of events
-				eventIds.add(event.id);
-			}
+			final next = i < _events.length - 1 ? _events[i + 1] : null;
+			// If same id as next, it's a duplicate
+			if (Preferences.hideDuplicates
+				&& next != null && next.id == event.id)
+				continue;
 			
 			// Check if we skipped a month
 			if (lastDate.month - event.start.month > 1)
@@ -455,9 +448,8 @@ class ScheduleState extends State<SchedulePage> with WidgetsBindingObserver
 					"${Preferences.localized("week")} $week")
 				);
 			
-			// Previous and next events (if any)
+			// Previous event (next is fetched earlier)
 			final prev = i > 0 ? _events[i - 1] : null;
-			final next = i < _events.length - 1 ? _events[i + 1] : null;
 			
 			// Check if it collides with previous or next
 			var highlightTime = false;
@@ -467,8 +459,7 @@ class ScheduleState extends State<SchedulePage> with WidgetsBindingObserver
 					&& (_collide(event, prev) || _collide(prev, event)))
 					|| (next != null
 						&& next.start.day == event.start.day
-						&& (_collide(event, next) || _collide(next, event))
-						&& (!Preferences.hideDuplicates || event.id != next.id));
+						&& (_collide(event, next) || _collide(next, event)));
 			
 			// Add to all events and set parameters
 			events.add(_buildEvent(event, event.start.day != lastDate.day,
