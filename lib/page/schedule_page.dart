@@ -4,14 +4,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
+import 'package:school_schedule/tool/event_builder.dart';
 
 import '../dialog/search_dialog.dart';
 import '../dialog/course_list_dialog.dart';
 import '../tool/calendar_event.dart';
 import '../tool/preferences.dart';
-import '../tool/course_name.dart';
 import '../tool/date_formatter.dart';
-import '../tool/user_colors.dart';
 import '../demo.dart';
 import '../page/main_page.dart';
 
@@ -63,36 +62,9 @@ class ScheduleState extends State<SchedulePage> with WidgetsBindingObserver
 			"${_monthToString(date.month)} ${date.year}"
 		);
 		
-	/// Get 3 character name of weekday
-	String _weekdayToString(int weekday) =>
-		Preferences.localized("week_days").split(',')[weekday - 1];
-	
 	/// Get name of month
 	String _monthToString(int month) =>
 		Preferences.localized("months").split(',')[month - 1];
-	
-	/// Build table row for event info
-	TableRow _buildEventInfoRow(IconData icon, String title, String info) =>
-		TableRow(
-			children: [
-				Icon(icon),
-				Text(
-					title,
-					style: Theme.of(context).textTheme.subtitle,
-				),
-				Text(info ?? "(none)")
-			]
-		);
-	
-	/// Build an empty table row
-	TableRow _buildEventDivider() =>
-		TableRow(
-			children: [
-				Divider(),
-				Divider(),
-				Divider()
-			]
-		);
 	
 	/// Refresh the schedule
 	Future<void> _refreshSchedule(bool force) async
@@ -221,144 +193,10 @@ class ScheduleState extends State<SchedulePage> with WidgetsBindingObserver
 			)
 		);
 	
-	bool _isSameDay(DateTime d1, DateTime d2) =>
-		d1.year == d2.year && d1.month == d2.month && d1.day == d2.day;
-	
-	String _getDaysTo(DateTime d1, DateTime d2)
-	{
-		final diff  = d1.difference(d2);
-		final days  = diff.inDays;
-		final hours = diff.inHours;
-		
-		if (days != 0)
-			return "${Preferences.localized(days > 0
-				? "time_in" : "time_was_ago").replaceFirst("{time}",
-				"${days < 0 ? -days : days} ${Preferences.localized(
-					days == 1 ? "day" : "days").toLowerCase()}")}";
-		
-		return "${Preferences.localized(hours > 0
-			? "time_in" : "time_was_ago").replaceFirst("{time}",
-			"${hours < 0 ? -hours : hours} ${Preferences.localized(
-				hours == 1 ? "hour" : "hours")}")}";
-	}
-	
-	/// Build a calendar event
-	Widget _buildEvent(CalendarEvent event, bool printDate,
-		bool isToday, bool highlightTime) =>
-		ExpansionTile(
-			leading: printDate ? Column(
-				mainAxisAlignment: MainAxisAlignment.center,
-				crossAxisAlignment: CrossAxisAlignment.center,
-				children: <Widget>[
-					Text(
-						_weekdayToString(event.start.weekday),
-						style: Theme.of(context).textTheme.caption.copyWith(
-							color: isToday ? Theme.of(context).accentColor : null
-						),
-					),
-					Text(
-						event.start.day.toString(),
-						style: TextStyle(
-							color: isToday ? Theme.of(context).accentColor : null
-						),
-					)
-				],
-				
-			) : SizedBox(),
-			title: Column(
-				crossAxisAlignment: CrossAxisAlignment.start,
-				children: <Widget>[
-					// Title
-					Text(
-						event.summary,
-						style: TextStyle(
-							color: UserColors().getColor(event.courseId).color
-						)
-					),
-					// Subtitle
-					Text(
-						"${DateFormatter.asTime(event.start)} - "
-							"${DateFormatter.asTime(event.end)}",
-						style: Theme.of(context).textTheme.caption.copyWith(
-							color: highlightTime ? Colors.red : null,
-							fontWeight: _isWithin(DateTime.now(), event)
-								? FontWeight.bold : null,
-							decoration: event.end.difference(DateTime.now()).isNegative
-								? TextDecoration.lineThrough : null
-						),
-					)
-				],
-			),
-			trailing: Text(
-				"${event.courseId.split('-')[0]}\n"
-					"${event.location.split(' ')[0]}",
-				textAlign: TextAlign.end
-			),
-			children: <Widget>[
-				Padding(
-					padding: EdgeInsets.all(16.0),
-					child: Table(
-						defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-						columnWidths: {
-							0: FixedColumnWidth(48.0)
-						},
-						children: [
-							_buildEventInfoRow(
-								Icons.school,
-								Preferences.localized("course_code"),
-								event.courseId
-							),
-							_buildEventDivider(),
-							_buildEventInfoRow(
-								Icons.text_fields,
-								Preferences.localized("course_name"),
-								CourseName.get(event.fullCourseId)
-									?? Preferences.localized("none")
-							),
-							_buildEventDivider(),
-							_buildEventInfoRow(
-								Icons.account_circle,
-								Preferences.localized("signature"),
-								event.signature
-							),
-							_buildEventDivider(),
-							_buildEventInfoRow(
-								Icons.location_on,
-								Preferences.localized("locations"),
-								event.location.isEmpty
-									? Preferences.localized("none")
-									: event.location.replaceAll(" ", ", ")
-							),
-							_buildEventDivider(),
-							_buildEventInfoRow(
-								Icons.timelapse,
-								Preferences.localized("date_time"),
-								"${DateFormatter.asFullDateTime(event.start)} - "
-									"${_isSameDay(event.start, event.end)
-									? DateFormatter.asTime(event.end)
-									: DateFormatter.asFullDateTime(event.end)}\n(${_getDaysTo(event.start, DateTime.now())})"
-							),
-							_buildEventDivider(),
-							_buildEventInfoRow(
-								Icons.edit,
-								Preferences.localized("last_modified"),
-								DateFormatter.asFullDateTime(event.lastModified)
-							)
-						]
-					)
-				)
-			]
-		);
-	
-	/// If the date occurs within the event
-	bool _isWithin(DateTime date, CalendarEvent event) =>
-		event.start.difference(date).isNegative
-			&& !event.end.difference(date).isNegative;
-	
 	/// Return if the events have time that collides
 	/// (If either e1.start or e1.end is within e2)
 	bool _collide(CalendarEvent e1, CalendarEvent e2) =>
-		_isWithin(e1.start, e2) || _isWithin(e1.end, e2);
+		EventBuilder.isWithin(e1.start, e2) || EventBuilder.isWithin(e1.end, e2);
 	
 	/// Build all events
 	List<Widget> _buildEvents()
@@ -383,6 +221,8 @@ class ScheduleState extends State<SchedulePage> with WidgetsBindingObserver
 		// Temporary variables for use in loop
 		var lastDate  = DateTime.utc(0);
 		var lastWeek  = -1;
+		
+		final eventBuilder = EventBuilder(context);
 		
 		// Loop through all events
 		for (var i = 0; i < _events.length; i++)
@@ -461,8 +301,8 @@ class ScheduleState extends State<SchedulePage> with WidgetsBindingObserver
 						&& (_collide(event, next) || _collide(next, event)));
 			
 			// Add to all events and set parameters
-			events.add(_buildEvent(event, event.start.day != lastDate.day,
-				_isSameDay(now, event.start), highlightTime));
+			events.add(eventBuilder.build(event, event.start.day != lastDate.day,
+				EventBuilder.isSameDay(now, event.start), highlightTime));
 			
 			// Update for next lap
 			lastDate = event.start;
@@ -529,7 +369,8 @@ class ScheduleState extends State<SchedulePage> with WidgetsBindingObserver
 		final now   = DateTime.now();
 		final today = _getEventsToday(events, now);
 		
-		return "${_weekdayToString(now.weekday)}, ${_monthToString(now.month)} "
+		return "${EventBuilder.weekdayToString(now.weekday)}, "
+			"${_monthToString(now.month)} "
 			"${now.day}, ${today.length} "
 			"${Preferences.localized(today.length == 1 ? "event" : "events")}"
 			"${today.length > 0 ? ", ${_getFirstLastTime(today)}" : ""}";
