@@ -547,7 +547,7 @@ class BookingPageState extends State<BookingPage>
 				"Resource booking is currently not supported when having "
 					"the demo school selected"
 			);
-		if (_locations == null || true)
+		if (_locations == null)
 			return _buildNotSupportedPage();
 		
 		// Check if logged in
