@@ -68,6 +68,8 @@ class AppLocale
 			"delete_course": "Are you sure you want to delete {code} ({name})?",
 			"option_color": "Color...",
 			"option_delete": "Delete...",
+			"option_list": "Events...",
+			"events_for": "Events for {course}",
 			//endregion
 			//region booking_page
 			"book": "BOOK",
@@ -205,6 +207,8 @@ class AppLocale
 			"delete_course": "Är du säker på att du vill radera {code} ({name})?",
 			"option_color": "Färg...",
 			"option_delete": "Radera...",
+			"option_list": "Händelser...",
+			"events_for": "Händelser för {course}",
 			//endregion
 			//region booking_page
 			"book": "BOKA",

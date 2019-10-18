@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 
+import 'event_list_dialog.dart';
 import '../tool/preferences.dart';
 import '../tool/user_colors.dart';
 import '../tool/course_name.dart';
@@ -27,8 +28,9 @@ class CourseListState extends State<CourseListDialog>
 	void _saveHidden() => Preferences.hiddenCourses = _hidden;
 	
 	final _resultOptions = [
+		_buildResultOption("list",   Icons.today),
 		_buildResultOption("color",  Icons.color_lens),
-		_buildResultOption("delete", Icons.delete),
+		_buildResultOption("delete", Icons.delete)
 	];
 	
 	static PopupMenuItem _buildResultOption(String value, IconData icon) =>
@@ -149,6 +151,14 @@ class CourseListState extends State<CourseListDialog>
 				)
 		);
 	
+	void _showEventList(String courseId) async
+	{
+		await Navigator.of(context).push(MaterialPageRoute(
+			builder: (context) => EventListDialog(courseId),
+			fullscreenDialog: true
+		));
+	}
+	
 	/// Build a result showing a delete button
 	Widget _buildResult(String title, String subtitle) =>
 		PopupMenuButton(
@@ -163,6 +173,9 @@ class CourseListState extends State<CourseListDialog>
 						break;
 					case "delete":
 						_showDelete(title, subtitle);
+						break;
+					case "list":
+						_showEventList(title);
 						break;
 				}
 			},
