@@ -395,7 +395,7 @@ class ScheduleState extends State<SchedulePage> with WidgetsBindingObserver
 			// or if it's a course we should hide
 			if ((Preferences.hidePastEvents
 				&& event.end.difference(now).isNegative)
-				|| (Preferences.hiddenCourses.contains(event.courseId)))
+				|| (Preferences.hiddenCourses.any((c) => event.courseId.contains(c))))
 				continue;
 			
 			// Check if duplicate
