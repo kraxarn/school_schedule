@@ -26,7 +26,7 @@ class ScheduleState extends State<SchedulePage> with WidgetsBindingObserver
 	List<String> get _savedCourses => Preferences.savedCourses;
 	
 	// All events to show in the list
-	static final _events = List<CalendarEvent>();
+	static final allEvents = List<CalendarEvent>();
 	
 	/// Reusable HTTP instance for schedule refreshing
 	final _http = http.Client();
@@ -49,8 +49,8 @@ class ScheduleState extends State<SchedulePage> with WidgetsBindingObserver
 		if (Preferences.school.id == null)
 		{
 			setState(() {
-				_events.clear();
-				_events.addAll(Demo.calendarEvents);
+				allEvents.clear();
+				allEvents.addAll(Demo.calendarEvents);
 			});
 			return;
 		}
@@ -64,7 +64,7 @@ class ScheduleState extends State<SchedulePage> with WidgetsBindingObserver
 		// We only set state here if events is empty
 		if (_savedCourses == null ||  _savedCourses.isEmpty)
 		{
-			setState(() => _events.clear());
+			setState(() => allEvents.clear());
 			_refreshing = false;
 			return;
 		}
@@ -82,11 +82,11 @@ class ScheduleState extends State<SchedulePage> with WidgetsBindingObserver
 		// Only set state if current page
 		if (MainState.navBarIndex == 0 && tempEvents.isNotEmpty)
 		{
-			_events.clear();
-			setState(() => _events.addAll(tempEvents));
+			allEvents.clear();
+			setState(() => allEvents.addAll(tempEvents));
 
 			// Sort them to be sorted in cache and when showing later
-			_events.sort((e1, e2) => e1.start.compareTo(e2.start));
+			allEvents.sort((e1, e2) => e1.start.compareTo(e2.start));
 		}
 		
 		// Check if something went wrong
@@ -102,7 +102,7 @@ class ScheduleState extends State<SchedulePage> with WidgetsBindingObserver
 		}
 		
 		// Check if any events got filtered
-		final hiddenEvents = tempEvents.length - _events.length;
+		final hiddenEvents = tempEvents.length - allEvents.length;
 		if (hiddenEvents > 0)
 			Scaffold.of(context).showSnackBar(SnackBar(
 				content: Text(Preferences.localized(hiddenEvents == 1
@@ -117,12 +117,12 @@ class ScheduleState extends State<SchedulePage> with WidgetsBindingObserver
 	/// Save current event list to cache
 	void _saveToCache() async =>
 		await File("${(await getTemporaryDirectory()).path}/events.json")
-			.writeAsString(jsonEncode(_events.map((event) => event.toJson()).toList()));
+			.writeAsString(jsonEncode(allEvents.map((event) => event.toJson()).toList()));
 	
 	/// Loads the current event list from cache
 	void _loadFromCache() async
 	{
-		if (_events.isNotEmpty)
+		if (allEvents.isNotEmpty)
 			return;
 		
 		final file = File(
@@ -134,8 +134,8 @@ class ScheduleState extends State<SchedulePage> with WidgetsBindingObserver
 		final events = tempEvents.map((value) =>
 			CalendarEvent.fromJson(value)).toList();
 		
-		_events.clear();
-		setState(() => _events.addAll(events));
+		allEvents.clear();
+		setState(() => allEvents.addAll(events));
 	}
 	
 	/// Return if the events have time that collides
@@ -146,7 +146,7 @@ class ScheduleState extends State<SchedulePage> with WidgetsBindingObserver
 	/// Build all events
 	List<Widget> _buildEvents()
 	{
-		if (_refreshing && _events.isEmpty)
+		if (_refreshing && allEvents.isEmpty)
 			return [
 				SizedBox()
 			];
@@ -159,8 +159,10 @@ class ScheduleState extends State<SchedulePage> with WidgetsBindingObserver
 			);
 		
 		// Check if no events for saved courses
-		if (_events.isEmpty)
-			return _buildStatusMessage(Preferences.localized("no_events"));
+		if (allEvents.isEmpty)
+			return EventBuilder.buildStatusMessage(
+				Preferences.localized("no_events")
+			);
 		
 		// List of all built widgets
 		final now    = DateTime.now();
@@ -173,10 +175,10 @@ class ScheduleState extends State<SchedulePage> with WidgetsBindingObserver
 		final eventBuilder = EventBuilder(context);
 		
 		// Loop through all events
-		for (var i = 0; i < _events.length; i++)
+		for (var i = 0; i < allEvents.length; i++)
 		{
 			// Get current event
-			final event = _events[i];
+			final event = allEvents[i];
 			
 			// Check if we should always hide past events
 			// or if it's a course we should hide
@@ -186,7 +188,7 @@ class ScheduleState extends State<SchedulePage> with WidgetsBindingObserver
 				continue;
 			
 			// Check if duplicate
-			final next = i < _events.length - 1 ? _events[i + 1] : null;
+			final next = i < allEvents.length - 1 ? allEvents[i + 1] : null;
 			// If same id as next, it's a duplicate
 			if (Preferences.hideDuplicates
 				&& next != null && next.id == event.id)
@@ -236,7 +238,7 @@ class ScheduleState extends State<SchedulePage> with WidgetsBindingObserver
 				);
 			
 			// Previous event (next is fetched earlier)
-			final prev = i > 0 ? _events[i - 1] : null;
+			final prev = i > 0 ? allEvents[i - 1] : null;
 			
 			// Check if it collides with previous or next
 			var highlightTime = false;
@@ -368,7 +370,7 @@ class ScheduleState extends State<SchedulePage> with WidgetsBindingObserver
 							)
 						),
 						Text(
-							_getSubtitle(_events),
+							_getSubtitle(allEvents),
 							style: Theme.of(context).textTheme.caption.apply(
 								// It's in the title, so always light color
 								color: ThemeData.dark().textTheme.caption.color
