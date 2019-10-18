@@ -4,22 +4,20 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
-import 'package:school_schedule/tool/event_builder.dart';
 
 import '../dialog/search_dialog.dart';
 import '../dialog/course_list_dialog.dart';
 import '../tool/calendar_event.dart';
 import '../tool/preferences.dart';
 import '../tool/date_formatter.dart';
+import '../tool/event_builder.dart';
 import '../demo.dart';
 import '../page/main_page.dart';
-
 
 class SchedulePage extends StatefulWidget
 {
 	@override
-	State createState() =>
-		ScheduleState();
+	State createState() => ScheduleState();
 }
 
 class ScheduleState extends State<SchedulePage> with WidgetsBindingObserver
@@ -38,33 +36,6 @@ class ScheduleState extends State<SchedulePage> with WidgetsBindingObserver
 	
 	/// When we last refreshed the schedule
 	static DateTime _lastRefresh;
-	
-	/// Build title with bottom border
-	Widget _buildTitle(String text) =>
-		DecoratedBox(
-			child: ListTile(
-				title: Text(
-					text,
-					style: Theme.of(context).textTheme.title,
-				),
-			
-			),
-			decoration: BoxDecoration(
-				border: Border(
-					bottom: Divider.createBorderSide(context)
-				)
-			),
-		);
-	
-	/// Build a title with month and year
-	Widget _buildDateTitle(DateTime date) =>
-		_buildTitle(
-			"${_monthToString(date.month)} ${date.year}"
-		);
-		
-	/// Get name of month
-	String _monthToString(int month) =>
-		Preferences.localized("months").split(',')[month - 1];
 	
 	/// Refresh the schedule
 	Future<void> _refreshSchedule(bool force) async
@@ -167,32 +138,6 @@ class ScheduleState extends State<SchedulePage> with WidgetsBindingObserver
 		setState(() => _events.addAll(events));
 	}
 	
-	/// Build centered and padded status message
-	List<Widget> _buildStatusMessage(String text) =>
-		[
-			Padding(
-				padding: EdgeInsets.all(32.0),
-				child: Text(
-					text,
-					textAlign: TextAlign.center,
-				)
-			)
-		];
-	
-	Widget _buildSubtitle(String text) =>
-		Padding (
-			padding: EdgeInsets.only(
-				left: 72.0,
-				top: 8.0,
-				bottom: 8.0
-			),
-			child: Text(
-				text,
-				style: Theme.of(context).textTheme.caption,
-				
-			)
-		);
-	
 	/// Return if the events have time that collides
 	/// (If either e1.start or e1.end is within e2)
 	bool _collide(CalendarEvent e1, CalendarEvent e2) =>
@@ -207,8 +152,11 @@ class ScheduleState extends State<SchedulePage> with WidgetsBindingObserver
 			];
 		
 		// Check if no saved courses
-		if (Preferences.school.id != null && (_savedCourses == null || _savedCourses.isEmpty))
-			return _buildStatusMessage(Preferences.localized("no_courses"));
+		if (Preferences.school.id != null && (_savedCourses == null
+			|| _savedCourses.isEmpty))
+			return EventBuilder.buildStatusMessage(
+				Preferences.localized("no_courses")
+			);
 		
 		// Check if no events for saved courses
 		if (_events.isEmpty)
@@ -262,7 +210,7 @@ class ScheduleState extends State<SchedulePage> with WidgetsBindingObserver
 					);
 					
 					// Add month title
-					events.add(_buildDateTitle(newDate));
+					events.add(eventBuilder.buildDateTitle(newDate));
 					
 					// Add "no events for this month"
 					events.add(ListTile(
@@ -277,13 +225,13 @@ class ScheduleState extends State<SchedulePage> with WidgetsBindingObserver
 			// Check if new month
 			if (lastDate.month != event.start.month
 				|| lastDate.year != event.start.year)
-				events.add(_buildDateTitle(event.start));
+				events.add(eventBuilder.buildDateTitle(event.start));
 			
 			// Week of event
 			final week = DateFormatter.getWeekNumber(event.start);
 			
 			if (week != lastWeek && Preferences.showWeek)
-				events.add(_buildSubtitle(
+				events.add(eventBuilder.buildSubtitle(
 					"${Preferences.localized("week")} $week")
 				);
 			
@@ -311,7 +259,9 @@ class ScheduleState extends State<SchedulePage> with WidgetsBindingObserver
 		
 		// Another empty event check if all were filtered away
 		if (events.isEmpty)
-			return _buildStatusMessage(Preferences.localized("no_events_filter"));
+			return EventBuilder.buildStatusMessage(
+				Preferences.localized("no_events_filter")
+			);
 		
 		// Return final widget list
 		return events;
@@ -370,7 +320,7 @@ class ScheduleState extends State<SchedulePage> with WidgetsBindingObserver
 		final today = _getEventsToday(events, now);
 		
 		return "${EventBuilder.weekdayToString(now.weekday)}, "
-			"${_monthToString(now.month)} "
+			"${EventBuilder.monthToString(now.month)} "
 			"${now.day}, ${today.length} "
 			"${Preferences.localized(today.length == 1 ? "event" : "events")}"
 			"${today.length > 0 ? ", ${_getFirstLastTime(today)}" : ""}";

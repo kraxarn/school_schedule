@@ -24,6 +24,59 @@ class EventBuilder
 	static String weekdayToString(int weekday) =>
 		Preferences.localized("week_days").split(',')[weekday - 1];
 	
+	/// Get name of month
+	static String monthToString(int month) =>
+		Preferences.localized("months").split(',')[month - 1];
+	
+	/// Build centered and padded status message
+	static List<Widget> buildStatusMessage(String text) =>
+		[
+			Padding(
+				padding: EdgeInsets.all(32.0),
+				child: Text(
+					text,
+					textAlign: TextAlign.center,
+				)
+			)
+		];
+	
+	/// Build title with bottom border
+	Widget _buildTitle(String text) =>
+		DecoratedBox(
+			child: ListTile(
+				title: Text(
+					text,
+					style: Theme.of(_context).textTheme.title,
+				),
+			
+			),
+			decoration: BoxDecoration(
+				border: Border(
+					bottom: Divider.createBorderSide(_context)
+				)
+			),
+		);
+	
+	Widget buildSubtitle(String text) =>
+		Padding (
+			padding: EdgeInsets.only(
+				left: 72.0,
+				top: 8.0,
+				bottom: 8.0
+			),
+			child: Text(
+				text,
+				style: Theme.of(_context).textTheme.caption,
+			
+			)
+		);
+	
+	/// Build a title with month and year
+	Widget buildDateTitle(DateTime date) =>
+		_buildTitle(
+			"${monthToString(date.month)} ${date.year}"
+		);
+	
 	String _getDaysTo(DateTime d1, DateTime d2)
 	{
 		final diff  = d1.difference(d2);
