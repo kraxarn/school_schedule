@@ -470,6 +470,10 @@ class ScheduleState extends State<SchedulePage> with WidgetsBindingObserver
 			lastWeek = week;
 		}
 		
+		// Another empty event check if all were filtered away
+		if (events.isEmpty)
+			return _buildStatusMessage(Preferences.localized("no_events_filter"));
+		
 		// Return final widget list
 		return events;
 	}
