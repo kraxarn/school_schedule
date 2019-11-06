@@ -26,6 +26,7 @@ class AppLocale
 			"required": "Required",
 			"delete": "Delete?",
 			"default": "Default",
+			"something_went_wrong": "Sorry, something went wrong :(",
 			//endregion
 			//region start_page
 			"title_start": "Select School",
@@ -171,6 +172,7 @@ class AppLocale
 			"required": "Obligatorisk",
 			"delete": "Radera?",
 			"default": "Standard",
+			"something_went_wrong": "Tyvärr gick något fel :(",
 			//endregion
 			//region start_page
 			"title_start": "Välj Skola",

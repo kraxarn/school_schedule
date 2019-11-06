@@ -71,14 +71,14 @@ class ScheduleState extends State<SchedulePage> with WidgetsBindingObserver
 		}
 		
 		final tempEvents = List<CalendarEvent>();
-		var error = false;
+		dynamic error;
 		
 		// Get events four courses and save to tempEvents
 		for (var course in _savedCourses)
 			await CalendarEvent.getCalendar(_http, Preferences.school, course)
 				.then((cal) =>
 					tempEvents.addAll(CalendarEvent.parseMultiple(cal)))
-				.catchError((e) => error = true);
+				.catchError((e) => error = e);
 		
 		// Only set state if current page
 		if (MainState.navBarIndex == 0 && tempEvents.isNotEmpty)
@@ -92,9 +92,11 @@ class ScheduleState extends State<SchedulePage> with WidgetsBindingObserver
 		
 		// Check if something went wrong
 		// No need to save to cache if error
-		if (error)
+		if (error != null)
 			Scaffold.of(context).showSnackBar(SnackBar(
-				content: Text(Preferences.localized("connection_failed")),
+				content: Text(Preferences.localized(
+					error.runtimeType == SocketException
+						? "connection_failed" : "something_went_wrong")),
 			));
 		else
 		{
@@ -180,7 +182,7 @@ class ScheduleState extends State<SchedulePage> with WidgetsBindingObserver
 		{
 			// Get current event
 			final event = allEvents[i];
-			
+
 			// Check if we should always hide past events
 			// or if it's a course we should hide
 			if ((Preferences.hidePastEvents
