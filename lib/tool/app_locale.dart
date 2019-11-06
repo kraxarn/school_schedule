@@ -25,6 +25,7 @@ class AppLocale
 			"yes": "YES",
 			"required": "Required",
 			"delete": "Delete?",
+			"default": "Default",
 			//endregion
 			//region start_page
 			"title_start": "Select School",
@@ -161,6 +162,7 @@ class AppLocale
 			"yes": "JA",
 			"required": "Obligatorisk",
 			"delete": "Radera?",
+			"default": "Standard",
 			//endregion
 			//region start_page
 			"title_start": "Välj Skola",

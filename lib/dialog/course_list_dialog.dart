@@ -79,7 +79,8 @@ class CourseListState extends State<CourseListDialog>
 						_createColor(color.color, color.toString())
 					).toList()
 						..add(_createColor(
-							Theme.of(context).textTheme.title.color, "Default"
+							Theme.of(context).textTheme.title.color,
+							Preferences.localized("default")
 						))
 				)
 		);
