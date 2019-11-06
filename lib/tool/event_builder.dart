@@ -44,6 +44,8 @@ class EventBuilder
 				)
 			)
 		];
+
+	final _now = DateTime.now();
 	
 	/// Build title with bottom border
 	Widget _buildTitle(String text) =>
@@ -81,23 +83,37 @@ class EventBuilder
 		_buildTitle(
 			"${monthToString(date.month)} ${date.year}"
 		);
-	
-	String _getDaysTo(DateTime d1, DateTime d2)
+
+	String _getDaysToEvent(CalendarEvent event)
 	{
-		final diff  = d1.difference(d2);
-		final days  = diff.inDays;
-		final hours = diff.inHours;
-		
-		if (days != 0)
-			return "${Preferences.localized(days > 0
-				? "time_in" : "time_was_ago").replaceFirst("{time}",
-				"${days < 0 ? -days : days} ${Preferences.localized(
-					days == 1 ? "day" : "days").toLowerCase()}")}";
-		
-		return "${Preferences.localized(hours > 0
-			? "time_in" : "time_was_ago").replaceFirst("{time}",
-			"${hours < 0 ? -hours : hours} ${Preferences.localized(
-				hours == 1 ? "hour" : "hours")}")}";
+		if (_now.difference(event.start).isNegative)
+		{
+			// Event has not started yet
+
+			// Get different to event start
+			final diff = event.start.difference(_now);
+			
+			return Preferences.localized("time_in")
+				.replaceFirst("{time}", "${diff.inDays > 0 ? diff.inDays : diff.inHours} ${diff.inDays > 0
+				? Preferences.localized("${diff.inDays > 0 ? "days" : "day"}")
+				: Preferences.localized("${diff.inHours > 0 ? "hours" : "hour"}")}");
+		}
+		else if (event.end.difference(_now).isNegative)
+		{
+			// Event already ended
+			// (this is not likely to show often)
+
+			// Get different to event end
+			final diff = _now.difference(event.end);
+
+			return Preferences.localized("time_was_ago")
+				.replaceFirst("{time}", "${diff.inDays > 0 ? diff.inDays : diff.inHours} ${diff.inDays > 0
+				? Preferences.localized("${diff.inDays > 0 ? "days" : "day"}")
+				: Preferences.localized("${diff.inHours > 0 ? "hours" : "hour"}")}");
+		}
+
+		// It is now
+		return Preferences.localized("time_now");
 	}
 
 	/// Build a row with only one type of widget
@@ -268,7 +284,7 @@ class EventBuilder
 								"${DateFormatter.asFullDateTime(event.start)} - "
 									"${isSameDay(event.start, event.end)
 									? DateFormatter.asTime(event.end)
-									: DateFormatter.asFullDateTime(event.end)}\n(${_getDaysTo(event.start, DateTime.now())})"
+									: DateFormatter.asFullDateTime(event.end)}\n(${_getDaysToEvent(event)})"
 							),
 							_buildEventDivider(),
 							_buildEventInfoRow(
