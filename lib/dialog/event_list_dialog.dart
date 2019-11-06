@@ -25,7 +25,7 @@ class EventListDialogState extends State<EventListDialog>
 	EventListDialogState(this._courseId)
 	{
 		_events = ScheduleState.allEvents.where((e) =>
-			_courseId.contains(e.courseId)).toList();
+			e.courseId.contains(_courseId)).toList();
 	}
 	
 	/// Modified, "lighter", version of SchedulePage._buildEvents
