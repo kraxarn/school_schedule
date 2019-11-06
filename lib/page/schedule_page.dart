@@ -8,6 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import '../dialog/search_dialog.dart';
 import '../dialog/course_list_dialog.dart';
 import '../tool/calendar_event.dart';
+import '../tool/course_settings.dart';
 import '../tool/preferences.dart';
 import '../tool/date_formatter.dart';
 import '../tool/event_builder.dart';
@@ -184,7 +185,8 @@ class ScheduleState extends State<SchedulePage> with WidgetsBindingObserver
 			// or if it's a course we should hide
 			if ((Preferences.hidePastEvents
 				&& event.end.difference(now).isNegative)
-				|| (Preferences.hiddenCourses.any((c) => event.courseId.contains(c))))
+				|| (Preferences.hiddenCourses.any((c) =>
+					c.startsWith(CourseSettings.getId(event.courseId)))))
 				continue;
 			
 			// Check if duplicate
