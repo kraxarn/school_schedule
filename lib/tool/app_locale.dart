@@ -45,6 +45,7 @@ class AppLocale
 			"locations": "Locations",
 			"date_time": "Date and time",
 			"last_modified": "Last Modified",
+			"icon": "Icon",
 			"connection_failed": "Connection failed, try again later",
 			"no_courses": "No courses found, press the search button to add",
 			"no_events": "No events found for saved courses",
@@ -61,6 +62,10 @@ class AppLocale
 			"time_in": "in {time}",
 			"hiding_event": "Hiding {events} duplicate event",
 			"hiding_events": "Hiding {events} duplicate events",
+			"icon_clear": "Clear",
+			"icon_done": "Done",
+			"icon_favorite": "Favorite",
+			"icon_flag": "Flag",
 			//endregion
 			//region course_list_dialog
 			"select_color": "Select color",
@@ -182,6 +187,7 @@ class AppLocale
 			"locations": "Platser",
 			"date_time": "Dag och tid",
 			"last_modified": "Senast Uppdaterad",
+			"icon": "Ikon",
 			"connection_failed": "Anslutning misslyckades, försök igen senare",
 			"no_courses": "Inga kurser hittades, tryck sök för att lägga till",
 			"no_events": "Inga händelser hittades för de sparade kurserna",
@@ -201,6 +207,10 @@ class AppLocale
 			"hours": "timmar",
 			"hiding_event": "Döljer {events} duplicerade händelse",
 			"hiding_events": "Döljer {events} duplicerade händelser",
+			"icon_clear": "Rensa",
+			"icon_done": "Klar",
+			"icon_favorite": "Favorit",
+			"icon_flag": "Flagga",
 			//endregion
 			//region course_list_dialog
 			"select_color": "Välj färg",
