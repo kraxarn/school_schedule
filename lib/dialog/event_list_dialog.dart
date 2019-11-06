@@ -45,7 +45,7 @@ class EventListDialogState extends State<EventListDialog>
 		var lastDate  = DateTime.utc(0);
 		var lastWeek  = -1;
 		
-		final eventBuilder = EventBuilder(context);
+		final eventBuilder = EventBuilder(context, null);
 		
 		// Loop through all events
 		for (var i = 0; i < _events.length; i++)

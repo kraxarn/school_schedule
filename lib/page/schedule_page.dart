@@ -172,7 +172,7 @@ class ScheduleState extends State<SchedulePage> with WidgetsBindingObserver
 		var lastDate  = DateTime.utc(0);
 		var lastWeek  = -1;
 		
-		final eventBuilder = EventBuilder(context);
+		final eventBuilder = EventBuilder(context, this);
 		
 		// Loop through all events
 		for (var i = 0; i < allEvents.length; i++)

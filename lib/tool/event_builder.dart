@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../page/schedule_page.dart';
 import '../tool/calendar_event.dart';
 import '../tool/preferences.dart';
 import '../tool/course_name.dart';
@@ -9,8 +10,10 @@ import '../tool/date_formatter.dart';
 class EventBuilder
 {
 	BuildContext _context;
+
+	ScheduleState _state;
 	
-	EventBuilder(this._context);
+	EventBuilder(this._context, this._state);
 	
 	/// If the date occurs within the event
 	static bool isWithin(DateTime date, CalendarEvent event) =>
