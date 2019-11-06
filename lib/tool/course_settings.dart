@@ -21,8 +21,11 @@ class CourseSettings
 	static final _courseSettings = Map<String, CourseSettings>();
 	
 	/// Formats course ID
-	static String getId(String courseId) =>
-		courseId.substring(0, courseId.indexOf('-'));
+	static String getId(String courseId)
+	{
+		final i = courseId.indexOf('-');
+		return i > 0 ? courseId.substring(0, i) : courseId;
+	}
 	
 	/// Load course settings from file
 	static Future<bool> load() async
