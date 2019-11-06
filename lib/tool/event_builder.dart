@@ -157,15 +157,38 @@ class EventBuilder
 			]
 		);
 
-	static PopupMenuItem _buildIconOption(String value, IconData icon) =>
+	static PopupMenuItem _buildIconOption(String value, IconData icon, int eventIcon) =>
 		PopupMenuItem(
 			child: ListTile(
 				contentPadding: EdgeInsets.all(0.0),
 				leading: Icon(icon),
 				title: Text(Preferences.localized("icon_$value"))
 			),
-			value: icon.codePoint
+			value: icon.codePoint,
+			enabled: icon.codePoint != eventIcon
 		);
+
+	List<PopupMenuItem> _buildIconOptions(String eventId)
+	{
+		final icon = EventSettings.get(eventId)?.icon;
+
+		return [
+			_buildIconOption("clear", Icons.clear, icon),
+			_buildIconOption("done", Icons.done, icon),
+			_buildIconOption("favorite", Icons.favorite, icon),
+			_buildIconOption("flag", Icons.flag, icon),
+			PopupMenuItem(
+				child: ListTile(
+					contentPadding: EdgeInsets.all(0.0),
+					leading: SizedBox(),
+					title: Text(
+						Preferences.localized("default")
+					)
+				),
+				value: 0
+			)
+		];
+	}
 
 	String _getEventDuration(CalendarEvent event)
 	{
@@ -324,20 +347,7 @@ class EventBuilder
 										if (_state != null)
 											_state.onSetState();
 									},
-									itemBuilder: (builder) => [
-										_buildIconOption("clear", Icons.clear),
-										_buildIconOption("done", Icons.done),
-										_buildIconOption("favorite", Icons.favorite),
-										_buildIconOption("flag", Icons.flag),
-										PopupMenuItem(
-											child: ListTile(
-												contentPadding: EdgeInsets.all(0.0),
-												leading: SizedBox(),
-												title: Text(Preferences.localized("default"))
-											),
-											value: 0,
-										)
-									],
+									itemBuilder: (builder) => _buildIconOptions(event.id),
 									child: Icon(
 										IconData(
 											EventSettings.get(event.id)?.icon ?? 58835,
