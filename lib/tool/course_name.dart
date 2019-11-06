@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
 
+import 'course_settings.dart';
+
 class CourseName
 {
 	// TODO: Maybe integrate this into CourseSettings (as nickname)
@@ -19,7 +21,9 @@ class CourseName
 		_courseNames.clear();
 		_courseNames.addAll(
 			(jsonDecode(await file.readAsString()) as Map<String, dynamic>)
-				.map((key, value) => MapEntry<String, String>(key, value)));
+				.map((key, value) =>
+					// getId here for "backwards compatibility"
+					MapEntry<String, String>(CourseSettings.getId(key), value)));
 		return true;
 	}
 	
@@ -30,7 +34,7 @@ class CourseName
 	
 	/// Get name of specified course
 	static String get(String courseId) =>
-		_courseNames[courseId];
+		_courseNames[CourseSettings.getId(courseId)];
 	
 	/// Add a course and name to the list and save to file
 	static void add(String courseId, String courseName)
