@@ -35,7 +35,7 @@ class EventListDialogState extends State<EventListDialog>
 		// Check if no events for saved courses
 		if (_events.isEmpty)
 			return EventBuilder.buildStatusMessage(
-				Preferences.localized("no_events")
+				Preferences.localized("no_events_course")
 			);
 		
 		// List of all built widgets
