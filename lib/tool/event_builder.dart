@@ -151,6 +151,14 @@ class EventBuilder
 			value: icon.codePoint
 		);
 
+	String _getEventDuration(CalendarEvent event)
+	{
+		final diff = event.end.difference(event.start);
+
+		return Preferences.localized("event_duration")
+			.replaceFirst('{h}', diff.inHours.toString())
+			.replaceFirst('{m}', (diff.inMinutes % 60).toString());
+	}
 	
 	Widget build(CalendarEvent event, bool printDate,
 		bool isToday, bool highlightTime) =>
@@ -187,7 +195,8 @@ class EventBuilder
 					// Subtitle
 					Text(
 						"${DateFormatter.asTime(event.start)} - "
-							"${DateFormatter.asTime(event.end)}",
+							"${DateFormatter.asTime(event.end)} "
+							"(${_getEventDuration(event)})",
 						style: Theme.of(_context).textTheme.caption.copyWith(
 							color: highlightTime ? Colors.red : null,
 							fontWeight: isWithin(DateTime.now(), event)

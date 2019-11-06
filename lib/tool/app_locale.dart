@@ -66,6 +66,7 @@ class AppLocale
 			"icon_done": "Done",
 			"icon_favorite": "Favorite",
 			"icon_flag": "Flag",
+			"event_duration": "{h}h, {m}m",
 			//endregion
 			//region course_list_dialog
 			"select_color": "Select color",
@@ -211,6 +212,7 @@ class AppLocale
 			"icon_done": "Klar",
 			"icon_favorite": "Favorit",
 			"icon_flag": "Flagga",
+			"event_duration": "{h}t, {m}m",
 			//endregion
 			//region course_list_dialog
 			"select_color": "Välj färg",
