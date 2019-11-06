@@ -117,7 +117,18 @@ class EventBuilder
 				Text(info ?? "(none)")
 			]
 		);
-	
+
+	TableRow _buildEventInfoRowWidget(IconData icon, String title, Widget info) =>
+		TableRow(
+			children: [
+				Icon(icon),
+				Text(
+					title,
+					style: Theme.of(_context).textTheme.subtitle,
+				),
+				info
+			]
+		);
 	Widget build(CalendarEvent event, bool printDate,
 		bool isToday, bool highlightTime) =>
 		ExpansionTile(
