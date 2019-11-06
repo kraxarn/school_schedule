@@ -5,10 +5,13 @@ import 'page/main_page.dart';
 import 'page/start_page.dart';
 import 'tool/preferences.dart';
 
-void main() =>
+void main()
+{
+	WidgetsFlutterBinding.ensureInitialized();
 	Preferences.create().then((result) {
 		runApp(MyApp());
 	});
+}
 
 class MyApp extends StatelessWidget
 {
