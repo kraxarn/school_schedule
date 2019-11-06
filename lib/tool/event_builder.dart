@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../page/schedule_page.dart';
 import '../tool/calendar_event.dart';
+import '../tool/course_settings.dart';
 import '../tool/event_settings.dart';
 import '../tool/preferences.dart';
 import '../tool/course_name.dart';
@@ -210,7 +211,7 @@ class EventBuilder
 						width: 8,
 					),
 					Text(
-						"${event.courseId.split('-')[0]}\n"
+						"${CourseSettings.getId(event.courseId)}\n"
 							"${event.location.split(' ')[0]}",
 						textAlign: TextAlign.end
 					)
