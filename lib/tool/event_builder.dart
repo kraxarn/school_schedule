@@ -156,8 +156,8 @@ class EventBuilder
 		final diff = event.end.difference(event.start);
 
 		return Preferences.localized("event_duration")
-			.replaceFirst('{h}', diff.inHours.toString())
-			.replaceFirst('{m}', (diff.inMinutes % 60).toString());
+			.replaceFirst("{h}", diff.inHours.toString())
+			.replaceFirst("{m}", (diff.inMinutes % 60).toString());
 	}
 	
 	Widget build(CalendarEvent event, bool printDate,
