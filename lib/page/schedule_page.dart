@@ -327,6 +327,10 @@ class ScheduleState extends State<SchedulePage> with WidgetsBindingObserver
 			"${Preferences.localized(today.length == 1 ? "event" : "events")}"
 			"${today.length > 0 ? ", ${_getFirstLastTime(today)}" : ""}";
 	}
+
+	/// When we want to update the state from another class
+	void onSetState() =>
+		setState(() => null);
 	
 	@override
 	void initState()
