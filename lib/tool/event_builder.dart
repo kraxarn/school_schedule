@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../page/schedule_page.dart';
 import '../tool/calendar_event.dart';
+import '../tool/event_settings.dart';
 import '../tool/preferences.dart';
 import '../tool/course_name.dart';
 import '../tool/user_colors.dart';
@@ -138,6 +139,18 @@ class EventBuilder
 				info
 			]
 		);
+
+	static PopupMenuItem _buildIconOption(String value, IconData icon) =>
+		PopupMenuItem(
+			child: ListTile(
+				contentPadding: EdgeInsets.all(0.0),
+				leading: Icon(icon),
+				title: Text(Preferences.localized("icon_$value"))
+			),
+			value: icon.codePoint
+		);
+
+	
 	Widget build(CalendarEvent event, bool printDate,
 		bool isToday, bool highlightTime) =>
 		ExpansionTile(
@@ -184,10 +197,24 @@ class EventBuilder
 					)
 				],
 			),
-			trailing: Text(
-				"${event.courseId.split('-')[0]}\n"
-					"${event.location.split(' ')[0]}",
-				textAlign: TextAlign.end
+			trailing: Row(
+				mainAxisSize: MainAxisSize.min,
+				children: [
+					EventSettings.get(event.id)?.icon == null
+						? SizedBox()
+						: Icon(IconData(
+							EventSettings.get(event.id)?.icon,
+							fontFamily: "MaterialIcons"
+						)),
+					SizedBox(
+						width: 8,
+					),
+					Text(
+						"${event.courseId.split('-')[0]}\n"
+							"${event.location.split(' ')[0]}",
+						textAlign: TextAlign.end
+					)
+				]
 			),
 			children: <Widget>[
 				Padding(
@@ -238,6 +265,60 @@ class EventBuilder
 								Icons.edit,
 								Preferences.localized("last_modified"),
 								DateFormatter.asFullDateTime(event.lastModified)
+							),
+							_state == null ? _buildEmptyEvent() : _buildEventDivider(),
+							_state == null ? _buildEmptyEvent() : _buildEventInfoRowWidget(
+								Icons.image,
+								Preferences.localized("icon"),
+								PopupMenuButton(
+									onSelected: (value)
+									{
+										// null is not allowed
+										if (value == 0)
+											value = null;
+
+										var settings = EventSettings.get(event.id);
+
+										if (settings == null)
+										{
+											// No previous settings, create new
+											settings = EventSettings(
+												icon: value,
+												ends: event.end.millisecondsSinceEpoch
+											);
+										}
+										else
+											// Update current settings
+											settings.icon = value;
+
+										// Update
+										EventSettings.set(event.id, settings);
+
+										// Set state if on schedule page
+										if (_state != null)
+											_state.onSetState();
+									},
+									itemBuilder: (builder) => [
+										_buildIconOption("clear", Icons.clear),
+										_buildIconOption("done", Icons.done),
+										_buildIconOption("favorite", Icons.favorite),
+										_buildIconOption("flag", Icons.flag),
+										PopupMenuItem(
+											child: ListTile(
+												contentPadding: EdgeInsets.all(0.0),
+												leading: SizedBox(),
+												title: Text(Preferences.localized("default"))
+											),
+											value: 0,
+										)
+									],
+									child: Icon(
+										IconData(
+											EventSettings.get(event.id)?.icon ?? 58835,
+											fontFamily: "MaterialIcons"
+										)
+									),
+								)
 							)
 						]
 					)
