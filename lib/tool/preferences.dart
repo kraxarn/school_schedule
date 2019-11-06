@@ -2,13 +2,14 @@ import 'dart:io';
 
 import 'package:encrypt/encrypt.dart';
 import 'package:flutter/material.dart' as material;
-import 'package:school_schedule/tool/app_locale.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:unique_identifier/unique_identifier.dart';
 
 import 'account.dart';
+import 'app_locale.dart';
 import 'course_name.dart';
 import 'course_settings.dart';
+import 'event_settings.dart';
 import 'school.dart';
 
 /// Application preferences
@@ -282,6 +283,7 @@ class Preferences
 		
 		await CourseName.load();
 		await CourseSettings.load();
+		await EventSettings.load();
 		return true;
 	}
 }
