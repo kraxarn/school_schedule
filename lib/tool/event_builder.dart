@@ -94,16 +94,22 @@ class EventBuilder
 			"${hours < 0 ? -hours : hours} ${Preferences.localized(
 				hours == 1 ? "hour" : "hours")}")}";
 	}
+
+	/// Build a row with only one type of widget
+	TableRow _buildSingleWidgetRow(Widget widget) =>
+		TableRow(
+			children: [
+				widget, widget, widget
+			]
+		);
 	
 	/// Build an empty table row
 	TableRow _buildEventDivider() =>
-		TableRow(
-			children: [
-				Divider(),
-				Divider(),
-				Divider()
-			]
-		);
+		_buildSingleWidgetRow(Divider());
+
+	/// Build an empty row
+	TableRow _buildEmptyEvent() =>
+		_buildSingleWidgetRow(SizedBox());
 	
 	/// Build table row for event info
 	TableRow _buildEventInfoRow(IconData icon, String title, String info) =>
