@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../page/schedule_page.dart';
 import '../tool/calendar_event.dart';
+import '../tool/course_settings.dart';
 import '../tool/event_builder.dart';
 import '../tool/preferences.dart';
 import '../tool/date_formatter.dart';
@@ -25,7 +26,7 @@ class EventListDialogState extends State<EventListDialog>
 	EventListDialogState(this._courseId)
 	{
 		_events = ScheduleState.allEvents.where((e) =>
-			e.courseId.contains(_courseId)).toList();
+			e.courseId.startsWith(CourseSettings.getId(_courseId))).toList();
 	}
 	
 	/// Modified, "lighter", version of SchedulePage._buildEvents
