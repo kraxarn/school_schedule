@@ -108,8 +108,8 @@ class EventBuilder
 
 			return Preferences.localized("time_was_ago")
 				.replaceFirst("{time}", "${diff.inDays > 0 ? diff.inDays : diff.inHours} ${diff.inDays > 0
-				? Preferences.localized("${diff.inDays > 0 ? "days" : "day"}")
-				: Preferences.localized("${diff.inHours > 0 ? "hours" : "hour"}")}");
+				? Preferences.localized("${diff.inDays != 1 ? "days" : "day"}")
+				: Preferences.localized("${diff.inHours != 1 ? "hours" : "hour"}")}");
 		}
 
 		// It is now
