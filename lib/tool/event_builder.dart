@@ -73,8 +73,7 @@ class EventBuilder
 			),
 			child: Text(
 				text,
-				style: Theme.of(_context).textTheme.caption,
-			
+				textScaleFactor: 0.9
 			)
 		);
 	
