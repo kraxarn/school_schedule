@@ -211,12 +211,14 @@ class EventBuilder
 						style: Theme.of(_context).textTheme.caption.copyWith(
 							color: isToday ? Theme.of(_context).accentColor : null
 						),
+						textAlign: TextAlign.center
 					),
 					Text(
 						event.start.day.toString(),
 						style: TextStyle(
 							color: isToday ? Theme.of(_context).accentColor : null
 						),
+						textAlign: TextAlign.center
 					)
 				],
 			
