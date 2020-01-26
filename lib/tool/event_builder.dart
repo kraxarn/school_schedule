@@ -95,7 +95,7 @@ class EventBuilder
 			
 			return Preferences.localized("time_in")
 				.replaceFirst("{time}", "${diff.inDays > 0 ? diff.inDays : diff.inHours} ${diff.inDays > 0
-				? Preferences.localized("${diff.inDays != 1 ? "days" : "day"}")
+				? Preferences.localized("${diff.inDays != 1 ? "days" : "day"}").toLowerCase()
 				: Preferences.localized("${diff.inHours != 1 ? "hours" : "hour"}")}");
 		}
 		else if (event.end.difference(_now).isNegative)
