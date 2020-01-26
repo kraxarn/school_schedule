@@ -62,7 +62,7 @@ class AppLocale
 			"no_search_results": "No results found",
 			"time_was_ago": "was {time} ago",
 			"time_in": "in {time}",
-			"time_now": "nu",
+			"time_now": "now",
 			"hiding_event": "Hiding {events} duplicate event",
 			"hiding_events": "Hiding {events} duplicate events",
 			"icon_clear": "Clear",
