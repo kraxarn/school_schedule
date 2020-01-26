@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:http/http.dart' as http;
 import 'package:package_info/package_info.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../tool/preferences.dart';
 
@@ -51,12 +52,44 @@ class ChangelogDialogState extends State<ChangelogDialog>
 		super.initState();
 		_loadChangelog();
 	}
+
+	final _menuOptions = [
+		_buildMenuOption("store", Icons.store),
+		_buildMenuOption("code",  Icons.code)
+	];
+
+	static PopupMenuItem _buildMenuOption(String value, IconData icon) =>
+		PopupMenuItem(
+			child: ListTile(
+				contentPadding: EdgeInsets.all(0.0),
+				leading: Icon(icon),
+				title: Text(Preferences.localized("open_$value"))
+			),
+			value: value,
+		);
 	
 	@override
 	Widget build(BuildContext context) =>
 		Scaffold(
 			appBar: AppBar(
-				title: Text(Preferences.localized("whats_new"))
+				title: Text(Preferences.localized("whats_new")),
+				actions: <Widget>[
+					PopupMenuButton(
+						itemBuilder: (context) => _menuOptions,
+						onSelected: (value) async
+						{
+							switch (value)
+							{
+								case "store":
+									await launch("https://play.google.com/store/apps/details?id=com.crow.school_schedule");
+									break;
+								case "code":
+									await launch("https://github.com/kraxarn/school_schedule");
+									break;
+							}
+						},
+					)
+				],
 			),
 			body: _loading ? Center(
 				child: CircularProgressIndicator()

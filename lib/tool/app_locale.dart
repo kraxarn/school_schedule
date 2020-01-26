@@ -149,6 +149,8 @@ class AppLocale
 			"privacy_policy": "Privacy policy",
 			"licenses": "Licenses",
 			"whats_new": "What's new",
+			"open_store": "Open store page",
+			"open_code": "Open source code",
 			//endregion
 			//region login_dialog
 			"login_failed": "Login failed",
@@ -297,6 +299,8 @@ class AppLocale
 			"privacy_policy": "Integritetspolicy",
 			"licenses": "Licenser",
 			"whats_new": "Vad är nytt",
+			"open_store": "Öppna butik",
+			"open_code": "Öppna källkod",
 			//endregion
 			//region login_dialog
 			"login_failed": "Inloggning misslyckades",
