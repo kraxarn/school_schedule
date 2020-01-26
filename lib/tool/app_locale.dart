@@ -38,7 +38,7 @@ class AppLocale
 			//endregion
 			//region schedule_page
 			"week_days": "MON,TUE,WED,THU,FRI,SAT,SUN",
-			"months": "Janurary,February,March,April,May,June,July,August,September,October,November,December",
+			"months": "January,February,March,April,May,June,July,August,September,October,November,December",
 			"none": "(none)",
 			"course_code": "Course Code",
 			"course_name": "Course Name",
