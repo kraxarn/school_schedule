@@ -12,6 +12,12 @@ import 'course_settings.dart';
 import 'event_settings.dart';
 import 'school.dart';
 
+/// Type of all events (for future use)
+enum AllEventsType
+{
+	Never, EventList, Schedule, Always
+}
+
 /// Application preferences
 class Preferences
 {
@@ -186,6 +192,15 @@ class Preferences
 	{
 		_hiddenCourses = value;
 		_prefs.then((prefs) => prefs.setStringList("hidden_courses", value));
+	}
+
+	static bool _allEvents;
+	static bool get allEvents => _allEvents ?? false;
+	static set allEvents(bool value)
+	{
+		_allEvents = value;
+		_prefs.then((prefs) => prefs.setInt("all_events",
+			(value ? AllEventsType.Always : AllEventsType.Never).index));
 	}
 	
 	// Semi-temp for easier localization
