@@ -26,7 +26,14 @@ class SettingsState extends State<SettingsPage>
 		"en": Preferences.localized("english"),
 		"sv": Preferences.localized("swedish")
 	};
-	
+
+	final _allEventsOptions = {
+		AllEventsType.Never:     "Never",
+		AllEventsType.EventList: "Only in event list",
+		AllEventsType.Schedule:	 "Only in schedule",
+		AllEventsType.Always:	 "Always"
+	};
+
 	/// Build a card with children in a column
 	Widget _buildCard(List<Widget> children) =>
 		Card(
@@ -168,6 +175,15 @@ class SettingsState extends State<SettingsPage>
 				value: Preferences.hidePastEvents,
 				onChanged: (checked) =>
 					setState(() => Preferences.hidePastEvents = checked)
+			),
+			SwitchListTile(
+				title: Text(Preferences.localized("all_events_title")),
+				subtitle: Text(
+					Preferences.localized("all_events_info")
+				),
+				value: Preferences.allEvents,
+				onChanged: (checked) =>
+					setState(() => Preferences.allEvents = checked)
 			),
 			_buildButtonBar([])
 		]);
