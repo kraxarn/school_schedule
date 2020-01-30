@@ -1,5 +1,7 @@
 import 'package:http/http.dart' as http;
 
+import '../tool/date_formatter.dart';
+import '../tool/preferences.dart';
 import '../tool/school.dart';
 
 /*
@@ -181,7 +183,9 @@ class CalendarEvent
 	static Future<String> getCalendar(http.Client http, School school, String courseId) =>
 		http.read(
 			"${school.baseUrl}setup/jsp/SchemaICAL.ics?"
-			"startDatum=idag&intervallTyp=a&intervallAntal=1&sprak=SV"
+			"startDatum=${Preferences.allEvents
+				? (DateFormatter.asFullDate(DateTime.now().subtract(Duration(days: 365))))
+				: "idag"}&intervallTyp=a&intervallAntal=${Preferences.allEvents ? "2" : "1"}"
 			"&sokMedAND=true&forklaringar=true&resurser=k.$courseId"
 		);
 }
