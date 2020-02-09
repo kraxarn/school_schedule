@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:school_schedule/tool/preferences.dart';
 
 import '../tool/account.dart';
+import '../tool/preferences.dart';
 
 class LoginDialog extends StatefulWidget
 {
