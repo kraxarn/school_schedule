@@ -288,6 +288,7 @@ class Preferences
 		_hideDuplicates     = prefs.getBool("hide_duplicates");
 		_hidePastEvents     = prefs.getBool("hide_past_events");
 		_hiddenCourses      = prefs.getStringList("hidden_courses");
+		_allEvents          = prefs.getInt("all_events") ==	AllEventsType.Always.index ? true : false;
 		
 		// Get unique ID before decrypting
 		_uniqueId = await UniqueIdentifier.serial;
