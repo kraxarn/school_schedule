@@ -21,7 +21,6 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  shared_preferences: 0.5.4+9
   http: ^0.12.0
   flutter_markdown: ^0.2.0
   package_info: ^0.4.0+10
@@ -29,7 +28,9 @@ dependencies:
   html: ^0.14.0
   encrypt: ^3.2.0
   unique_identifier: ^0.0.3
-  url_launcher: ^5.4.1
+  # These packages have a fixed version due to bugs with desktop support in newer versions
+  shared_preferences: 0.5.4+9
+  url_launcher: 5.2.7
 
 dev_dependencies:
   flutter_test:
