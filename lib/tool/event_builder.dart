@@ -260,7 +260,9 @@ class EventBuilder
 						width: 8,
 					),
 					Text(
-						"${CourseSettings.getId(event.courseId)}\n"
+						"${(event.courseId.length > 9
+							? "${event.courseId.substring(0, 9)}..."
+							: CourseSettings.getId(event.courseId))}\n"
 							"${event.location.split(' ')[0]}",
 						textAlign: TextAlign.end
 					)
