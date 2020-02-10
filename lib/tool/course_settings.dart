@@ -23,8 +23,13 @@ class CourseSettings
 	/// Formats course ID
 	static String getId(String courseId)
 	{
-		final i = courseId.indexOf('-');
-		return i > 0 ? courseId.substring(0, i) : courseId;
+		// Find first word
+		final s = courseId.indexOf(' ');
+		final first = s > 0
+			? courseId.substring(0, s).replaceAll(',', '') : courseId;
+		// Get until first -
+		final i = first.indexOf('-');
+		return i > 0 ? first.substring(0, i) : first;
 	}
 	
 	/// Load course settings from file
