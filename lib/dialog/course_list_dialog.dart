@@ -5,6 +5,7 @@ import 'event_list_dialog.dart';
 import '../tool/preferences.dart';
 import '../tool/user_colors.dart';
 import '../tool/course_settings.dart';
+import '../page/schedule_page.dart';
 
 class CourseListDialog extends StatefulWidget
 {
@@ -25,9 +26,6 @@ class CourseListState extends State<CourseListDialog>
 	
 	/// Replace hidden courses with temporary list
 	void _saveHidden() => Preferences.hiddenCourses = _hidden;
-
-	/// Sort of half temp id -> name mapping
-	static final courseNameCache = Map<String, String>();
 	
 	final _resultOptions = [
 		_buildResultOption("list",   Icons.today),
@@ -44,6 +42,14 @@ class CourseListState extends State<CourseListDialog>
 			),
 			value: value,
 		);
+
+	String _findCourseName(String courseId)
+	{
+		for (var event in ScheduleState.allEvents)
+			if (event.fullCourseId == courseId)
+				return event.courseName;
+		return Preferences.localized("none");
+	}
 	
 	/// Build a centered and padded message
 	List<Widget> _buildStatusMessage(String message) =>
@@ -162,12 +168,8 @@ class CourseListState extends State<CourseListDialog>
 	}
 	
 	/// Build a result showing a delete button
-	Widget _buildResult(String title)
-	{
-		var subtitle = courseNameCache.containsKey(title)
-			? courseNameCache[title] : Preferences.localized("none");
-
-		return PopupMenuButton(
+	Widget _buildResult(String title, String subtitle) =>
+		PopupMenuButton(
 			offset: Offset.fromDirection(0.0),
 			itemBuilder: (builder)
 			=> _resultOptions,
@@ -213,7 +215,6 @@ class CourseListState extends State<CourseListDialog>
 				),
 			)
 		);
-	}
 	
 	@override
 	Widget build(BuildContext context) =>
@@ -225,7 +226,7 @@ class CourseListState extends State<CourseListDialog>
 				children: _saved.isEmpty
 					? _buildStatusMessage(Preferences.localized("no_saved_courses"))
 					: _saved.map((entry) =>
-						_buildResult(entry)
+						_buildResult(entry, _findCourseName(entry))
 					).toList()
 			),
 		);

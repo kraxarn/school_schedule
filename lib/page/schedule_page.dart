@@ -78,13 +78,8 @@ class ScheduleState extends State<SchedulePage> with WidgetsBindingObserver
 		{
 			// Update calendar
 			await CalendarEvent.getCalendar(_http, Preferences.school, course)
-				.then((cal)
-				{
-					// Add to temp events
-					tempEvents.addAll(CalendarEvent.parseMultiple(cal, course));
-					// Save to course list cache
-					CourseListState.courseNameCache[course] = tempEvents.last.courseName;
-				})
+				.then((cal) =>
+					tempEvents.addAll(CalendarEvent.parseMultiple(cal, course)))
 				.catchError((e) => error = e);
 		}
 		
