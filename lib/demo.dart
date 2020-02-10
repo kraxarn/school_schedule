@@ -12,7 +12,7 @@ class Demo
 					"LAST-MODIFIED:20190910T101500\n"
 					"LOCATION:Zeta\n"
 					"UID:001\n"
-					"SUMMARY:Kurs.grp: DVA217 Sign: aaa001 Moment: Lecture 1 Aktivitetstyp: Okänd\n"
+					"SUMMARY:Kurs.grp: Test Course Sign: aaa001 Moment: Lecture 1 Aktivitetstyp: Okänd\n", "DVA217"
 			),
 			CalendarEvent(
 				"DTSTART:20190917T131500\n"
@@ -20,7 +20,7 @@ class Demo
 					"LAST-MODIFIED:20190917T131500\n"
 					"LOCATION:Zeta\n"
 					"UID:002\n"
-					"SUMMARY:Kurs.grp: DVA217 Sign: aaa001 Moment: Lecture 2 Aktivitetstyp: Okänd\n"
+					"SUMMARY:Kurs.grp: Test Course Sign: aaa001 Moment: Lecture 2 Aktivitetstyp: Okänd\n", "DVA217"
 			),
 			CalendarEvent(
 				"DTSTART:20190919T131500\n"
@@ -28,7 +28,7 @@ class Demo
 					"LAST-MODIFIED:20190919T131500\n"
 					"LOCATION:U2-127\n"
 					"UID:003\n"
-					"SUMMARY:Kurs.grp: DVA217 Sign: aaa001 Moment: Lab 1 Aktivitetstyp: Okänd\n"
+					"SUMMARY:Kurs.grp: Test Course Sign: aaa001 Moment: Lab 1 Aktivitetstyp: Okänd\n", "DVA217"
 			),
 			CalendarEvent(
 				"DTSTART:20190926T101500\n"
@@ -36,7 +36,7 @@ class Demo
 					"LAST-MODIFIED:20190926T101500\n"
 					"LOCATION:U2-127\n"
 					"UID:004\n"
-					"SUMMARY:Kurs.grp: DVA217 Sign: aaa001 Moment: Lab 2 Aktivitetstyp: Okänd\n"
+					"SUMMARY:Kurs.grp: Test Course Sign: aaa001 Moment: Lab 2 Aktivitetstyp: Okänd\n", "DVA217"
 			),
 			CalendarEvent(
 				"DTSTART:20191003T101500\n"
@@ -44,7 +44,7 @@ class Demo
 					"LAST-MODIFIED:20191003T101500\n"
 					"LOCATION:Zeta\n"
 					"UID:005\n"
-					"SUMMARY:Kurs.grp: DVA217 Sign: aaa001 Moment: Lecture 3 Aktivitetstyp: Okänd\n"
+					"SUMMARY:Kurs.grp: Test Course Sign: aaa001 Moment: Lecture 3 Aktivitetstyp: Okänd\n", "DVA217"
 			),
 			CalendarEvent(
 				"DTSTART:20191005T131500\n"
@@ -52,7 +52,7 @@ class Demo
 					"LAST-MODIFIED:20191005T131500\n"
 					"LOCATION:U2-127\n"
 					"UID:006\n"
-					"SUMMARY:Kurs.grp: DVA217 Sign: aaa001 Moment: Lab 3 Aktivitetstyp: Okänd\n"
+					"SUMMARY:Kurs.grp: Test Course Sign: aaa001 Moment: Lab 3 Aktivitetstyp: Okänd\n", "DVA217"
 			)
 		];
 }
