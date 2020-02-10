@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import '../tool/course_name.dart';
 import '../tool/preferences.dart';
 
 class SearchDialog extends StatefulWidget
@@ -103,13 +102,6 @@ class SearchState extends State<SearchDialog>
 				setState(() =>
 					_alreadySaved ? _saved.remove(title) : _saved.add(title));
 				_save();
-				
-				// Save to course name
-				// (this is unrelated to widget state)
-				if (_alreadySaved)
-					CourseName.remove(title);
-				else
-					CourseName.add(title, subtitle);
 			},
 		);
 	}

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'event_list_dialog.dart';
 import '../tool/preferences.dart';
 import '../tool/user_colors.dart';
-import '../tool/course_name.dart';
 import '../tool/course_settings.dart';
 
 class CourseListDialog extends StatefulWidget
@@ -144,7 +143,6 @@ class CourseListState extends State<CourseListDialog>
 								Navigator.of(context).pop();
 								setState(() => _saved.remove(title));
 								_save();
-								CourseName.remove(title);
 								CourseSettings.remove(title);
 							},
 						)

@@ -7,7 +7,6 @@ import 'package:unique_identifier/unique_identifier.dart';
 
 import 'account.dart';
 import 'app_locale.dart';
-import 'course_name.dart';
 import 'course_settings.dart';
 import 'event_settings.dart';
 import 'school.dart';
@@ -296,8 +295,7 @@ class Preferences
 		// Password is encrypted, so requires decryption
 		if (_password != null)
 			_password = _decrypt(prefs.getString("password"));
-		
-		await CourseName.load();
+
 		await CourseSettings.load();
 		await EventSettings.load();
 		return true;
