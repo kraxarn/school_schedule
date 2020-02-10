@@ -109,10 +109,15 @@ class CalendarEvent
 					}
 					else
 						_courseId = _between(line, "Kurs.grp:", "Moment");
-					
+
+					// Get summary
+					if (line.contains("Aktivitetstyp"))
+						_summary = _between(line, "Moment:", "Aktivitetstyp");
+					else
+						_summary = line.substring(line.indexOf("Moment:"));
 					// & seems to be the only thing having issues
-					_summary = _between(line, "Moment:", "Aktivitetstyp")
-						.replaceAll("&amp;", "&");
+					_summary = _summary.replaceAll("&amp;", "&");
+
 					break;
 			}
 		});
