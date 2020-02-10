@@ -5,7 +5,6 @@ import '../tool/calendar_event.dart';
 import '../tool/course_settings.dart';
 import '../tool/event_settings.dart';
 import '../tool/preferences.dart';
-import '../tool/course_name.dart';
 import '../tool/user_colors.dart';
 import '../tool/date_formatter.dart';
 
@@ -284,8 +283,7 @@ class EventBuilder
 							_buildEventInfoRow(
 								Icons.text_fields,
 								Preferences.localized("course_name"),
-								CourseName.get(event.fullCourseId)
-									?? Preferences.localized("none")
+								event.courseName ?? Preferences.localized("none")
 							),
 							_buildEventDivider(),
 							_buildEventInfoRow(

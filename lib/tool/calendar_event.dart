@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:http/http.dart' as http;
 
 import '../tool/date_formatter.dart';
@@ -50,7 +52,10 @@ class CalendarEvent
 	/// Course name
 	String _courseId;
 	String get courseId => _courseId;
-	
+
+	String _courseName;
+	String get courseName => _courseName;
+
 	String get fullCourseId =>
 		_courseId.contains(' ')
 			? _courseId.substring(_courseId.indexOf(' ') + 1) : _courseId;
@@ -67,8 +72,11 @@ class CalendarEvent
 		).trim();
 	
 	/// Parses a single event
-	CalendarEvent(String data)
+	CalendarEvent(String data, String courseId)
 	{
+		// Set from parameter
+		_courseId = courseId;
+		// Parse the actual data
 		data.split('\n').forEach((line) {
 			final l = line.split(':');
 			switch (l[0])
@@ -106,17 +114,17 @@ class CalendarEvent
 					{
 						if (line.contains("Sign"))
 						{
-							_courseId  = _between(line, "Kurs.grp:", "Sign");
+							_courseName  = _between(line, "Kurs.grp:", "Sign");
 							_signature = _between(line, "Sign:", "Moment");
 						}
 						else
-							_courseId = _between(line, "Kurs.grp:", "Moment");
+							_courseName = _between(line, "Kurs.grp:", "Moment");
 
 						// Get summary
 						if (line.contains("Aktivitetstyp"))
 							_summary = _between(line, "Moment:", "Aktivitetstyp");
 						else
-							_summary = line.substring(line.indexOf("Moment:"));
+							_summary = line.substring(line.indexOf("Moment:") + 8);
 						// & seems to be the only thing having issues
 						_summary = _summary.replaceAll("&amp;", "&");
 					}
@@ -181,7 +189,7 @@ class CalendarEvent
 		};
 	
 	/// Parse all events in an ICS file
-	static List<CalendarEvent> parseMultiple(String data)
+	static List<CalendarEvent> parseMultiple(String data, String courseId)
 	{
 		// Split up for every event
 		final events = data.split("BEGIN:VEVENT");
@@ -191,7 +199,7 @@ class CalendarEvent
 		
 		// Return final list with events
 		return events.map((event) {
-			return CalendarEvent(event);
+			return CalendarEvent(event, courseId);
 		}).toList();
 	}
 	
