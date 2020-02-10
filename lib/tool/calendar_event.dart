@@ -99,6 +99,9 @@ class CalendarEvent
 					 * Assume:
 					 * SUMMARY: Kurs.grp:<course-id> Sign:<signature> Moment:<summary>
 					 */
+					if (line.length <= 0)
+						break;
+
 					if (line.contains("Sign"))
 					{
 						_courseId  = _between(line, "Kurs.grp:", "Sign");
