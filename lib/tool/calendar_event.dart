@@ -47,7 +47,7 @@ class CalendarEvent
 	String _summary;
 	String get summary => _summary;
 	
-	/// Course ID / course code
+	/// Course name
 	String _courseId;
 	String get courseId => _courseId;
 	
@@ -102,21 +102,29 @@ class CalendarEvent
 					if (line.length <= 0)
 						break;
 
-					if (line.contains("Sign"))
+					try
 					{
-						_courseId  = _between(line, "Kurs.grp:", "Sign");
-						_signature = _between(line, "Sign:", "Moment");
-					}
-					else
-						_courseId = _between(line, "Kurs.grp:", "Moment");
+						if (line.contains("Sign"))
+						{
+							_courseId  = _between(line, "Kurs.grp:", "Sign");
+							_signature = _between(line, "Sign:", "Moment");
+						}
+						else
+							_courseId = _between(line, "Kurs.grp:", "Moment");
 
-					// Get summary
-					if (line.contains("Aktivitetstyp"))
-						_summary = _between(line, "Moment:", "Aktivitetstyp");
-					else
-						_summary = line.substring(line.indexOf("Moment:"));
-					// & seems to be the only thing having issues
-					_summary = _summary.replaceAll("&amp;", "&");
+						// Get summary
+						if (line.contains("Aktivitetstyp"))
+							_summary = _between(line, "Moment:", "Aktivitetstyp");
+						else
+							_summary = line.substring(line.indexOf("Moment:"));
+						// & seems to be the only thing having issues
+						_summary = _summary.replaceAll("&amp;", "&");
+					}
+					catch (e)
+					{
+						_summary = "(invalid summary)";
+					}
+
 
 					break;
 			}
