@@ -75,10 +75,18 @@ class ScheduleState extends State<SchedulePage> with WidgetsBindingObserver
 		
 		// Get events four courses and save to tempEvents
 		for (var course in _savedCourses)
+		{
+			// Update calendar
 			await CalendarEvent.getCalendar(_http, Preferences.school, course)
-				.then((cal) =>
-					tempEvents.addAll(CalendarEvent.parseMultiple(cal)))
+				.then((cal)
+				{
+					// Add to temp events
+					tempEvents.addAll(CalendarEvent.parseMultiple(cal, course));
+					// Save to course list cache
+					CourseListState.courseNameCache[course] = tempEvents.last.courseName;
+				})
 				.catchError((e) => error = e);
+		}
 		
 		// Only set state if current page
 		if (MainState.navBarIndex == 0 && tempEvents.isNotEmpty)

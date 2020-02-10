@@ -25,6 +25,9 @@ class CourseListState extends State<CourseListDialog>
 	
 	/// Replace hidden courses with temporary list
 	void _saveHidden() => Preferences.hiddenCourses = _hidden;
+
+	/// Sort of half temp id -> name mapping
+	static final courseNameCache = Map<String, String>();
 	
 	final _resultOptions = [
 		_buildResultOption("list",   Icons.today),
@@ -159,11 +162,17 @@ class CourseListState extends State<CourseListDialog>
 	}
 	
 	/// Build a result showing a delete button
-	Widget _buildResult(String title, String subtitle) =>
-		PopupMenuButton(
+	Widget _buildResult(String title)
+	{
+		var subtitle = courseNameCache.containsKey(title)
+			? courseNameCache[title] : Preferences.localized("none");
+
+		return PopupMenuButton(
 			offset: Offset.fromDirection(0.0),
-			itemBuilder: (builder) => _resultOptions,
-			onSelected: (value) async
+			itemBuilder: (builder)
+			=> _resultOptions,
+			onSelected: (value)
+			async
 			{
 				switch (value)
 				{
@@ -183,7 +192,9 @@ class CourseListState extends State<CourseListDialog>
 					title.endsWith('-')
 						? title.substring(0, title.length - 1) : title,
 					style: TextStyle(
-						color: UserColors().getColor(title).color
+						color: UserColors()
+							.getColor(title)
+							.color
 					),
 				),
 				subtitle: Text(subtitle),
@@ -193,13 +204,16 @@ class CourseListState extends State<CourseListDialog>
 					value: !_hidden.contains(title),
 					onChanged: (value)
 					{
-						setState(() => _hidden.contains(title)
+						setState(()
+						=>
+						_hidden.contains(title)
 							? _hidden.remove(title) : _hidden.add(title));
 						_saveHidden();
 					},
 				),
 			)
 		);
+	}
 	
 	@override
 	Widget build(BuildContext context) =>
@@ -211,7 +225,7 @@ class CourseListState extends State<CourseListDialog>
 				children: _saved.isEmpty
 					? _buildStatusMessage(Preferences.localized("no_saved_courses"))
 					: _saved.map((entry) =>
-						_buildResult(entry, CourseName.get(entry))
+						_buildResult(entry)
 					).toList()
 			),
 		);
