@@ -210,7 +210,7 @@ class SettingsState extends State<SettingsPage>
 			PackageInfo.fromPlatform().then((info) =>
 				setState(()
 				{
-					_version = "Version ${info.version}";
+					_version = "Version ${info.version.substring(0, info.version.length - 2)}";
 					_build   = "Build ${info.buildNumber}";
 				}));
 		}
