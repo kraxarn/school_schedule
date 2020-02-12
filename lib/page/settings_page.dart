@@ -27,13 +27,6 @@ class SettingsState extends State<SettingsPage>
 		"sv": Preferences.localized("swedish")
 	};
 
-	final _allEventsOptions = {
-		AllEventsType.Never:     "Never",
-		AllEventsType.EventList: "Only in event list",
-		AllEventsType.Schedule:	 "Only in schedule",
-		AllEventsType.Always:	 "Always"
-	};
-
 	/// Build a card with children in a column
 	Widget _buildCard(List<Widget> children) =>
 		Card(
