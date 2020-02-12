@@ -784,7 +784,8 @@ class TimeSelectState extends State<TimeSelect>
 						value.isEmpty ? Preferences.localized("required") : null
 					),
 				),
-				ButtonTheme.bar(
+				ButtonBarTheme(
+					data: ButtonBarTheme.of(context),
 					child: ButtonBar(
 						children: [
 							FlatButton(

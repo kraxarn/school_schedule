@@ -54,7 +54,8 @@ class SettingsState extends State<SettingsPage>
 	
 	/// Build a button bar (or use as padding)
 	Widget _buildButtonBar(List<Widget> children) =>
-		ButtonTheme.bar(
+		ButtonBarTheme(
+			data: ButtonBarTheme.of(context),
 			child: ButtonBar(
 				children: children
 			)

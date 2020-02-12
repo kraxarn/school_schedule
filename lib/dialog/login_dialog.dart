@@ -125,7 +125,8 @@ class LoginDialogState extends State<LoginDialog>
 									? Preferences.localized("enter_password")
 									: null)
 						),
-						ButtonTheme.bar(
+						ButtonBarTheme(
+							data: ButtonBarTheme.of(context),
 							child: ButtonBar(
 								children: <Widget>[
 									Padding(
