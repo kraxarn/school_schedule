@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:http/http.dart' as http;
 
 import '../tool/date_formatter.dart';
