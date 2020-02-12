@@ -126,7 +126,7 @@ class CalendarEvent
 						else
 							_summary = line.substring(line.indexOf("Moment:") + 8);
 						// & seems to be the only thing having issues
-						_summary = _summary.replaceAll("&amp;", "&");
+						_summary = _summary.replaceAll("&amp;", "&").trim();
 					}
 					catch (e)
 					{
