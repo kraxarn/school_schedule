@@ -31,9 +31,8 @@ class ChangelogDialogState extends State<ChangelogDialog>
 		String response;
 		try
 		{
-			response = await client.read(
-				"https://api.github.com/repos/kraxarn/school_schedule/releases"
-			);
+			final url = Uri.parse("https://api.github.com/repos/kraxarn/school_schedule/releases");
+			response = await client.read(url);
 		}
 		catch (e)
 		{

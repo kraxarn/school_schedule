@@ -52,11 +52,11 @@ class SearchState extends State<SearchDialog>
 		
 		try
 		{
-			response = await _http.read(
-				"${Preferences.school.baseUrl}ajax/ajax_sokResurser.jsp"
+			final url = Uri.parse("${Preferences.school.baseUrl}ajax/ajax_sokResurser.jsp"
 					"?sokord=$keyword&startDatum=idag&slutDatum="
 					"&intervallTyp=a&intervallAntal=1"
-					"&sprak=${Preferences.locale.locale.languageCode}");
+					"&sprak=${Preferences.appLocale.locale.languageCode}");
+			response = await _http.read(url);
 		}
 		catch (e)
 		{

@@ -28,22 +28,23 @@ class LicenseState extends State<LicenseDialog>
 	void _loadLicenses() async
 	{
 		final client = http.Client();
-		
+
+		final dartSdk = Uri.parse("https://raw.githubusercontent.com/dart-lang/sdk/master/LICENSE");
+		final flutterSdk = Uri.parse("https://raw.githubusercontent.com/flutter/flutter/master/LICENSE");
+		final dartHttpHtml = Uri.parse("https://raw.githubusercontent.com/dart-lang/http/master/LICENSE");
+		final flutterMarkdown = Uri.parse("https://raw.githubusercontent.com/flutter/flutter_markdown/master/LICENSE");
+		final encrypt = Uri.parse("https://raw.githubusercontent.com/leocavalcante/encrypt/master/LICENSE");
+
 		// Dart SDK
-		_addLicense("Dart SDK", await client.read(
-			"https://raw.githubusercontent.com/dart-lang/sdk/master/LICENSE"));
+		_addLicense("Dart SDK", await client.read(dartSdk));
 		// Flutter SDK, shared_preferences and package_info
-		_addLicense("Flutter and Flutter plugins", await client.read(
-			"https://raw.githubusercontent.com/flutter/flutter/master/LICENSE"));
+		_addLicense("Flutter and Flutter plugins", await client.read(flutterSdk));
 		// Dart HTTP and HTML
-		_addLicense("Dart plugins", await client.read(
-			"https://raw.githubusercontent.com/dart-lang/http/master/LICENSE"));
+		_addLicense("Dart plugins", await client.read(dartHttpHtml));
 		// flutter_markdown
-		_addLicense("Flutter Markdown", await client.read(
-			"https://raw.githubusercontent.com/flutter/flutter_markdown/master/LICENSE"));
+		_addLicense("Flutter Markdown", await client.read(flutterMarkdown));
 		// encrypt
-		_addLicense("encrypt", await client.read(
-			"https://raw.githubusercontent.com/leocavalcante/encrypt/master/LICENSE"));
+		_addLicense("encrypt", await client.read(encrypt));
 		
 		setState(() => _loading = false);
 	}

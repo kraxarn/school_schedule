@@ -13,25 +13,23 @@ class BookingHelpDialog extends StatefulWidget
 class BookingHelpDialogState extends State<BookingHelpDialog>
 {
 	var _loading = true;
-	
+
 	var _content = "";
-	
+
 	void _loadContent() async
 	{
-		_content = await http.read(
-			"https://raw.githubusercontent.com/kraxarn/school_schedule/master"
-				"/img/booking_help/${Preferences.locale.locale.languageCode}.md"
-		);
+		final url = Uri.parse("https://raw.githubusercontent.com/kraxarn/school_schedule/master/img/booking_help/${Preferences.appLocale.locale.languageCode}.md");
+		_content = await http.read(url);
 		setState(() =>_loading = false);
 	}
-	
+
 	@override
 	void initState()
 	{
 		super.initState();
 		_loadContent();
 	}
-	
+
 	@override
 	Widget build(BuildContext context) =>
 		Scaffold(

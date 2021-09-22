@@ -202,12 +202,12 @@ class CalendarEvent
 	}
 	
 	/// Get ICS calendar for specified course
-	static Future<String> getCalendar(http.Client http, School school, String courseId) =>
-		http.read(
-			"${school.baseUrl}setup/jsp/SchemaICAL.ics?"
-			"startDatum=${Preferences.allEvents
+	static Future<String> getCalendar(http.Client http, School school, String courseId) {
+		var url = Uri.parse("${school.baseUrl}setup/jsp/SchemaICAL.ics?"
+				"startDatum=${Preferences.allEvents
 				? (DateFormatter.asFullDate(DateTime.now().subtract(Duration(days: 365))))
 				: "idag"}&intervallTyp=a&intervallAntal=${Preferences.allEvents ? "2" : "1"}"
-			"&sokMedAND=true&forklaringar=true&resurser=k.$courseId"
-		);
+				"&sokMedAND=true&forklaringar=true&resurser=k.$courseId");
+	  return http.read(url);
+	}
 }

@@ -24,7 +24,8 @@ class PrivacyPolicyState extends State<PrivacyPolicyDialog>
 		super.initState();
 		
 		// We start fetching it ahead of time
-		http.read("https://kronox.se/app/privacypolicy.php").then((response) =>
+		final url = Uri.parse("https://kronox.se/app/privacypolicy.php");
+		http.read(url).then((response) =>
 			setState(() {
 				_privacyPolicy = response.substring(
 					response.indexOf("</head>") + 7,
