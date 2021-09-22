@@ -40,7 +40,7 @@ class SettingsState extends State<SettingsPage>
 		ListTile(
 			title: Text(
 				title,
-				style: Theme.of(context).textTheme.title,
+				style: Theme.of(context).textTheme.headline6,
 			)
 		);
 	
@@ -116,7 +116,7 @@ class SettingsState extends State<SettingsPage>
 				title: Text(Preferences.localized("language_title")),
 				subtitle: Text(Preferences.localized("language_info")),
 				trailing: DropdownButton<String>(
-					value: Preferences.locale.locale.languageCode,
+					value: Preferences.appLocale.locale.languageCode,
 					items: _languages.entries.map((value) =>
 						DropdownMenuItem(
 							child: Text(value.value),

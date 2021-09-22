@@ -207,7 +207,7 @@ class Preferences
 	
 	/// App language
 	static String _locale;
-	static AppLocale get locale
+	static AppLocale get appLocale
 	{
 		// No locale set, use device default
 		if (_locale == null)
@@ -268,7 +268,7 @@ class Preferences
 	}
 	
 	static String localized(String value) =>
-		locale.get(value);
+		appLocale.get(value);
 	
 	static Future<bool> create() async
 	{

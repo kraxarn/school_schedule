@@ -376,7 +376,7 @@ class ScheduleState extends State<SchedulePage> with WidgetsBindingObserver
 						),
 						Text(
 							Preferences.localized("title_schedule"),
-							style: Theme.of(context).textTheme.title.apply(
+							style: Theme.of(context).textTheme.headline6.apply(
 								color: Colors.white
 							)
 						),

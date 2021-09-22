@@ -408,7 +408,7 @@ class BookingPageState extends State<BookingPage>
 						),
 						child: Text(
 							Preferences.localized("title_booking"),
-							style: Theme.of(context).textTheme.title.apply(
+							style: Theme.of(context).textTheme.headline6.apply(
 								color: Colors.white
 							),
 						),

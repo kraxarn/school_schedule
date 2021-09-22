@@ -52,7 +52,7 @@ class EventBuilder
 			child: ListTile(
 				title: Text(
 					text,
-					style: Theme.of(_context).textTheme.title,
+					style: Theme.of(_context).textTheme.headline6,
 				),
 			
 			),
@@ -137,7 +137,7 @@ class EventBuilder
 				Icon(icon),
 				Text(
 					title,
-					style: Theme.of(_context).textTheme.subtitle,
+					style: Theme.of(_context).textTheme.subtitle1,
 				),
 				Text(info ?? "(none)")
 			]
@@ -149,7 +149,7 @@ class EventBuilder
 				Icon(icon),
 				Text(
 					title,
-					style: Theme.of(_context).textTheme.subtitle,
+					style: Theme.of(_context).textTheme.subtitle1,
 				),
 				info
 			]
